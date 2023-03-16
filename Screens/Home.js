@@ -1,9 +1,6 @@
 import React from 'react';
 import { View, Text,StyleSheet} from 'react-native';
 import { Button } from 'react-native-paper';
-import {Registration} from './Registration';
-
-
 
 export default class Home extends React.Component {
   render() {
