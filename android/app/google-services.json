@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "549626721229",
+    "project_id": "ksree-9be91",
+    "storage_bucket": "ksree-9be91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549626721229:android:f2cff319fdf37956598a84",
+        "android_client_info": {
+          "package_name": "com.kshree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549626721229-aeesafhb0iqefsnpkb14rf0qmrf7ueu0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDASgmnM4YfGuswYgprcS4FEWe7YQODa2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "549626721229-aeesafhb0iqefsnpkb14rf0qmrf7ueu0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
