@@ -1,19 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground, Dimensions } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 
 export default class Registration extends React.Component {
     render() {
         const { navigation } = this.props;
+        const height = Dimensions.get('window').height;
+        const width = Dimensions.get('window').width;
+        
         return (
             <View style={styles.container}>
+            <ImageBackground source={require('../assets/bgimage.png')} resizeMode= {'cover'} style={{ width: '100%', height: '100%' }}> 
                 <View style={{ display: 'flex', alignItems: 'center' }}>
                     <View>
                         <Image source={require('../assets/kudumbasree.png')} style={{ marginBottom: '28%'}} />
+                        
                     </View>
                 </View>
-                <View style={{ display: 'flex', alignItems: 'center', position: 'relative', bottom: 65 }}>
-                    <Text style={{ fontSize: 26, fontWeight: 'bold' }}>Welcome to K-Sree</Text>
+                <View style={{ alignItems: 'flex-start'}}>
+                <Text style={{ fontSize: 46, fontFamily: 'NunitoSans-SemiBold', marginLeft : 20  }}>Welcome to K-Sree</Text>
                 </View>
                 <View>
                     <TextInput
@@ -37,6 +42,7 @@ export default class Registration extends React.Component {
                         <Text style={{ fontSize: 17, color: 'black' }}>Sign In</Text>
                     </Button>
                 </View>
+               </ImageBackground>
             </View>
         )
     }
@@ -47,8 +53,8 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#b3ff99',
         justifyContent: 'center',
-        bottom: '3%'
+       
+        
     }
 })
