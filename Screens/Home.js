@@ -1,26 +1,34 @@
-import React from 'react';
-import { View, Text,StyleSheet} from 'react-native';
-import { Button } from 'react-native-paper';
+import * as React from 'react';
+import { Button, View } from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Drawer } from 'react-native-paper';
 
-export default class Home extends React.Component {
-  render() {
-    const { navigation } = this.props;
-    return (
-        <View style={styles.container}>
-            <Text>Hello</Text>
-            <Button style={{ marginTop: '8%', backgroundColor: '#ff99e6', marginLeft: '25%', marginRight: '25%', padding: 2 }} onPress={() => {navigation.navigate('Registration')}}><Text>LogOut</Text></Button>
-        </View>
-    )
-  }
+function HomeScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button
+        onPress={() => navigation.navigate('Notifications')}
+        title="Go to notifications"
+      />
+    </View>
+  );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+function NotificationsScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button onPress={() => navigation.goBack()} title="Go back home" />
+    </View>
+  );
+}
 
+const OutDraw = createDrawerNavigator();
 
+export default function App() {
+  return (
+  <OutDraw.Navigator initialRouteName="Home">
+  
+      </OutDraw.Navigator>
+  
+  );
+}
