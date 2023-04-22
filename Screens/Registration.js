@@ -136,6 +136,7 @@ class Login extends React.Component {
                              mode="outlined"
                             label="Password"
                             error = {this.state.error}
+                            secureTextEntry={true}
                                 // right={<TextInput.Affix text="/100" />}
                              style={{ marginLeft: 5, marginRight: 5, marginTop: 2 }}
                              value={this.state.password}
