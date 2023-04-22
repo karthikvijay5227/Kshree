@@ -1,12 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, ImageBackground, Dimensions,KeyboardAvoidingView } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { View, Text, StyleSheet, ImageBackground, Dimensions,Animated,Keyboard} from 'react-native';
+import { TextInput, Button, Modal } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import 'react-native-url-polyfill/auto'
 import { createStackNavigator } from '@react-navigation/stack';
 import Admin from '../Screens/Admin';
+import Toast from 'react-native-toast-message'
+import Members from '../Screens/Members';
+
 
 const Stack = createStackNavigator();
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
 
 export default class Registration extends React.Component {
     render() {
@@ -19,6 +24,7 @@ export default class Registration extends React.Component {
               
               <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
               <Stack.Screen name="Admin" component={Admin} />
+              <Stack.Screen name="Home" component={Members} />
             </Stack.Navigator>
          
         )
@@ -27,78 +33,109 @@ export default class Registration extends React.Component {
 
 
 class Login extends React.Component {
-         
     
-   componentDidMount() {
-      
-    
-    }
 
     constructor(props) {
         super(props);
         this.state = {
             username: '',
             password: '',
-            admin : false
+            error : false,
+            animationUp : new Animated.Value(0)
         }
-
-    
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
     }
- 
+
+    _keyboardDidHide = () => {
+        this.setState({animationUp : new Animated.Value(0)})
+    }
+
+    _keyboardDidShow = () => {
+        Animated.timing(this.state.animationUp, {
+            toValue : -300,
+            duration : 100,
+            useNativeDriver : true,
+            
+        }).start()
+    }
 
     render() {
-        
-       
+      
+         const { navigation } = this.props;
+         const transformStyle = {
+            transform : [
+                {translateY : this.state.animationUp}
+            ]
+        }      
 
-        const { navigation } = this.props;
-        const height = Dimensions.get('window').height;
-        const width = Dimensions.get('window').width;
-        
-        
          validateCredentials = async () => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
             const supabase = createClient(supabaseUrl, supabaseKey)
-            const { data, error } = await supabase.from('users').select('password').eq('username', this.state.username)
             
-            console.log("Enntered Text : " + this.state.username);
-            console.log("Entered Password : " + this.state.password);
-            console.log("Actual Password : " + data[0]['password']);
-            
-            this.setState({admin : await supabase.from('users').select('admin')})
-             if(data[0]['password']=== this.state.password){
-                console.log("Login Success");
-                navigation.navigate('Admin');
-                
-                
-            }else{
-                 console.log("Login Failed");   
-            }
+            let { data : data1, error } = await supabase.from('users').select('password').eq('username', this.state.username)    
+            let{ data : admin, error2} = await supabase.from('users').select('admin').eq('username', this.state.username)
+          
+            try{
+
+              if(data1[0]["password"] == this.state.password){
+                if(admin[0]["admin"]){
+                    this.props.navigation.navigate('Admin')
+                }
+                else{
+                    this.props.navigation.navigate('Home')
+                }
+             }
+             else{
+                this.setState({error : true})
+             }
+
+             }
+             catch(error){
+                this.setState({error : true})    
+                Toast.show({
+                   type: 'error',
+                   position : 'top',
+                   text1 : "Invalid Credentials",
+                   autoHide : true,
+                   visibilityTime : 1000,
+                    onHide : () => {this.setState({error : false})}});
+             }
         }
 
     
         return (
-           <ImageBackground source={require('../assets/bgimage.jpg')} resizeMode= {'cover'} style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}> 
-              <KeyboardAvoidingView behavior="height" contentContainerStyle={{ flex: 1}} >
-                    <View style={{alignItems : 'center', marginTop : 130}}>
-                             <Text style={{ fontSize: 46, fontFamily: 'NunitoSans-SemiBold', marginLeft : 20  }}>Welcome to K-Sree</Text>
+           <ImageBackground source={require('../assets/bgimage.jpg')} style={{flex: 1}} imageStyle={{height : height - 200, width : width}}> 
+              <Modal visible={this.state.error} >
+                <View style={{marginBottom : 800}}>
+                 <Toast autoHide visibilityTime={2000}>                   
+                 </Toast>
+                 </View>
+                </Modal>
+        
+               
+                 <Animated.View style={[styles.logs,transformStyle]}>
+                    <View style={{height : 4, width : 100, marginLeft : 140, backgroundColor : 'grey', marginTop : 10, borderRadius : 20}}>
                     </View>
-                    <View style={{marginTop : 130}}>
+
+                    <View style={{marginTop : 50, width : '90%',marginLeft : 20}}>
                          <TextInput
                             mode="outlined"
                              // label="Username"
-                              label="Username"
-                            
+                            label="Username"
+                            error = {this.state.error}
                              // right={<TextInput.Affix text="/100" />}
                              style={{ marginLeft: 5, marginRight: 5}}
                              value={this.state.username}
                              onChangeText={(text) => { this.setState({ username: text }) }}
+                            
                             />
 
                          <TextInput
                              mode="outlined"
                             label="Password"
-                            
+                            error = {this.state.error}
                                 // right={<TextInput.Affix text="/100" />}
                              style={{ marginLeft: 5, marginRight: 5, marginTop: 2 }}
                              value={this.state.password}
@@ -109,8 +146,7 @@ class Login extends React.Component {
                                  <Text style={{ fontSize: 17, color: 'black' }}>Sign In</Text>
                             </Button>
                     </View>
-                   
-                </KeyboardAvoidingView>
+                   </Animated.View> 
              </ImageBackground>
           
         )
@@ -122,8 +158,13 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        justifyContent: 'center',
-       
-        
+        justifyContent: 'center',           
+    },
+    logs: {
+      backgroundColor : 'white', 
+      borderRadius : 20, 
+      marginTop : '135%',
+      height : '50%',
+      width : width
     }
 })
