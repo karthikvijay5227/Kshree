@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import Registration from './Screens/Registration'
+import Admin from './Screens/Admin'
 const Stack = createStackNavigator();
 
 export default class App extends React.Component {
@@ -13,7 +13,7 @@ export default class App extends React.Component {
           screenOptions={{
             headerShown: false,
           }}>
-          <Stack.Screen name="Registration" component={Registration} options={{ headerShown: false }} />
+          <Stack.Screen name="Registration" component={Admin} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     )
