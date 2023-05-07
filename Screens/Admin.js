@@ -54,7 +54,7 @@ class DrawerNavigation extends React.Component {
                 <Drawer.Screen name="Home" component={AdminHome} />
                 <Drawer.Screen name="Loan Details" component={LoanDetails}/>
                 <Drawer.Screen name="Loan Registration" component={LoanRegistration}/>
-                <Drawer.Screen name="Kudumbashree Registration" component={KudumbashreeRegistration}/>
+                <Drawer.Screen name="Kudumbashree Registration" component={KudumbashreeRegistration}  options={{headerTitle : ''}}/>
                 <Drawer.Screen name="Events" component={Events}/>
             </Drawer.Navigator>
             
