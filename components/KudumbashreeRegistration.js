@@ -2,13 +2,13 @@
 admin or member, with their name, username, password, address, and phone number. */
 
 import * as React from 'react';
-import { View, StyleSheet, Text, Button, Touchable } from 'react-native';
-import { TextInput, Modal, Card } from 'react-native-paper';
+import { View, StyleSheet, Text, } from 'react-native';
+import { TextInput, Modal } from 'react-native-paper';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createClient } from '@supabase/supabase-js'
 import Toast from 'react-native-toast-message'
-import { Modal } from 'react-native';
+
 
 
 export default class KudumbashreeRegistartion extends React.Component {
@@ -66,9 +66,11 @@ export default class KudumbashreeRegistartion extends React.Component {
             {
                 this.setState({deterror : true});
                 this.setState({pherror : true});
+              
             }
             else if (this.state.phone.length != 10) {
                 this.setState({error : true});
+
             
             }
             else {
@@ -83,15 +85,13 @@ export default class KudumbashreeRegistartion extends React.Component {
               name : this.state.name, 
               phone_number : this.state.phone
              }]).throwOnError(
+                    error => {
+                       console.log(error)
+                    } 
+             )
                 
-                Toast.show({
-                    type: 'error',
-                    position : 'top',
-                    text1 : "Error Occured",
-                    autoHide : true,
-                    visibilityTime : 1000,
-                    onHide : () => {this.setState({pherror : false, deterror : false})}}
-                   ))
+          
+                
             }
         }
 
@@ -101,13 +101,7 @@ export default class KudumbashreeRegistartion extends React.Component {
           <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor : '#FFFFFF' }}>
              
          
-             <Modal visible={this.state.deterror} style={{position : 'absolute'}} >
-                <View style={{marginBottom : 800, position : 'absolute'}}>
-                 <Toast autoHide visibilityTime={2000}>                   
-                 </Toast>
-                 </View>
-             </Modal>
-            
+                        
               <Text style={{fontSize : 20, fontWeight : 'bold', alignItems : 'flex-start', marginTop : 30}}>Member Registartion</Text>
             
               
@@ -188,9 +182,15 @@ export default class KudumbashreeRegistartion extends React.Component {
                    <Text style={{marginTop : 15, marginLeft : 35}}>Register</Text>
                 </TouchableOpacity>
                 </View>
-    
               </View>
+              <Modal visible={this.state.deterror}  >
+                 <View style={{backgroundColor : 'red', marginTop : 10}}>
+                  <Toast autoHide visibilityTime={2000}>                   
+                  </Toast>
+                 </View>
+              </Modal>
               </View>
+              
         )
     }
 }
