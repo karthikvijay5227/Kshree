@@ -3,11 +3,11 @@ admin or member, with their name, username, password, address, and phone number.
 
 import * as React from 'react';
 import { View, StyleSheet, Text, } from 'react-native';
-import { TextInput, Modal } from 'react-native-paper';
+import { TextInput} from 'react-native-paper';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createClient } from '@supabase/supabase-js'
-import Toast from 'react-native-toast-message'
+import { Alert } from 'react-native';
 
 
 
@@ -59,23 +59,27 @@ export default class KudumbashreeRegistartion extends React.Component {
             `true`, which will also display an error message to the user. If all the required fields
             are filled out and the phone number is valid, it inserts the user's information into a
             Supabase database using the `supabase.from('users').insert()` method. If there is an
-            error during the insertion process, it displays an error message using the
-            `Toast.show()` method. */
+            error during the insertion process*/
 
             if( this.state.name == '' || this.state.username == '' || this.state.password == '' || this.state.address == '' || this.state.admin == '' || this.state.phone == '')
             {
                 this.setState({deterror : true});
                 this.setState({pherror : true});
+                Alert.alert("Please fill all the details").then(() => {
+                    this.setState({deterror : false});
+                    this.setState({pherror : false});
+                });
               
             }
             else if (this.state.phone.length != 10) {
-                this.setState({error : true});
+                this.setState({pherror : true});
+                Alert.alert("Please enter a valid phone number");
 
             
             }
             else {
 
-            
+            try{
              await supabase.from('users').insert([
              {
               username : this.state.username, 
@@ -84,15 +88,16 @@ export default class KudumbashreeRegistartion extends React.Component {
               address : this.state.address, 
               name : this.state.name, 
               phone_number : this.state.phone
-             }]).throwOnError(
-                    error => {
-                       console.log(error)
-                    } 
-             )
-                
-          
-                
+             }]) 
+
+             }catch(e){
+                Alert.alert("Failed to add user");
+             }
+
+                Alert.alert("User added successfully");
+            
             }
+            
         }
 
         return(
@@ -183,13 +188,7 @@ export default class KudumbashreeRegistartion extends React.Component {
                 </TouchableOpacity>
                 </View>
               </View>
-              <Modal visible={this.state.deterror}  >
-                 <View style={{backgroundColor : 'red', marginTop : 10}}>
-                  <Toast autoHide visibilityTime={2000}>                   
-                  </Toast>
-                 </View>
-              </Modal>
-              </View>
+            </View>
               
         )
     }
