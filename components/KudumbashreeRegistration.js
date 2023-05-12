@@ -2,7 +2,7 @@
 admin or member, with their name, username, password, address, and phone number. */
 
 import * as React from 'react';
-import { View, StyleSheet, Text, } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, ScrollView } from 'react-native';
 import { TextInput} from 'react-native-paper';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -39,7 +39,9 @@ export default class KudumbashreeRegistartion extends React.Component {
 
         const list = [{label : "Admin",value : true }, {label : "Member", value : false}]
 
-      
+        const height = Dimensions.get('window').height;
+        const width = Dimensions.get('window').width;
+
         const addUser = async() => {
 
            /* This code is creating a Supabase client object using the Supabase URL and API key.
@@ -59,7 +61,7 @@ export default class KudumbashreeRegistartion extends React.Component {
             `true`, which will also display an error message to the user. If all the required fields
             are filled out and the phone number is valid, it inserts the user's information into a
             Supabase database using the `supabase.from('users').insert()` method. If there is an
-            error during the insertion process*/
+            error during the insertion process its displays an Alert */
 
             if( this.state.name == '' || this.state.username == '' || this.state.password == '' || this.state.address == '' || this.state.admin == '' || this.state.phone == '')
             {
@@ -103,11 +105,11 @@ export default class KudumbashreeRegistartion extends React.Component {
         return(
           
           <View style={{flex : 1}}>
-          <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor : '#FFFFFF' }}>
+          <View style={{ flex: 1, justifyContent: 'flex-start',alignItems: 'center' ,backgroundColor : '#FFFFFF' }}>
              
-         
+            <ScrollView style={{flex : 1}} showsVerticalScrollIndicator={false}>
                         
-              <Text style={{fontSize : 20, fontWeight : 'bold', alignItems : 'flex-start', marginTop : 30}}>Member Registartion</Text>
+              <Text style={{fontSize : 20, fontWeight : 'bold', alignItems : 'flex-start', marginTop : 30,}}>Member Registartion</Text>
             
               
                 <TextInput
@@ -116,7 +118,7 @@ export default class KudumbashreeRegistartion extends React.Component {
                 error={this.state.deterror}
                 value={this.state.name}
                 onChangeText={text => this.setState({ name : text })}
-                style={{width : 350, marginTop : 20}}
+                style={{width : width - 50, marginTop : 20}}
                 />
               
 
@@ -127,7 +129,7 @@ export default class KudumbashreeRegistartion extends React.Component {
                 error={this.state.deterror}
                 value={this.state.username}
                 onChangeText={text => this.setState({ username : text })}
-                style={{width : 350, marginTop : 20}}
+                style={{width : width - 50, marginTop : 20}}
                 />
               
                 <TextInput
@@ -137,7 +139,7 @@ export default class KudumbashreeRegistartion extends React.Component {
                 secureTextEntry={true}
                 value={this.state.password}
                 onChangeText={text => this.setState({ password : text })}
-                style={{width : 350, marginTop : 20}}
+                style={{width : width - 50, marginTop : 20}}
                 />
              
                 <TextInput
@@ -146,7 +148,7 @@ export default class KudumbashreeRegistartion extends React.Component {
                 error={this.state.deterror}
                 value={this.state.address}
                 onChangeText={text => this.setState({ address : text })}
-                style={{width : 350, marginTop : 20, height : 80}}
+                style={{width : width - 50, marginTop : 20}}
                 numberOfLines={10}
                 multiline={true}
                 editable={true}
@@ -160,11 +162,11 @@ export default class KudumbashreeRegistartion extends React.Component {
                 error={this.state.pherror}
                 onChangeText={text => this.setState({ phone : text })}
                 keyboardType={'number-pad'}
-                style={{width : 350, marginTop : 20, }}
+                style={{width : width - 50, marginTop : 20}}
                 
                 />
 
-                <View style={{ marginTop : 25, width : 350, }}>
+                <View style={{width : width - 50, marginTop : 20}}>
                 <SelectList
                 placeholder='Role'
                 search={false}
@@ -183,10 +185,11 @@ export default class KudumbashreeRegistartion extends React.Component {
                 </View>
                
                 <View style={{marginTop : 40,  width : '30%'}}>
-                <TouchableOpacity style={{backgroundColor : '#ADD8E6', width : '100%', height : 50, borderRadius : 10}} onPress={()=>{addUser()}}>
-                   <Text style={{marginTop : 15, marginLeft : 35}}>Register</Text>
+                <TouchableOpacity style={{flex : 1,justifyContent : 'center', alignItems : 'center',backgroundColor : '#ADD8E6', width : '100%', height : 50, borderRadius : 10, marginBottom : 30}} onPress={()=>{addUser()}}>
+                   <Text>Register</Text>
                 </TouchableOpacity>
                 </View>
+                </ScrollView>
               </View>
             </View>
               

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import LoanDetails from '../components/LoanDetails';
 import LoanRegistration from '../components/LoanRegistration';
 import KudumbashreeRegistration from '../components/KudumbashreeRegistration';
@@ -10,6 +10,7 @@ import Registration from '../Screens/Registration';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
+const height = Dimensions.get('window').height;
 
 function Logout(props){
     
@@ -19,7 +20,7 @@ function Logout(props){
         <DrawerContentScrollView {...props}>
           <DrawerItemList {...props} />
           <DrawerItem label={() => <Text>Logout</Text>}
-            style={{marginTop : '176%',}} 
+            style={{marginTop : height - 360,}} 
             onPress={() => {navigation.navigate('InitialPage')}}
           />
         </DrawerContentScrollView>

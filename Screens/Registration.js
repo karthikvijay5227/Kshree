@@ -53,7 +53,7 @@ class Login extends React.Component {
 
     _keyboardDidShow = () => {
         Animated.timing(this.state.animationUp, {
-            toValue : -300,
+            toValue : -height/2 + 100,
             duration : 100,
             useNativeDriver : true,
             
@@ -108,7 +108,7 @@ class Login extends React.Component {
         return (
            <ImageBackground source={require('../assets/bgimage.jpg')} style={{flex: 1}} imageStyle={{height : height - 200, width : width}}> 
               <Modal visible={this.state.error} >
-                <View style={{marginBottom : 800}}>
+                <View style={{marginBottom : height - 300}}>
                  <Toast autoHide visibilityTime={2000}>                   
                  </Toast>
                  </View>
@@ -143,7 +143,7 @@ class Login extends React.Component {
                              onChangeText={(text) => { this.setState({ password: text }) }}
                              />
                              
-                            <Button style={{ marginTop: '8%', backgroundColor: '#ff99e6', marginLeft: '25%', marginRight: '25%', padding: 2 }} onPress={() => {validateCredentials()}}>
+                            <Button style={{ marginTop: height - 720, backgroundColor: '#ff99e6', marginLeft: '25%', marginRight: '25%', padding: 2 }} onPress={() => {validateCredentials()}}>
                                  <Text style={{ fontSize: 17, color: 'black' }}>Sign In</Text>
                             </Button>
                     </View>
@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
     logs: {
       backgroundColor : 'white', 
       borderRadius : 20, 
-      marginTop : '135%',
-      height : '50%',
+      marginTop : height - 290,
+      height : height,
       width : width
     }
 })
