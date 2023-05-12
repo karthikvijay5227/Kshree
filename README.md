@@ -10,11 +10,11 @@
 
 
 <p float="left" align="center">
-<img src="/assets/image1.jpeg" width=190 />
-<img src="/assets/image2.jpeg" width=190 />
-<img src="/assets/image3.jpeg" width=190 />
-<img src="/assets/image4.jpeg" width=190 />
-<img src="/assets/image5.jpeg" width=190 />
+<img src="/assets/image1.jpeg" width=180 />
+<img src="/assets/image2.jpeg" width=180 />
+<img src="/assets/image3.jpeg" width=180 />
+<img src="/assets/image4.jpeg" width=180 />
+<img src="/assets/image5.jpeg" width=180 />
 </p>
 
 ## Usage
