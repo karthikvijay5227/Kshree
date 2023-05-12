@@ -14,7 +14,6 @@
 <img src="/assets/image2.jpeg" width=180 />
 <img src="/assets/image3.jpeg" width=180 />
 <img src="/assets/image4.jpeg" width=180 />
-<img src="/assets/image5.jpeg" width=180 />
 </p>
 
 ## Usage
