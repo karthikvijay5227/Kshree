@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js'
 import { ScrollView } from 'react-native-gesture-handler';
 import CreateEvent from '../components/CreateEvent';
-
+import EventDetails from '../components/EventDetails';
 
 const Stack = createStackNavigator();
 const height = Dimensions.get('window').height
@@ -17,6 +17,7 @@ export default class Events extends React.Component {
         <Stack.Navigator initialRouteName="EventList" screenOptions={{headerShown : false}}>
             <Stack.Screen name='CreateEvent' component={CreateEvent} />
             <Stack.Screen name='EventList' component={EventList} />
+            <Stack.Screen name='EventDetails' component={EventDetails} />
         </Stack.Navigator>
     )}
 }
@@ -78,7 +79,7 @@ class EventList extends React.Component {
                 this.state.events.map((item,index)=>{
                     return(
                        
-                        <Card onPress={()=>{}} key={index} style={{height : 210, marginTop : 20, width : width - 20}}>
+                        <Card onPress={()=>{this.props.navigation.navigate('EventDetails',{ event : item.event_name})}} key={index} style={{height : 210, marginTop : 20, width : width - 20}}>
                             <Card.Title title={item.event_name} titleVariant='headlineMedium' right={(props) => <IconButton {...props} icon={require("../assets/delete.png")} onPress={() => {deleteEvent(item.event_name)}} />}/>
                             <Card.Content>
                                 <View style={{flexDirection : 'row', marginTop : 10}}>
