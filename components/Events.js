@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, Alert,Platform,KeyboardAvoidingView, Dimensions, RefreshControl, Keyboard } from 'react-native';
+import { View, StyleSheet, Text,ScrollView ,Dimensions, RefreshControl} from 'react-native';
 import { Button, Card, IconButton, TextInput } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js'
-import { ScrollView } from 'react-native-gesture-handler';
 import CreateEvent from '../components/CreateEvent';
 import EventDetails from '../components/EventDetails';
 
@@ -45,10 +44,7 @@ class EventList extends React.Component {
             let { data: obj} = await supabase.from('events').select('*')
             this.setState({events : obj})
           });
-
-        
-
-        setTimeout(()=>{this.setState({refresh : false})}, 1000)
+          setTimeout(()=>{this.setState({refresh : false})}, 1000)
         
         }   
 
@@ -65,6 +61,7 @@ class EventList extends React.Component {
         const deleteEvent = async(name) => {
             
             await supabase.from('events').delete().match({event_name : name})
+            await supabase.from('EventAttendies').delete().match({eventname : name})
             let { data: obj} = await supabase.from('events').select('*')
             this.setState({events : obj})
 
@@ -76,10 +73,11 @@ class EventList extends React.Component {
         const mapEvents = () => {
 
             return(
+                
                 this.state.events.map((item,index)=>{
                     return(
-                       
-                        <Card onPress={()=>{this.props.navigation.navigate('EventDetails',{ event : item.event_name})}} key={index} style={{height : 210, marginTop : 20, width : width - 20}}>
+                    
+                        <Card key={index} onPress={()=>{this.props.navigation.navigate('EventDetails',{ event : item.event_name})}} style={{height : 210, marginTop : 20, width : width - 20}}>
                             <Card.Title title={item.event_name} titleVariant='headlineMedium' right={(props) => <IconButton {...props} icon={require("../assets/delete.png")} onPress={() => {deleteEvent(item.event_name)}} />}/>
                             <Card.Content>
                                 <View style={{flexDirection : 'row', marginTop : 10}}>
@@ -94,8 +92,11 @@ class EventList extends React.Component {
                             </Card.Content>
 
                         </Card>
+                        
                     )
                 })
+            
+            
             )
         }
         
@@ -104,15 +105,16 @@ class EventList extends React.Component {
                 <Button mode='elevated' icon={require('../assets/plus.png')} style={{fontSize : 20, fontWeight : 'bold', marginLeft : 30, marginTop : 30}} onPress={()=>{this.props.navigation.navigate('CreateEvent')}}>
                     <Text style={{fontSize : 15}}>Create Event</Text>
                 </Button>
-
-            <ScrollView contentContainerStyle={{flex : 1, width : width, justifyContent : 'flex-start', alignItems : 'center'}}
-             refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={()=>{mapEvents()}}/>}>
-                  
+            <View style={{flex : 1, alignSelf : 'center'}}> 
+            <ScrollView refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={()=>{mapEvents()}}/>} showsVerticalScrollIndicator={false}>
+               
                   {
                    mapEvents()
                   }
+                
 
             </ScrollView>
+            </View>
                 
             
             </View>

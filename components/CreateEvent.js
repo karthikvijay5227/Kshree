@@ -68,11 +68,7 @@ export default class CreateEvent extends React.Component {
                             contact : this.state.contact,
                             date : this.state.date.toDateString(),
                             time : this.state.time
-                        }
-                        
-                       
-                    ])
-
+                        }])
                 
                  }
                  catch(e){
