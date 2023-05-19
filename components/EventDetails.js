@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image} from 'reac
 import { createClient } from '@supabase/supabase-js';
 import { Paragraph,Button } from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
+import { ImageBackground } from 'react-native';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -20,6 +21,11 @@ export default class EventDetails extends React.Component {
         }
     }
 
+/**
+ * This function uses Supabase to retrieve data from two tables and set the state of the component with
+ * the retrieved data.
+ */
+
     async componentDidMount(){
       
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
@@ -29,13 +35,31 @@ export default class EventDetails extends React.Component {
             this.getEventDetails(obj[0])
             let { data: obj2} = await supabase.from('users').select('username');
             this.setState({users :  Object.entries(obj2)})
-            
-            let checkedState = this.state.users.map(() => false);
-            this.setState({ checked: checkedState });
            
+            let checkedState = this.state.users.map(() => false);
+           
+            try{
+            await supabase.from('EventAttendies').select('attendies').match({eventname : this.state.eventDetails.event_name}).then((members) => 
+            {
+               members.data[0].attendies.map((item,index) => {
+                    this.state.users.map((item2,index2) => {
+                        if(item === item2[1].username){
+                           checkedState[index2] = true;
+                        }
+                    })
+               })
+                
+            })
+             }catch(err){
+                this.setState({ checked: checkedState });
+             }
 
-            
-    }
+             this.setState({ checked: checkedState });
+        }
+
+        /* `getEventDetails` is a function that takes in a parameter `data` and sets the state of the component
+        with the `eventDetails` key to the value of `data`. It also sets the `refresh` key in the state to
+        `false` after a delay of 1 second using `setTimeout`. */
 
     getEventDetails = (data) => {
         this.setState({eventDetails : data})  
@@ -50,6 +74,8 @@ export default class EventDetails extends React.Component {
         this.setState({ checked });
 
       };
+
+
 
     render(){
         
@@ -71,12 +97,30 @@ export default class EventDetails extends React.Component {
             
         }
 
+        const handleMembers = async() => {
+
+            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabase = createClient(supabaseUrl, supabaseKey);
+            let participants = [];
+            
+            
+            for(let i = 0; i < this.state.checked.length; i++){
+                if(this.state.checked[i] === true){
+                    participants.push(this.state.users[i][1].username)
+                }
+            }
+           
+            await supabase.from('EventAttendies').update({ attendies : participants }).eq( "eventname" , this.state.eventDetails.event_name)
+        }
+
         return(
             
             <View style={{flex : 1, backgroundColor : 'white'}}>
-                 <ScrollView contentContainerStyle={{height : height}}>
+                 <ScrollView >
                   
                    <Text style={{fontSize : 30,fontFamily : 'InterTight-Bold', marginLeft : 20 ,marginTop : 20, color : '#000000'}}>{this.state.eventDetails.event_name}</Text>
+                                                  
                    <View style={{flexDirection : 'row'}}>
                         <TouchableOpacity style={{backgroundColor : '#ECF8F8', height : 40, width : 100, marginLeft : 20, marginTop : 30 ,borderRadius : 30}}>
                             <View style={{flexDirection : 'row', justifyContent : 'center', alignItems : 'flex-start'}}>
@@ -109,14 +153,28 @@ export default class EventDetails extends React.Component {
                                 <Paragraph numberOfLines={2} style={{fontSize : 15, width : 100 ,fontFamily : 'Outfit-Medium', marginLeft : 10 ,marginTop : 10, color : '#000000'}}>{this.state.eventDetails.contact}</Paragraph>
                         </TouchableOpacity>
                     </View>
-                                   
-                   <Text style={{fontSize : 20,fontFamily : 'InterTight-Bold', marginLeft : 30 ,marginTop : 50, color : '#000000'}}>Participants</Text>
+
+                    <View style={{flexDirection: 'row', marginTop: 30, marginBottom: 10, paddingHorizontal: 30, alignItems: 'center', overflow: 'hidden'}}>
+                        <Text style={{fontSize: 20, fontFamily: 'InterTight-Bold', color: '#000000'}}>Participants</Text>
+                        <View style={{flex: 1, alignItems: 'flex-end'}}>
+                          <TouchableOpacity style={{height: 40, width: 80, borderRadius: 25, justifyContent: 'center', alignItems: 'center'}} onPress={()=>{handleMembers()}}>
+                                <ImageBackground source={require('../assets/bg.jpg')} borderRadius={25} style={{height: 40, width: 80, justifyContent: 'center', alignItems: 'center'}}>
+                                    <Text style={{fontSize: 15, fontFamily: 'InterTight-Bold', color: 'white'}}>Save</Text>
+                                 </ImageBackground>
+                            </TouchableOpacity>
+                         </View>
+                    </View>
+
                   
                     {
                         renderMembers()
                     }
                    
+                   
                 </ScrollView>
+               
+               
+
                  </View>
             
         )

@@ -64,6 +64,7 @@ class EventList extends React.Component {
             await supabase.from('EventAttendies').delete().match({eventname : name})
             let { data: obj} = await supabase.from('events').select('*')
             this.setState({events : obj})
+            
 
         }
 

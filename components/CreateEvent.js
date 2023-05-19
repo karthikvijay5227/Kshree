@@ -69,6 +69,10 @@ export default class CreateEvent extends React.Component {
                             date : this.state.date.toDateString(),
                             time : this.state.time
                         }])
+
+                    await supabase.from('EventAttendies').insert([{
+                        eventname : this.state.name
+                    }]);
                 
                  }
                  catch(e){
