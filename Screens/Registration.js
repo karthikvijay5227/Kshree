@@ -17,7 +17,7 @@ export default class Registration extends React.Component {
     render() {
         return (
           
-            <Stack.Navigator initialRouteName="Login"// Add this to set initial screen
+            <Stack.Navigator initialRouteName="Login"
               screenOptions={{
                 headerShown: false,
               }}>
@@ -106,7 +106,7 @@ class Login extends React.Component {
 
     
         return (
-           <ImageBackground source={require('../assets/bgimage.jpg')} style={{flex: 1}} imageStyle={{height : height - 200, width : width}}> 
+            <ImageBackground source={require('../assets/bgimage.jpg')} style={styles.imageBackground} imageStyle={styles.image}>
               <Modal visible={this.state.error} >
                 <View style={{marginBottom : height - 300}}>
                  <Toast autoHide visibilityTime={2000}>                   
@@ -143,9 +143,11 @@ class Login extends React.Component {
                              onChangeText={(text) => { this.setState({ password: text }) }}
                              />
                              
-                            <Button style={{ marginTop: height - 720, backgroundColor: '#ff99e6', marginLeft: '25%', marginRight: '25%', padding: 2 }} onPress={() => {validateCredentials()}}>
-                                 <Text style={{ fontSize: 17, color: 'black' }}>Sign In</Text>
-                            </Button>
+                             <View style={styles.signInContainer}>
+                                    <Button style={styles.signInButton} onPress={() => { validateCredentials() }}>
+                                        <Text style={styles.signInText}>Sign In</Text>
+                                    </Button>
+                                    </View>
                     </View>
                    </Animated.View> 
              </ImageBackground>
@@ -161,11 +163,35 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',           
     },
+    imageBackground: {
+        flex: 1,
+      },
+      image: {
+        height: height - 200,
+        width: width,
+      },
+
     logs: {
       backgroundColor : 'white', 
       borderRadius : 20, 
       marginTop : height - 290,
       height : height,
       width : width
-    }
+    },
+    signInContainer: {
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        marginTop: 30,
+      },
+      signInButton: {
+        backgroundColor: '#ff99e6',
+        padding: 2,
+        width: '50%',
+        borderRadius: 10,
+      },
+      signInText: {
+        fontSize: 17,
+        color: 'black',
+      },
 })

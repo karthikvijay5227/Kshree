@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
 import { createClient } from '@supabase/supabase-js';
+import { exp } from "react-native/Libraries/Animated/Easing";
 
 
 const height = Dimensions.get('window').height;
@@ -12,7 +13,9 @@ export default class LoanUser extends React.Component {
     super(props);
     this.state = {
       loanDetails: [],
-      monthlyPayment: ''
+      monthlyPayment: '',
+      expired : false
+    
     }
   }
 
@@ -25,10 +28,34 @@ export default class LoanUser extends React.Component {
     let name = this.props.route.params.name
     let { data, error } = await supabase.rpc('monthly_payment', {p_username : name})
     this.setState({monthlyPayment : data}) 
-    console.log(this.state.monthlyPayment)
+   
+    let expirationDate = new Date(this.state.loanDetails[0]?.date);
+    expirationDate.setMonth(expirationDate.getMonth() + Number(this.state.loanDetails[0]?.duration));
+    let expiration = new Date(expirationDate).toISOString().slice(0,10);
+    let today = new Date().toISOString().slice(0,10);
+    
+    let diff = Math.floor(( Date.parse(expiration) - Date.parse(today) ) / 86400000);
+
+    if(diff > 0){
+     this.setState({expired : false})
+    }
+    else{
+      this.setState({expired : true})
+    }
+  
+  
   }
 
   render() {
+
+
+
+    
+ 
+
+
+    
+
     return (
       <View style={{ flex: 1, justifyContent: 'flex-start', alignContent: 'flex-start', backgroundColor: 'white' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 10 }}>
@@ -37,7 +64,14 @@ export default class LoanUser extends React.Component {
           </TouchableOpacity>
           <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 30, color: 'black', marginLeft: 20, marginTop: 15 }}>Loan Users</Text>
         </View>
-        <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: '#1A1110', marginTop: 30, marginLeft: 20 }}>Details</Text>
+        <View style={{flexDirection : 'row', marginLeft: 30, justifyContent: 'space-between', alignItems: 'center'}}>
+        <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: '#1A1110', marginTop: 30,  }}>Details</Text>
+        {
+          this.state.expired && (
+            <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 14, color: 'red', marginTop: 30, marginRight : 30 }} >Loan Expired</Text>
+          )
+        }
+        </View>
         {this.state.loanDetails.length > 0 && (
           <TouchableOpacity style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginLeft: 20, marginTop: 30, width: width - 40, height: height - 280 }}>
            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

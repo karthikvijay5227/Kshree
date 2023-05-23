@@ -35,15 +35,14 @@ class LoanInfo extends React.Component {
 
     componentDidMount(){
 
-       const { navigation } = this.props;
-       this.onNavigate = navigation.addListener('focus', async() => {
+        const { navigation } = this.props;
+        this.onNavigate = navigation.addListener('focus', async() => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
         const supabase = createClient(supabaseUrl, supabaseKey)
         this.setState({totalAmount : await supabase.rpc('calculate_total_amount')})
         let { data: obj1} = await supabase.rpc('calculate_monthly_payment')
         this.setState({loanMembers : obj1})
-        
 
        }) 
         
