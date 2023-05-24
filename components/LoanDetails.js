@@ -41,9 +41,10 @@ class LoanInfo extends React.Component {
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
         const supabase = createClient(supabaseUrl, supabaseKey)
         this.setState({totalAmount : await supabase.rpc('calculate_total_amount')})
-        let { data: obj1} = await supabase.rpc('calculate_monthly_payment')
+        let { data: obj1} = await supabase.rpc('calculatemonthlypayment')
         this.setState({loanMembers : obj1})
 
+      
        }) 
         
     }
@@ -61,14 +62,14 @@ class LoanInfo extends React.Component {
                 this.state.loanMembers.map((item,index) => {
 
                     return(
-                        <TouchableOpacity key={index} activeOpacity={0.8} style={styles.names} onPress={()=> navigation.navigate('LoanUser', {name : item.username})}>
+                        <TouchableOpacity key={index} activeOpacity={0.8} style={styles.names} onPress={()=> navigation.navigate('LoanUser', {name : item.loan_username})}>
                         <View style={{ flexDirection: 'row' }}>
                           <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10 }}>{index + 1}.</Text>
-                          <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10 }}>{item.username}</Text>
+                          <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10 }}>{item.loan_username}</Text>
                         </View>
                         <View style={{ flexDirection: 'column', marginRight: 20 }}>
-                          <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: '#38E038' }}>₹ {Math.round(item.monthly_payment).toFixed(2)}</Text>
-                          <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: new Date(item.date).toISOString().slice(0,10) < new Date().toISOString().slice(0,10) ? 'red' : '#38E038' }}>{item.date}</Text>
+                          <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: '#38E038' }}>₹ {Math.round(item.amount).toFixed(2)}</Text>
+                          <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: new Date(item.updatedate).toISOString().slice(0,10) < new Date().toISOString().slice(0,10) ? 'red' : '#38E038' }}>{item.updatedate}</Text>
                         </View>
                       </TouchableOpacity>
                       

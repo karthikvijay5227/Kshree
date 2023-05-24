@@ -49,9 +49,38 @@ export default class LoanUser extends React.Component {
   render() {
 
 
+    const updateDate = async() =>{
+      const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+      const supabase = createClient(supabaseUrl, supabaseKey)
+      let name = this.props.route.params.name;
+      const currentDate = (await supabase.from('loan').select('updatedate').eq('username', name)).data[0].updatedate;
+      const updatedDate = new Date(new Date(currentDate).setMonth(new Date(currentDate).getMonth() + 1)).toISOString().slice(0, 10);
+      await supabase.from('loan').update({ updatedate: updatedDate }).eq('username', name);
+      this.props.navigation.goBack();
+    }
 
     
+    const updateLoan = () =>{
+
+      if(this.state.expired){
+          return  <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 14, color: 'red', marginTop: 30, marginRight : 30 }} >Loan Expired</Text>
+      }
+      else{
+          return(
+           <TouchableOpacity style={{height : 40, width : 150,marginTop: 30, marginRight : 30, backgroundColor : '#90EE90', borderRadius : 10, justifyContent : 'center'}} onPress={()=>{updateDate()}}>
+            <View style={{flexDirection : 'row'}}>
+              <Image source={require('../assets/checkmark.png')} style={{ height: 20, width: 20, alignSelf : 'center', marginLeft : 10 }} />
+            <Text style={{fontFamily : 'Outfit-Medium', fontSize : 15 ,marginLeft :10, color : 'black'}}>Mark as Payed</Text>
+            </View>
+           </TouchableOpacity>
+      
+          )
+      }
+      
+     
  
+     }
 
 
     
@@ -67,14 +96,12 @@ export default class LoanUser extends React.Component {
         <View style={{flexDirection : 'row', marginLeft: 30, justifyContent: 'space-between', alignItems: 'center'}}>
         <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: '#1A1110', marginTop: 30,  }}>Details</Text>
         {
-          this.state.expired && (
-            <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 14, color: 'red', marginTop: 30, marginRight : 30 }} >Loan Expired</Text>
-          )
+          updateLoan()
         }
         </View>
         <ScrollView contentContainerStyle={{height : height}}>
         {this.state.loanDetails.length > 0 && (
-          <TouchableOpacity style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginLeft: 20, marginTop: 30, width: width - 40, height: height - 280 }} disabled>
+          <TouchableOpacity style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginLeft: 20, marginTop: 30, width: width - 40, height: height - 200 }} disabled>
            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ fontSize: 18, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: '#1A1110' }}>Simple Credit</Text>
