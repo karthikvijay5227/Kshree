@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, Image, Dimensions, ScrollView } from "react-native";
 import { createClient } from '@supabase/supabase-js';
 import { exp } from "react-native/Libraries/Animated/Easing";
 
@@ -72,8 +72,9 @@ export default class LoanUser extends React.Component {
           )
         }
         </View>
+        <ScrollView contentContainerStyle={{height : height}}>
         {this.state.loanDetails.length > 0 && (
-          <TouchableOpacity style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginLeft: 20, marginTop: 30, width: width - 40, height: height - 280 }}>
+          <TouchableOpacity style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginLeft: 20, marginTop: 30, width: width - 40, height: height - 280 }} disabled>
            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ fontSize: 18, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: '#1A1110' }}>Simple Credit</Text>
@@ -117,7 +118,9 @@ export default class LoanUser extends React.Component {
             </View>
             
            </TouchableOpacity>
+      
         )}
+      </ScrollView>
       </View>
     )
   }

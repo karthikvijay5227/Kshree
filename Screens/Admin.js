@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, StyleSheet, Text, Dimensions,TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Text, Dimensions,TouchableOpacity, Image, ScrollView } from 'react-native';
 import LoanDetails from '../components/LoanDetails';
 import LoanRegistration from '../components/LoanRegistration';
 import KudumbashreeRegistration from '../components/KudumbashreeRegistration';
@@ -22,15 +22,12 @@ export default class Admin extends React.Component {
 
 render(){
     return(
-        <Stack.Navigator initialRouteName="Drawer"// Add this to set initial screen
+        <Stack.Navigator initialRouteName="Drawer"
               screenOptions={{
                 headerShown: false,
               }}>
 
-              <Stack.Screen name="Drawer" component={DrawerNavigation} options={{ headerShown: false }} />
-              <Stack.Screen name="InitialPage" component={Registration}  />
-             
-              
+              <Stack.Screen name="Drawer" component={DrawerNavigation} options={{ headerShown: false }} />              
             </Stack.Navigator>
     );
 }    
@@ -125,6 +122,8 @@ class AdminHome extends React.Component {
 
         return(
             <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor : 'white' }}>
+                
+               
                 <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center', marginTop : 30, marginLeft : 15}}>
                    <IconButton icon={require('../assets/hamburger-menu.png')} size={30} onPress={() => this.props.navigation.openDrawer()} />
                     <Text style={{fontFamily : 'InterTight-Bold', fontSize : 30, color : 'black', marginLeft : 10,marginBottom : 5}}>Homepage</Text>
@@ -154,14 +153,14 @@ class AdminHome extends React.Component {
                     </TouchableOpacity>
 
                     <View style={{flexDirection : 'column'}}>   
-                    <TouchableOpacity style={{alignItems : 'center',justifyContent : 'center',height : 50, width : 150,marginTop : 30,marginLeft : 10, borderRadius : 10, backgroundColor : 'white', elevation: 8,  shadowOffset: { width: 5, height: 2 }, shadowOpacity: 0.5, shadowRadius: 3}} disabled >
+                    <TouchableOpacity style={{alignItems : 'center',justifyContent : 'center',height : 50, width : 150,marginTop : 30,marginLeft : 10, borderRadius : 10, backgroundColor : 'white', elevation: 8,  shadowOffset: { width: 5, height: 2 }, shadowOpacity: 0.5, shadowRadius: 3}} activeOpacity={0.9} onPress={()=>{this.props.navigation.navigate('Events')}} >
                     <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center'}}>
                             <Image source={require('../assets/event.png')} style={{height : 20, width : 20}} />
                             <Text style={{fontFamily : 'InterTight-Bold',fontSize : 14 ,color : 'black', letterSpacing : 0.5, marginLeft : 10}} >Create Event</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{alignItems : 'center',justifyContent : 'center',height : 50, width : 150,marginTop : 20,marginLeft : 10, borderRadius : 10, backgroundColor : 'white', elevation: 8,  shadowOffset: { width: 5, height: 2 }, shadowOpacity: 0.5, shadowRadius: 3}} disabled >
+                    <TouchableOpacity style={{alignItems : 'center',justifyContent : 'center',height : 50, width : 150,marginTop : 20,marginLeft : 10, borderRadius : 10, backgroundColor : 'white', elevation: 8,  shadowOffset: { width: 5, height: 2 }, shadowOpacity: 0.5, shadowRadius: 3}} activeOpacity={0.8} onPress={()=>{this.props.navigation.navigate('Kudumbashree Registration')}} >
                         <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center'}}>
                             <Image source={require('../assets/plus.png')} style={{height : 20, width : 20}} />
                             <Text style={{fontFamily : 'InterTight-Bold',fontSize : 15 ,color : 'black', letterSpacing : 0.5, marginLeft : 10}} >Add User</Text>
@@ -179,12 +178,14 @@ class AdminHome extends React.Component {
 
                 </View>            
                 <Text style={{fontFamily : 'InterTight-Bold', fontSize : 25, color : 'black', marginLeft : 30,marginTop : 40}}>Upcoming Events</Text>
+                
                     
-                <View style={{alignSelf :'center'}}>
+                <ScrollView style={{alignSelf :'center'}}>
                     {
                         displayEvents()
                     }
-                </View>
+              
+                </ScrollView>
             </View>
         )
     }

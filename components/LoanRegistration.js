@@ -55,11 +55,7 @@ export default class LoanRegistartion extends React.Component {
                 
             }
             else {
-                if( !isNaN(parseFloat(this.state.account)) && isFinite(this.state.account) )
-                  this.setState({error : true})
-                else
-                {
-
+                
                 try{
                     await supabase.from('loan').insert([{
                          username : this.state.selectedUser,
@@ -78,7 +74,7 @@ export default class LoanRegistartion extends React.Component {
                         }
                     }
                  Alert.alert("Loan Registered Successfully");
-                }
+                
         }
 
         return(

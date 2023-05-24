@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image} from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Alert} from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Paragraph,Button } from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
@@ -114,6 +114,11 @@ export default class EventDetails extends React.Component {
             await supabase.from('EventAttendies').update({ attendies : participants }).eq( "eventname" , this.state.eventDetails.event_name)
         }
 
+        const createAlert = (alertName) =>{
+       
+                Alert.alert(alertName);               
+            
+        }
         return(
             
             <View style={{flex : 1, backgroundColor : 'white'}}>
@@ -122,14 +127,14 @@ export default class EventDetails extends React.Component {
                    <Text style={{fontSize : 30,fontFamily : 'InterTight-Bold', marginLeft : 20 ,marginTop : 20, color : '#000000'}}>{this.state.eventDetails.event_name}</Text>
                                                   
                    <View style={{flexDirection : 'row'}}>
-                        <TouchableOpacity style={{backgroundColor : '#ECF8F8', height : 40, width : 100, marginLeft : 20, marginTop : 30 ,borderRadius : 30}}>
+                        <TouchableOpacity style={{backgroundColor : '#ECF8F8', height : 40, width : 100, marginLeft : 20, marginTop : 30 ,borderRadius : 30}} onPress={()=>{createAlert(this.state.eventDetails.time)}}>
                             <View style={{flexDirection : 'row', justifyContent : 'center', alignItems : 'flex-start'}}>
                                 <Image source={require('../assets/clock.png')} style={{height : 20, width : 20, marginTop : 10, marginLeft : 5}}/>
                                 <Text style={{fontSize : 15, fontFamily : 'Outfit-Medium', marginLeft : 10 ,marginTop : 10, color : '#000000'}}>{this.state.eventDetails.time}</Text>
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={{backgroundColor : '#ECF8F8', height : 40, width : 200, marginLeft : 20, marginTop : 30 ,borderRadius : 30}}>
+                        <TouchableOpacity style={{backgroundColor : '#ECF8F8', height : 40, width : 200, marginLeft : 20, marginTop : 30 ,borderRadius : 30}} disabled>
                             <View style={{flexDirection : 'row', justifyContent : 'center'}}>
                                 <Image source={require('../assets/calendar.png')} style={{height : 20, width : 20, marginTop : 10, marginLeft : 5}}/>
                                 <Text style={{fontSize : 15, fontFamily : 'Outfit-Medium', marginLeft : 10 ,marginTop : 10, color : '#000000'}}>{this.state.eventDetails.date}</Text>
@@ -137,18 +142,18 @@ export default class EventDetails extends React.Component {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity style={{backgroundColor : '#ECF8F8', height : 40, width : 130 , marginLeft : 20, marginTop : 10 ,borderRadius : 30}}>
+                    <TouchableOpacity style={{backgroundColor : '#ECF8F8', height : 40, width : 130 , marginLeft : 20, marginTop : 10 ,borderRadius : 30}} onPress={()=>{createAlert(this.state.eventDetails.location)}}>
                          <View style={{flexDirection : 'row', alignItems :'flex-start',justifyContent : 'center', marginLeft : 9}}>
                              <Image source={require('../assets/placeholder.png')} style={{height : 20, width : 20, alignSelf : 'center',marginTop : 7}}/>
                              <Paragraph numberOfLines={1} style={{fontSize : 15, width : 80 ,fontFamily : 'Outfit-Medium', marginLeft : 10 ,marginTop : 10, color : '#000000'}}>{this.state.eventDetails.location}</Paragraph>
                          </View>
                     </TouchableOpacity>
 
-                    <View style={{flexDirection : 'row', marginTop : 30}}>
-                        <TouchableOpacity  style={{justifyContent : 'center',alignItems : 'center',marginLeft : 20,height : 100, width : 180, backgroundColor : '#E5F7FF', borderRadius : 30}} >
+                    <View style={{flexDirection : 'row', marginTop : 30, alignItems : 'center', justifyContent : 'space-between'}}>
+                        <TouchableOpacity  style={{justifyContent : 'center',alignItems : 'center',marginLeft : 20,height : 100, width : 180, backgroundColor : '#E5F7FF', borderRadius : 30}} disabled>
                             <Paragraph numberOfLines={3} style={{fontSize : 15, fontFamily : 'Outfit-Medium',  width : 130}}>{this.state.eventDetails.event_description}</Paragraph>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ flexDirection : 'row',justifyContent : 'center',alignItems : 'center',marginLeft : 10,height : 100, width : 150, backgroundColor : '#E5F7FF', borderRadius : 30}} >
+                        <TouchableOpacity style={{ flexDirection : 'row',justifyContent : 'center',alignItems : 'center',marginRight : 20,height : 100, width : 150, backgroundColor : '#E5F7FF', borderRadius : 30}} onPress={()=>{createAlert(this.state.eventDetails.contact)}}>
                                 <Image source={require('../assets/phone.png')} style={{height : 20, width : 20, marginLeft : 20, marginTop : 10}}/>
                                 <Paragraph numberOfLines={2} style={{fontSize : 15, width : 100 ,fontFamily : 'Outfit-Medium', marginLeft : 10 ,marginTop : 10, color : '#000000'}}>{this.state.eventDetails.contact}</Paragraph>
                         </TouchableOpacity>

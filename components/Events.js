@@ -64,9 +64,7 @@ class EventList extends React.Component {
             await supabase.from('EventAttendies').delete().match({eventname : name})
             let { data: obj} = await supabase.from('events').select('*')
             this.setState({events : obj})
-            
-
-        }
+          }
 
        
 
@@ -102,12 +100,12 @@ class EventList extends React.Component {
         }
         
         return(
-            <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+            <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor : 'white' }}>
                 <Button mode='elevated' icon={require('../assets/plus.png')} style={{fontSize : 20, fontWeight : 'bold', marginLeft : 30, marginTop : 30}} onPress={()=>{this.props.navigation.navigate('CreateEvent')}}>
                     <Text style={{fontSize : 15}}>Create Event</Text>
                 </Button>
             <View style={{flex : 1, alignSelf : 'center'}}> 
-            <ScrollView refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={()=>{mapEvents()}}/>} showsVerticalScrollIndicator={false}>
+            <ScrollView style={{marginTop : 20}} refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={()=>{mapEvents()}}/>} showsVerticalScrollIndicator={false}>
                
                   {
                    mapEvents()
