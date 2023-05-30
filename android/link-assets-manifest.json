@@ -1,0 +1,85 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/bgimage.jpg",
+      "sha1": "82e4f12151fbe6e1a1fb7ac44b99b10f55e95d7c"
+    },
+    {
+      "path": "assets/calendar.png",
+      "sha1": "d55d0d4759d76d8540b33465bbf30b6850233749"
+    },
+    {
+      "path": "assets/clock.png",
+      "sha1": "146dd8f336a32fe246c006a2b0ccf4bfc6d497c9"
+    },
+    {
+      "path": "assets/delete.png",
+      "sha1": "8c76c00cd1d8924a1b9cfb0ad7e510fe6ce208f8"
+    },
+    {
+      "path": "assets/Gilroy-Medium.ttf",
+      "sha1": "d7f893124bd4fff78805e69df31385ae113368be"
+    },
+    {
+      "path": "assets/InterTight-Bold.ttf",
+      "sha1": "1fc9afdafd311b9a6c00a66fd46f8a20c8995b31"
+    },
+    {
+      "path": "assets/Outfit-Black.ttf",
+      "sha1": "db01f8b70a55a08418f146114a7a9f503a8608e4"
+    },
+    {
+      "path": "assets/Outfit-Bold.ttf",
+      "sha1": "4d7991b68c5b84c852824697b6ced99c691a0c18"
+    },
+    {
+      "path": "assets/Outfit-ExtraBold.ttf",
+      "sha1": "730982460da2905b902377d5838ab7d7e91b4db2"
+    },
+    {
+      "path": "assets/Outfit-ExtraLight.ttf",
+      "sha1": "61e64e785764f38bb78fe58340ae9bb15eca3bc0"
+    },
+    {
+      "path": "assets/Outfit-Light.ttf",
+      "sha1": "a5e2a1dbc10c56cf267eee4f40914e4e4f96a1eb"
+    },
+    {
+      "path": "assets/Outfit-Medium.ttf",
+      "sha1": "1112beb22b9344db1ff5f72791e6772e9f4b0b84"
+    },
+    {
+      "path": "assets/Outfit-Regular.ttf",
+      "sha1": "b59cc03a78884ea608624fecbf919ed032c8fd3d"
+    },
+    {
+      "path": "assets/Outfit-SemiBold.ttf",
+      "sha1": "11cab7bae700c3ab30edf4ba5367d6dc808b1787"
+    },
+    {
+      "path": "assets/Outfit-Thin.ttf",
+      "sha1": "d035f7db351a5f9adcdad52fa577621e99482612"
+    },
+    {
+      "path": "assets/person.png",
+      "sha1": "86d38aef4e0ca1efeb079b83ebc4846b992fb6bf"
+    },
+    {
+      "path": "assets/phone.png",
+      "sha1": "6614f2b1bbea9495781b479a43087435ef17c992"
+    },
+    {
+      "path": "assets/placeholder.png",
+      "sha1": "625133ec1147682b620d6689e12bf31f142d9b06"
+    },
+    {
+      "path": "assets/plus.png",
+      "sha1": "09f79eca4958c596e9c6c8154fb73aa41f3602f5"
+    },
+    {
+      "path": "assets/user.png",
+      "sha1": "df574d63afd61d6e56874b457b99890bb9393b63"
+    }
+  ]
+}
