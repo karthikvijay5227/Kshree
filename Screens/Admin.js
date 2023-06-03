@@ -125,7 +125,7 @@ class AdminHome extends React.Component {
                 
                
                 <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center', marginTop : 30, marginLeft : 15}}>
-                   <IconButton icon={require('../assets/hamburger-menu.png')} size={30} onPress={() => this.props.navigation.openDrawer()} />
+                    <IconButton icon={require('../assets/hamburger-menu.png')} size={30} onPress={() => this.props.navigation.openDrawer()} />
                     <Text style={{fontFamily : 'InterTight-Bold', fontSize : 30, color : 'black', marginLeft : 10,marginBottom : 5}}>Homepage</Text>
                 </View>
                 <View style={{flexDirection : 'row'}}>
