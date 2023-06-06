@@ -80,12 +80,12 @@ class EventList extends React.Component {
                             <Card.Title title={item.event_name} titleVariant='headlineMedium' right={(props) => <IconButton {...props} icon={require("../assets/delete.png")} onPress={() => {deleteEvent(item.event_name)}} />}/>
                             <Card.Content>
                                 <View style={{flexDirection : 'row', marginTop : 10}}>
-                                <Text style={{fontWeight : 'bold'}}>Event Description : </Text>
-                                <Text style={{marginLeft : 5}}>{item.event_description}</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#000000' }}>Event Description : </Text>
+                                    <Text style={{ marginLeft: 5, color: '#000000' }}>{item.event_description}</Text>
                                 </View>
                                 <View style={{flexDirection : 'row', marginTop : 10}}>
-                                <Text style={{fontWeight : 'bold'}}>Location : </Text>
-                                <Text style={{marginLeft : 5}}>{item.location}</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#000000' }}>Location : </Text>
+                                    <Text style={{ marginLeft: 5, color: '#000000' }}>{item.location}</Text>
                                 </View>
                                 <Button mode='contained' style={{marginTop : 30}} onPress={()=>{}}>Price : {item.profit}</Button>
                             </Card.Content>

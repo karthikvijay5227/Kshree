@@ -71,7 +71,7 @@ export default class LoanUser extends React.Component {
            <TouchableOpacity style={{height : 40, width : 150,marginTop: 30, marginRight : 30, backgroundColor : '#90EE90', borderRadius : 10, justifyContent : 'center'}} onPress={()=>{updateDate()}}>
             <View style={{flexDirection : 'row'}}>
               <Image source={require('../assets/checkmark.png')} style={{ height: 20, width: 20, alignSelf : 'center', marginLeft : 10 }} />
-            <Text style={{fontFamily : 'Outfit-Medium', fontSize : 15 ,marginLeft :10, color : 'black'}}>Mark as Payed</Text>
+            <Text style={{fontFamily : 'Outfit-Medium', fontSize : 15 ,marginLeft :10, color : 'black'}}>Mark as Paid</Text>
             </View>
            </TouchableOpacity>
       

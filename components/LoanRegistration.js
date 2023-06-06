@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, StyleSheet, Text, Dimensions, ScrollView,ImageBackground, TouchableOpacity, Alert } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { createClient } from '@supabase/supabase-js';
-import { Button, TextInput } from 'react-native-paper';
+import {TextInput } from 'react-native-paper';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
