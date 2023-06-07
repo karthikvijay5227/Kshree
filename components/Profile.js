@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Profile({ username }) {
+
+export default function Profile({ navigation, username }) {
   const [user, setUser] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [role, setRole] = useState('');
+
+  navigation = useNavigation();
 
   useEffect(() => {
     async function fetchData() {
@@ -24,6 +28,13 @@ export default function Profile({ username }) {
     }
     fetchData();
   }, []);
+
+  const handleLogout = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Registration' }],
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -46,6 +57,9 @@ export default function Profile({ username }) {
               <Text style={styles.boldText}>Role:</Text> {role ? "Admin" : "Member"}
             </Text>
           </View>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Text style={styles.logoutButtonText}>Sign Out</Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </View>
@@ -63,7 +77,6 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    // backgroundColor: '#E0E0E0',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -105,5 +118,22 @@ const styles = StyleSheet.create({
     fontFamily: 'InterTight-Bold',
     fontWeight: 'bold',
   },
+  logoutButton: {
+    marginTop: 45, // Adjust the spacing from the box view
+    backgroundColor: '#e0453d',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    width: '35%',
+    alignSelf: 'center',
+    shadowOffset: { width: 5, height: 2 },
+    shadowOpacity: 0.5, 
+    shadowRadius: 3
+  },
+  logoutButtonText: {
+    color: 'white', // Set the text color to black
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
-

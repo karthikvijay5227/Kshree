@@ -13,6 +13,7 @@ import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
+
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
@@ -34,6 +35,7 @@ export default class Admin extends React.Component {
 }
 
 class DrawerNavigation extends React.Component {
+
     render() {
         return (
             <Drawer.Navigator initialRouteName="AdminHome">
@@ -69,7 +71,6 @@ class AdminHome extends React.Component {
         let userNumber = await supabase.rpc('get_total_users');
         this.setState({ userNumber: userNumber.data })
     }
-
     render() {
         const displayEvents = () => {
 
@@ -154,7 +155,8 @@ class AdminHome extends React.Component {
                                 <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 15, color: 'black', letterSpacing: 0.5, marginLeft: 10 }} >Add User</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 150, marginTop: 20, marginLeft: 10, borderRadius: 10, backgroundColor: '#EE4A4A', elevation: 8, shadowOffset: { width: 5, height: 2 }, shadowOpacity: 0.5, shadowRadius: 3 }} onPress={() => { this.props.navigation.navigate('Registration') }}>
+                        <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 150, marginTop: 20, marginLeft: 10, borderRadius: 10, backgroundColor: '#EE4A4A', elevation: 8, shadowOffset: { width: 5, height: 2 }, shadowOpacity: 0.5, shadowRadius: 3 }} onPress={() => { this.props.navigation.navigate('Registration') }}
+                        >
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 18, color: 'white', letterSpacing: 0.5 }} >Logout</Text>
                                 <Image source={require('../assets/logout.png')} style={{ height: 20, width: 20, marginLeft: 20 }} />
@@ -181,4 +183,3 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 })
-

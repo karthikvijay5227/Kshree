@@ -9,30 +9,52 @@ import Events from '../components/Events';
 import Registration from '../Screens/Registration';
 import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
+import { useNavigation } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
-
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 function Logout(props) {
+    const navigation = useNavigation();
 
-    const { navigation } = props;
+    const handleLogout = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Registration' }],
+        });
+    };
 
     return (
         <DrawerContentScrollView {...props}>
             <DrawerItemList {...props} />
-            <DrawerItem label={() => <Text style={{ color: "black", textAlign: 'center', backgroundColor: '#e34444', padding: 10, borderRadius: 20 }}>Logout</Text>}
-                style={{ marginTop: height - 380, }}
-                onPress={() => { navigation.navigate('Registration') }}
+            <DrawerItem
+                label={() => (
+                    <Text
+                        style={{
+                            color: "white",
+                            textAlign: 'center',
+                            backgroundColor: '#e34444',
+                            padding: 10,
+                            borderRadius: 18,
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        Log Out
+                    </Text>
+                )}
+                style={{ marginTop: height - 370 }}
+                onPress={handleLogout}
             />
         </DrawerContentScrollView>
     );
 }
 
+
 export default function Members({ route }) {
     const { username } = route.params;
+
     return (
         <Stack.Navigator initialRouteName="Drawer" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Drawer">
@@ -44,7 +66,9 @@ export default function Members({ route }) {
 
 function DrawerNavigation({ username }) {
     return (
-        <Drawer.Navigator initialRouteName="MemberHome" screenOptions={{ headerShown: false }} drawerContent={props => <Logout {...props} />}>
+        <Drawer.Navigator initialRouteName="MemberHome" screenOptions={{ headerShown: false }} drawerContent={(props) => (
+            <Logout {...props} />
+        )}>
             <Drawer.Screen name="Home">
                 {(props) => <MemberHome {...props} username={username} />}
             </Drawer.Screen>
@@ -53,7 +77,7 @@ function DrawerNavigation({ username }) {
             </Drawer.Screen>
             <Drawer.Screen name="Loan Details" component={LoanDetails} options={{ headerShown: true, headerTitle: 'Loan Details' }} />
             <Drawer.Screen name="Events" component={Events} options={{ headerShown: true, headerTitle: 'Events' }} />
-            <Drawer.Screen name="Registration" component={Registration} options={{ headerShown: false, drawerItemStyle: { height: 0 } }} />
+            <Drawer.Screen name="InitialPage" component={Registration} options={{ headerShown: false, drawerItemStyle: { height: 0 } }} />
             <Drawer.Screen name="About" component={AboutUs} options={{ headerShown: true, headerTitle: 'About' }} />
         </Drawer.Navigator>
     )

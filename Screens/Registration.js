@@ -117,7 +117,7 @@ class Login extends React.Component {
 
 
         <Animated.View style={[styles.logs, transformStyle]}>
-          <View style={{ height: 4, width: 100, marginLeft: "36.9%", backgroundColor: 'grey', marginTop: 10, borderRadius: 20 }}>
+          <View style={{ height: 4, width: 100, marginLeft: "37%", backgroundColor: 'grey', marginTop: 10, borderRadius: 20 }}>
           </View>
 
           <View style={{ marginTop: 50, width: '90%', marginLeft: 20 }}>
