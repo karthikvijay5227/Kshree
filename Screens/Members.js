@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, Dimensions, Image, ScrollView } from 'react-native';
-import LoanDetails from '../components/LoanDetails';
+import LoanStatus from '../components/LoanStatus';
 import AboutUs from '../components/AboutUs';
 import Profile from '../components/Profile';
 import Events from '../components/Events';
@@ -75,7 +75,9 @@ function DrawerNavigation({ username }) {
             <Drawer.Screen name="Profile" options={{ headerShown: true, headerTitle: 'Profile' }}>
                 {(props) => <Profile {...props} username={username} />}
             </Drawer.Screen>
-            <Drawer.Screen name="Loan Details" component={LoanDetails} options={{ headerShown: true, headerTitle: 'Loan Details' }} />
+            <Drawer.Screen name="Loan Status" options={{ headerShown: true, headerTitle: 'Loan Status' }} >
+              {(props) => <LoanStatus {...props} username={username} />}
+            </Drawer.Screen>
             <Drawer.Screen name="Events" component={Events} options={{ headerShown: true, headerTitle: 'Events' }} />
             <Drawer.Screen name="InitialPage" component={Registration} options={{ headerShown: false, drawerItemStyle: { height: 0 } }} />
             <Drawer.Screen name="About" component={AboutUs} options={{ headerShown: true, headerTitle: 'About' }} />

@@ -64,8 +64,8 @@ class LoanInfo extends React.Component {
                     return(
                         <TouchableOpacity key={index} activeOpacity={0.8} style={styles.names} onPress={()=> navigation.navigate('LoanUser', {name : item.loan_username})}>
                         <View style={{ flexDirection: 'row' }}>
-                          <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10 }}>{index + 1}.</Text>
-                          <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10 }}>{item.loan_username}</Text>
+                          <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10,color:"black" }}>{index + 1}.</Text>
+                          <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10,color:"black" }}>{item.loan_username}</Text>
                         </View>
                         <View style={{ flexDirection: 'column', marginRight: 20 }}>
                           <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: '#38E038' }}>₹ {Math.round(item.amount).toFixed(2)}</Text>
@@ -83,14 +83,14 @@ class LoanInfo extends React.Component {
             <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor : 'white'}}>
                     <View style={{flexDirection : 'row'}}>
                         <TouchableOpacity disabled style={{elevation : 10,shadowOffset : 3,backgroundColor : 'white', borderRadius : 20,marginLeft : 20, marginTop : 30 ,width : width - 180, height : 100, justifyContent : 'flex-start', alignItems : 'flex-start'}}>
-                            <Text style={{fontSize : 15, fontFamily : 'Outfit-SemiBold', marginTop : 20, marginLeft : 20 }}>Total Amount</Text>
+                            <Text style={{fontSize : 15, fontFamily : 'Outfit-SemiBold', marginTop : 20, marginLeft : 20,color:"black" }}>Total Amount</Text>
                             <Text style={{fontFamily : 'Outfit-Bold', fontSize : 30, color : '#38E038', alignSelf : 'flex-end', marginRight : 30}}>                 
                                 ₹ <CountUp isCounting end={amount} duration={3} />
                             </Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity disabled style={{elevation : 10,shadowOffset : 3,backgroundColor : 'white', borderRadius : 20,marginLeft : 10, marginTop : 30 ,width : width - 260, height : 100, justifyContent : 'flex-start', alignItems : 'flex-start'}}>
-                            <Text style={{fontSize : 15, fontFamily : 'Outfit-SemiBold', marginTop : 20, marginLeft : 20 }}>Borrowers</Text>
+                            <Text style={{fontSize : 15, fontFamily : 'Outfit-SemiBold', marginTop : 20, marginLeft : 20,color:"black" }}>Borrowers</Text>
                             <Text style={{fontFamily : 'Outfit-Bold', fontSize : 30, color : '#38E038', alignSelf : 'flex-end', marginRight : 30}}>                 
                                  <CountUp isCounting end={this.state.loanMembers.length} duration={3} />
                             </Text>
