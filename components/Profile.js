@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    width: '35%',
+    width: 150, 
     alignSelf: 'center',
     shadowOffset: { width: 5, height: 2 },
     shadowOpacity: 0.5, 
