@@ -188,7 +188,9 @@ function MemberHome({ navigation, username }) {
             </View>
             <View style={{ width: 150, height: 150, borderRadius: 75, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
                 <Image source={require('../assets/profile.png')} style={{ width: 120, height: 120, borderRadius: 60, marginTop: 93 }} />
-                <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', textAlign: 'center' }}>{"\n"}{`Hello, ${user}`}</Text>
+                <View style={{width:"170%"}}>
+                    <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', textAlign: 'center' }}>{"\n"}{`Hello, ${user}`}</Text>
+                </View>
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10, margin: width / 4.3 }}>
             </View>

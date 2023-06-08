@@ -40,7 +40,9 @@ export default function Profile({ navigation, username }) {
     <View style={styles.container}>
       <View style={styles.profilePicContainer}>
         <Image source={require('../assets/profile.png')} style={styles.profilePic} />
+        <View style={{ width: "170%" }}>
         <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', textAlign: 'center' }}>{"\n"}{`Hello, ${user}`}</Text>
+        </View>
       </View>
       <View style={styles.boxContainer}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
