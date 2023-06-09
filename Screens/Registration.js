@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, Dimensions, Animated, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Dimensions, Animated, Keyboard, BackHandler } from 'react-native';
 import { TextInput, Button, Modal } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import 'react-native-url-polyfill/auto'
@@ -14,6 +14,18 @@ const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 export default class Registration extends React.Component {
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  handleBackPress = () => {
+    BackHandler.exitApp();
+    return true;
+  };
   render() {
     return (
 

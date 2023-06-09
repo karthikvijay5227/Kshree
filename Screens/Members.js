@@ -5,7 +5,7 @@ import { View, Text, Dimensions, Image, ScrollView } from 'react-native';
 import LoanStatus from '../components/LoanStatus';
 import AboutUs from '../components/AboutUs';
 import Profile from '../components/Profile';
-import Events from '../components/Events';
+import EventAttendance from '../components/EventAttendance';
 import Registration from '../Screens/Registration';
 import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
@@ -78,7 +78,9 @@ function DrawerNavigation({ username }) {
             <Drawer.Screen name="Loan Status" options={{ headerShown: true, headerTitle: 'Loan Status' }} >
               {(props) => <LoanStatus {...props} username={username} />}
             </Drawer.Screen>
-            <Drawer.Screen name="Events" component={Events} options={{ headerShown: true, headerTitle: 'Events' }} />
+            <Drawer.Screen name="Event Attendance" options={{ headerShown: true, headerTitle: 'Event Attendance' }} >
+                {(props) => <EventAttendance {...props} username={username} />}
+            </Drawer.Screen>
             <Drawer.Screen name="InitialPage" component={Registration} options={{ headerShown: false, drawerItemStyle: { height: 0 } }} />
             <Drawer.Screen name="About" component={AboutUs} options={{ headerShown: true, headerTitle: 'About' }} />
         </Drawer.Navigator>
@@ -197,7 +199,7 @@ function MemberHome({ navigation, username }) {
             <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10, margin: width / 4.3 }}>
             </View>
             <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', marginLeft: 20, marginTop: 20 }}>Upcoming Events</Text>
-            <ScrollView style={{ marginTop: 10, marginLeft: 20 }} showsVerticalScrollIndicator={false}>
+            <ScrollView style={{ marginTop: 10, marginLeft: 30 }} showsVerticalScrollIndicator={false}>
                 {displayEvents()}
             </ScrollView>
         </View>

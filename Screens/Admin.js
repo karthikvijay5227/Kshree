@@ -12,11 +12,11 @@ import AboutUs from '../components/AboutUs';
 import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { BackHandler } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
-
-const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 export default function Admin({ route }) {
@@ -55,7 +55,11 @@ function DrawerNavigation({ username }) {
     );
 }
 
-function AdminHome({ navigation, username }) {
+function AdminHome() {
+    const [backButtonPressed, setBackButtonPressed] = useState(false);
+    const navigation = useNavigation();
+
+
     const [events, setEvents] = useState([]);
     const [userNumber, setUserNumber] = useState('');
 
@@ -72,6 +76,24 @@ function AdminHome({ navigation, username }) {
 
         fetchEvents();
     }, []);
+
+    useEffect(() => {
+        const backAction = () => {
+            BackHandler.exitApp();
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+        return () => backHandler.remove();
+    }, []);
+
+    const handleLogout = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Registration' }],
+        });
+    };
 
     const displayEvents = () => {
         function getDayOrdinalSuffix(day) {
@@ -145,7 +167,7 @@ function AdminHome({ navigation, username }) {
                             <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 15, color: 'black', letterSpacing: 0.5, marginLeft: 10 }} >Add User</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 150, marginTop: 20, marginLeft: 10, borderRadius: 10, backgroundColor: '#EE4A4A', elevation: 8, shadowOffset: { width: 5, height: 2 }, shadowOpacity: 0.5, shadowRadius: 3 }} onPress={() => { navigation.navigate('Registration') }}
+                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 150, marginTop: 20, marginLeft: 10, borderRadius: 10, backgroundColor: '#EE4A4A', elevation: 8, shadowOffset: { width: 5, height: 2 }, shadowOpacity: 0.5, shadowRadius: 3 }} onPress={handleLogout}
                     >
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 18, color: 'white', letterSpacing: 0.5 }} >Logout</Text>
