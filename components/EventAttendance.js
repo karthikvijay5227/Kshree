@@ -36,7 +36,7 @@ export default function EventAttendance({ navigation, username }) {
             return (
                 <Card
                     key={index}
-                    style={{ height: 210, marginTop: 20, width: '100%' }}
+                    style={{ height: 210, marginTop: 5, width: '100%', marginBottom: 20 }}
                 >
                     <Card.Title title={item.event_name} titleStyle={{ fontSize: 18 }} right={() => <Text style={{ color: 'black', marginRight: 30, fontSize: 16, marginBottom: 5 }}>Hello</Text>} />
                     <Card.Content>
@@ -58,8 +58,7 @@ export default function EventAttendance({ navigation, username }) {
                         </View>
                         <Button
                             mode='contained'
-                            style={{ marginTop: 47 }}
-                            onPress={() => { }}
+                            style={{ marginTop: 30 }}
                         >
                             Price: {item.profit}
                         </Button>
@@ -72,7 +71,7 @@ export default function EventAttendance({ navigation, username }) {
     return (
         <View style={styles.container}>
             <ScrollView
-                style={{ marginTop: 20 }}
+                style={{ marginTop: 20, height: "90%" }}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
