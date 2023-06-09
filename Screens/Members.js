@@ -10,6 +10,7 @@ import Registration from '../Screens/Registration';
 import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
+import { BackHandler } from 'react-native';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -76,7 +77,7 @@ function DrawerNavigation({ username }) {
                 {(props) => <Profile {...props} username={username} />}
             </Drawer.Screen>
             <Drawer.Screen name="Loan Status" options={{ headerShown: true, headerTitle: 'Loan Status' }} >
-              {(props) => <LoanStatus {...props} username={username} />}
+                {(props) => <LoanStatus {...props} username={username} />}
             </Drawer.Screen>
             <Drawer.Screen name="Event Attendance" options={{ headerShown: true, headerTitle: 'Event Attendance' }} >
                 {(props) => <EventAttendance {...props} username={username} />}
@@ -103,6 +104,17 @@ function MemberHome({ navigation, username }) {
             setUser(user.data[0].name);
         }
         fetchData();
+    }, []);
+
+    useEffect(() => {
+        const backAction = () => {
+            BackHandler.exitApp();
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+        return () => backHandler.remove();
     }, []);
 
     const getDayOrdinalSuffix = (day) => {
@@ -192,7 +204,7 @@ function MemberHome({ navigation, username }) {
             </View>
             <View style={{ width: 150, height: 150, borderRadius: 75, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
                 <Image source={require('../assets/profile.png')} style={{ width: 120, height: 120, borderRadius: 60, marginTop: 93 }} />
-                <View style={{width:"170%"}}>
+                <View style={{ width: "170%" }}>
                     <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', textAlign: 'center' }}>{"\n"}{`Hello, ${user}`}</Text>
                 </View>
             </View>
