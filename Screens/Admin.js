@@ -56,7 +56,6 @@ function DrawerNavigation({ username }) {
 }
 
 function AdminHome() {
-    const [backButtonPressed, setBackButtonPressed] = useState(false);
     const navigation = useNavigation();
 
 
