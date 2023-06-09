@@ -8,8 +8,6 @@ export default function EventAttendance({ navigation, username }) {
     const [refreshing, setRefreshing] = useState(false);
     // const [attensees, setAttensees] = useState([]);
     // const [eventname, setEventName] = useState([]);
-
-    alert(username)
     useEffect(() => {
         fetchData();
     }, []);
