@@ -128,7 +128,7 @@ export default class EventDetails extends React.Component {
                                                   
                    <View style={{flexDirection : 'row'}}>
                         <TouchableOpacity style={{backgroundColor : '#ECF8F8', height : 40, width : 100, marginLeft : 20, marginTop : 30 ,borderRadius : 30}} onPress={()=>{createAlert(this.state.eventDetails.time)}}>
-                            <View style={{flexDirection : 'row', justifyContent : 'center', alignItems : 'flex-start'}}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', color: '#000000' }}>
                                 <Image source={require('../assets/clock.png')} style={{height : 20, width : 20, marginTop : 10, marginLeft : 5}}/>
                                 <Text style={{fontSize : 15, fontFamily : 'Outfit-Medium', marginLeft : 10 ,marginTop : 10, color : '#000000'}}>{this.state.eventDetails.time}</Text>
                             </View>
