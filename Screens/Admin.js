@@ -67,10 +67,16 @@ class AdminHome extends React.Component {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
         const supabase = createClient(supabaseUrl, supabaseKey)
-        let eventData =await supabase.rpc('events');
-        this.setState({events : eventData.data})
-        let userNumber = await supabase.rpc('get_total_users');
-        this.setState({userNumber : userNumber.data})       
+        
+        this._unsubscribe = this.props.navigation.addListener('focus', async() => {
+            let eventData =await supabase.rpc('events');
+            this.setState({events : eventData.data})
+            let userNumber = await supabase.rpc('get_total_users');
+            this.setState({userNumber : userNumber.data}) 
+    
+        })
+        
+       
     }
 
     render(){
