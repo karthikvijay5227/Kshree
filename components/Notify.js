@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Card } from 'react-native-paper';
+import moment from 'moment';
+
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -26,26 +28,6 @@ export default function Notify() {
         setPosts(data);
     };
 
-    const handleDeleteTask = async (index) => {
-        const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
-        const supabase = createClient(supabaseUrl, supabaseKey);
-
-        const postToDelete = posts[index];
-
-        const { data, error } = await supabase
-            .from('Posts')
-            .delete()
-            .eq('id', postToDelete.id);
-
-        if (error) {
-            throw new Error('Failed to delete post');
-        }
-        // Refresh the data after successful deletion
-        fetchData();
-    };
-
-
     const onRefresh = () => {
         setRefreshing(true);
         fetchData();
@@ -64,7 +46,7 @@ export default function Notify() {
         }
 
         return posts.map((post, index) => {
-            const createdAt = new Date(post.created_at).toLocaleString();
+            const createdAt = moment(post.created_at).format('ddd, MMM DD, YYYY h:mm A');
             return (
                 <Card
                     key={index}
@@ -72,12 +54,9 @@ export default function Notify() {
                 >
                     <Card.Content>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text style={{ marginLeft: 5, color: '#000000', fontSize: 20 }}>
+                            <Text style={{ marginLeft: 5, color: '#000000', fontSize: 18 }}>
                                 {post.posts}
                             </Text>
-                            <TouchableOpacity onPress={() => handleDeleteTask(index)}>
-                                <Image source={require('../assets/delete.png')} style={styles.deleteIcon} />
-                            </TouchableOpacity>
                         </View>
                         <View style={{ flexDirection: 'row', marginTop: 10 }}>
                             <Text style={{ marginLeft: 5, color: 'gray' }}>
