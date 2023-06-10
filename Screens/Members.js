@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, RefreshControl } from 'react-native';
 import LoanStatus from '../components/LoanStatus';
 import AboutUs from '../components/AboutUs';
 import Profile from '../components/Profile';
@@ -96,17 +96,24 @@ function MemberHome({ navigation, username }) {
     const [events, setEvents] = useState([]);
     const userName = username;
     const [user, setUser] = useState('');
+    const [refreshing, setRefreshing] = useState(false);
+
+    async function fetchData() {
+        const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        let eventData = await supabase.rpc('events');
+        let filteredEvents = eventData.data.filter((item) => {
+            const eventDate = new Date(item.date);
+            const currentDate = new Date();
+            return eventDate > currentDate;
+        });
+        let user = await supabase.from('users').select('name').eq('username', userName);
+        setEvents(filteredEvents);
+        setUser(user.data[0].name);
+    }
 
     useEffect(() => {
-        async function fetchData() {
-            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
-            const supabase = createClient(supabaseUrl, supabaseKey);
-            let eventData = await supabase.rpc('events');
-            let user = await supabase.from('users').select('name').eq('username', userName);
-            setEvents(eventData.data);
-            setUser(user.data[0].name);
-        }
         fetchData();
     }, []);
 
@@ -115,15 +122,28 @@ function MemberHome({ navigation, username }) {
     };
 
     useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchData();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
+    useEffect(() => {
         const backAction = () => {
             BackHandler.exitApp();
             return true;
         };
-
         const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
         return () => backHandler.remove();
     }, []);
+
+    const handleRefresh = () => {
+        setRefreshing(true);
+        fetchData(); // Fetch the data from the database
+        setRefreshing(false);
+    };
+
 
     const getDayOrdinalSuffix = (day) => {
         if (day === 1 || day === 21 || day === 31) {
@@ -223,8 +243,10 @@ function MemberHome({ navigation, username }) {
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10, margin: width / 4.3 }}>
             </View>
-            <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', marginLeft: 20, marginTop: 20 }}>Upcoming Events</Text>
-            <ScrollView style={{ marginTop: 10, marginLeft: 30 }} showsVerticalScrollIndicator={false}>
+            <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', marginLeft: 20 }}>Upcoming Events</Text>
+            <ScrollView style={{ marginTop: 10, marginLeft: 30 }} showsVerticalScrollIndicator={false} refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+            }>
                 {displayEvents()}
             </ScrollView>
         </View>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Image, ScrollView, RefreshControl } from 'react-native';
 import LoanDetails from '../components/LoanDetails';
 import LoanRegistration from '../components/LoanRegistration';
 import KudumbashreeRegistration from '../components/KudumbashreeRegistration';
@@ -58,24 +58,43 @@ function DrawerNavigation({ username }) {
 
 function AdminHome() {
     const navigation = useNavigation();
-
-
     const [events, setEvents] = useState([]);
     const [userNumber, setUserNumber] = useState('');
+    const [refreshing, setRefreshing] = useState(false);
+
+
+    const fetchEvents = async () => {
+        const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        let eventData = await supabase.rpc('events');
+        let filteredEvents = eventData.data.filter((item) => {
+            const eventDate = new Date(item.date);
+            const currentDate = new Date();
+            return eventDate > currentDate;
+        });
+        setEvents(filteredEvents);
+        let userNumber = await supabase.rpc('get_total_users');
+        setUserNumber(userNumber.data);
+    };
 
     useEffect(() => {
-        const fetchEvents = async () => {
-            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
-            const supabase = createClient(supabaseUrl, supabaseKey);
-            let eventData = await supabase.rpc('events');
-            setEvents(eventData.data);
-            let userNumber = await supabase.rpc('get_total_users');
-            setUserNumber(userNumber.data);
-        };
-
         fetchEvents();
     }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchEvents();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
+    const handleRefresh = () => {
+        setRefreshing(true);
+        fetchEvents(); // Fetch the data from the database
+        setRefreshing(false);
+    };
 
     useEffect(() => {
         const backAction = () => {
@@ -177,7 +196,9 @@ function AdminHome() {
                 </View>
             </View>
             <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', marginLeft: 30, marginTop: 40 }}>Upcoming Events</Text>
-            <ScrollView style={{ alignSelf: 'center' }}>{displayEvents()}</ScrollView>
+            <ScrollView style={{ alignSelf: 'center' }} showsVerticalScrollIndicator={false} refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+            }>{displayEvents()}</ScrollView>
         </View>
     );
 };
