@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, Dimensions, Image, ScrollView } from 'react-native';
+import { View, Text, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import LoanStatus from '../components/LoanStatus';
 import AboutUs from '../components/AboutUs';
 import Profile from '../components/Profile';
 import EventAttendance from '../components/EventAttendance';
 import Registration from '../Screens/Registration';
+import Notify from '../components/Notify';
 import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
@@ -76,6 +77,9 @@ function DrawerNavigation({ username }) {
             <Drawer.Screen name="Profile" options={{ headerShown: true, headerTitle: 'Profile' }}>
                 {(props) => <Profile {...props} username={username} />}
             </Drawer.Screen>
+            <Drawer.Screen name="Notifications" options={{ headerShown: true, headerTitle: 'Notifications' }}>
+                {(props) => <Notify {...props} />}
+            </Drawer.Screen>
             <Drawer.Screen name="Loan Status" options={{ headerShown: true, headerTitle: 'Loan Status' }} >
                 {(props) => <LoanStatus {...props} username={username} />}
             </Drawer.Screen>
@@ -105,6 +109,10 @@ function MemberHome({ navigation, username }) {
         }
         fetchData();
     }, []);
+
+    const handleDeleteIconPress = () => {
+        navigation.navigate('Notifications');
+    };
 
     useEffect(() => {
         const backAction = () => {
@@ -202,6 +210,11 @@ function MemberHome({ navigation, username }) {
                 <IconButton icon={require('../assets/hamburger-menu.png')} size={30} onPress={() => navigation.openDrawer()} />
                 <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 30, color: 'black', marginLeft: 10, marginBottom: 5 }}>Homepage</Text>
             </View>
+            <View style={styles.deleteIconContainer}>
+                <TouchableOpacity onPress={handleDeleteIconPress}>
+                    <Image source={require('../assets/notifications.png')} style={{ width: 27, height: 27 }} />
+                </TouchableOpacity>
+            </View>
             <View style={{ width: 150, height: 150, borderRadius: 75, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
                 <Image source={require('../assets/profile.png')} style={{ width: 120, height: 120, borderRadius: 60, marginTop: 93 }} />
                 <View style={{ width: "170%" }}>
@@ -217,3 +230,12 @@ function MemberHome({ navigation, username }) {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    deleteIconContainer: {
+        position: 'absolute',
+        top: 45,
+        right: 20,
+        zIndex: 1,
+    },
+});
