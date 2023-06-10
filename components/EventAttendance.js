@@ -6,7 +6,7 @@ import { Card, Button } from 'react-native-paper';
 export default function EventAttendance({ navigation, username }) {
     const [events, setEvents] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-    // const [attensees, setAttensees] = useState([]);
+    const [attend, setAttend] = useState([]);
     // const [eventname, setEventName] = useState([]);
     useEffect(() => {
         fetchData();
@@ -23,7 +23,26 @@ export default function EventAttendance({ navigation, username }) {
             return;
         }
         setEvents(data);
+
+        // Fetch presence data for each event
+        const presencePromises = data.map(async (event) => {
+            const { data: presence, error: presenceError } = await supabase.rpc('checkuser', {
+                eventname: event.event_name,
+                username: username,
+            });
+
+            if (presenceError) {
+                console.error('Error fetching presence:', presenceError);
+                return null;
+            }
+
+            return presence;
+        });
+
+        const presenceData = await Promise.all(presencePromises);
+        setAttend(presenceData);
     };
+
 
     const onRefresh = () => {
         setRefreshing(true);
@@ -38,7 +57,12 @@ export default function EventAttendance({ navigation, username }) {
                     key={index}
                     style={{ height: 210, marginTop: 5, width: '100%', marginBottom: 20 }}
                 >
-                    <Card.Title title={item.event_name} titleStyle={{ fontSize: 18 }} right={() => <Text style={{ color: 'black', marginRight: 30, fontSize: 16, marginBottom: 5 }}>Hello</Text>} />
+                    <Card.Title title={item.event_name} titleStyle={{ fontSize: 18 }} right={() => {
+                        const presence = attend[index];
+                        const status = presence ? "Present" : "Absent";
+                        const statusColor = presence ? "green" : "red";
+                        return <Text style={{ color: statusColor, marginRight: 30, fontSize: 16, marginBottom: 5 }}>{status}</Text>;
+                    }} />
                     <Card.Content>
                         <View style={{ flexDirection: 'row', marginTop: 10 }}>
                             <Text style={{ fontWeight: 'bold', color: '#000000' }}>

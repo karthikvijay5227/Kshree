@@ -8,6 +8,7 @@ import KudumbashreeRegistration from '../components/KudumbashreeRegistration';
 import Events from '../components/Events';
 import Profile from '../components/Profile';
 import Registration from '../Screens/Registration';
+import CreatePost from '../components/CreatePost';
 import AboutUs from '../components/AboutUs';
 import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
@@ -27,7 +28,6 @@ export default function Admin({ route }) {
             screenOptions={{
                 headerShown: false,
             }}
-
         >
             <Stack.Screen name="Drawer" options={{ headerShown: false }}>
                 {(props) => <DrawerNavigation {...props} username={username} />}
@@ -45,6 +45,7 @@ function DrawerNavigation({ username }) {
             <Drawer.Screen name="Profile" options={{ headerShown: true, headerTitle: 'Profile' }}>
                 {(props) => <Profile {...props} username={username} />}
             </Drawer.Screen>
+            <Drawer.Screen name="Create Post" component={CreatePost} />
             <Drawer.Screen name="Loan Details" component={LoanDetails} />
             <Drawer.Screen name="Loan Registration" component={LoanRegistration} />
             <Drawer.Screen name="Kudumbashree Registration" component={KudumbashreeRegistration} options={{ headerTitle: 'Member Registration' }} />
