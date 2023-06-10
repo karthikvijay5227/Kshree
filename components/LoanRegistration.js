@@ -37,7 +37,6 @@ export default class LoanRegistartion extends React.Component {
             delete item.username;
         })
         this.setState({ users: obj2 })
-      
 
     }
 
