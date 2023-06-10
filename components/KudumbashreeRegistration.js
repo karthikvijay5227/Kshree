@@ -63,14 +63,10 @@ export default class KudumbashreeRegistartion extends React.Component {
             Supabase database using the `supabase.from('users').insert()` method. If there is an
             error during the insertion process its displays an Alert */
 
-            if (this.state.name == '' || this.state.username == '' || this.state.password == '' || this.state.address == '' || this.state.admin == '' || this.state.phone == '') {
+            if (this.state.name == '' || this.state.username == '' || this.state.password == '' || this.state.address == '' || this.state.phone == '') {
                 this.setState({ deterror: true });
                 this.setState({ pherror: true });
-                Alert.alert("Please fill all the details").then(() => {
-                    this.setState({ deterror: false });
-                    this.setState({ pherror: false });
-                });
-
+                Alert.alert("Please fill all the details")
             }
             else if (this.state.phone.length != 10) {
                 this.setState({ pherror: true });
@@ -96,6 +92,7 @@ export default class KudumbashreeRegistartion extends React.Component {
                 }
 
                 Alert.alert("User added successfully");
+                this.props.navigation.goBack()
 
             }
 

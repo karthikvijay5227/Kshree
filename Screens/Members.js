@@ -46,7 +46,7 @@ function Logout(props) {
                         Log Out
                     </Text>
                 )}
-                style={{ marginTop: height - 370 }}
+                style={{ marginTop: height - 420 }}
                 onPress={handleLogout}
             />
         </DrawerContentScrollView>

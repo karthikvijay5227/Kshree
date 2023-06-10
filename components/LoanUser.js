@@ -88,9 +88,21 @@ export default class LoanUser extends React.Component {
             updateLoan()
           }
         </View>
-        <ScrollView contentContainerStyle={{ height: height }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {this.state.loanDetails.length > 0 && (
-            <TouchableOpacity style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginLeft: 20, marginTop: 30, width: width - 40, height: height - 200 }} disabled>
+            <TouchableOpacity style={{
+              flex: 1,
+              elevation: 10,
+              shadowOffset: { width: 3, height: 3 },
+              backgroundColor: 'white',
+              borderRadius: 20,
+              marginLeft: 20,
+              marginTop: 30,
+              width: width - 40,
+              marginBottom: 20,
+            }}
+              disabled
+            >
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'column' }}>
                   <Text style={{ fontSize: 18, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: '#1A1110' }}>Simple Credit</Text>
