@@ -58,7 +58,7 @@ export default function AboutUs() {
             </View>
 
             <View style={styles.box}>
-                <ScrollView contentContainerStyle={{ height: height + 210 }}>
+                <ScrollView contentContainerStyle={{ height: height + 230 }}>
                     <Text style={styles.aboutText}>
                         Kudumbashree is a pioneering poverty eradication and women empowerment program in the state of Kerala, India. Established in 1998, Kudumbashree aims to uplift the socio-economic status of women and their families by providing them with various skill development, entrepreneurship, and microfinance opportunities.
                         {'\n\n'}
