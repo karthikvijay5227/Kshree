@@ -14,7 +14,7 @@ import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { BackHandler } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -96,16 +96,21 @@ function AdminHome() {
         setRefreshing(false);
     };
 
-    useEffect(() => {
-        const backAction = () => {
-            BackHandler.exitApp();
-            return true;
-        };
+    useFocusEffect(
+        React.useCallback(() => {
+            const handleBackPress = () => {
+                BackHandler.exitApp();
+                return true;
+            };
 
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+            BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
-        return () => backHandler.remove();
-    }, []);
+            return () => {
+                // Clean up event listener when the screen loses focus or unmounts
+                BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+            };
+        }, [])
+    );
 
     const handleLogout = () => {
         navigation.reset({
