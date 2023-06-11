@@ -1,33 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
-
 
 export default function Profile({ navigation, username }) {
   const [user, setUser] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [role, setRole] = useState('');
+  const [backPressCount, setBackPressCount] = useState(0);
 
   navigation = useNavigation();
 
+  async function fetchData() {
+    const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    let user = await supabase.from('users').select('name').eq('username', username);
+    setUser(user.data[0].name);
+    let phone = await supabase.from('users').select('phone_number').eq('username', username);
+    setPhone(phone.data[0].phone_number);
+    let address = await supabase.from('users').select('address').eq('username', username);
+    setAddress(address.data[0].address);
+    let role = await supabase.from('users').select('admin').eq('username', username);
+    setRole(role.data[0].admin);
+  }
+
   useEffect(() => {
-    async function fetchData() {
-      const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
-      const supabase = createClient(supabaseUrl, supabaseKey);
-      let user = await supabase.from('users').select('name').eq('username', username);
-      setUser(user.data[0].name);
-      let phone = await supabase.from('users').select('phone_number').eq('username', username);
-      setPhone(phone.data[0].phone_number);
-      let address = await supabase.from('users').select('address').eq('username', username);
-      setAddress(address.data[0].address);
-      let role = await supabase.from('users').select('admin').eq('username', username);
-      setRole(role.data[0].admin);
-    }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackPress = () => {
+    if (backPressCount < 1) {
+      setBackPressCount(backPressCount + 1);
+      navigation.navigate('Home');
+      setTimeout(() => {
+        setBackPressCount(0);
+      }, 2000); // Reset backPressCount after 2 seconds
+      return true;
+    } else {
+      BackHandler.exitApp();
+      return false;
+    }
+  };
 
   const handleLogout = () => {
     navigation.reset({
@@ -40,8 +61,11 @@ export default function Profile({ navigation, username }) {
     <View style={styles.container}>
       <View style={styles.profilePicContainer}>
         <Image source={require('../assets/profile.png')} style={styles.profilePic} />
-        <View style={{ width: "170%" }}>
-        <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', textAlign: 'center' }}>{"\n"}{`Hello, ${user}`}</Text>
+        <View style={{ width: '170%' }}>
+          <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', textAlign: 'center' }}>
+            {"\n"}
+            {`Hello, ${user}`}
+          </Text>
         </View>
       </View>
       <View style={styles.boxContainer}>
@@ -56,7 +80,7 @@ export default function Profile({ navigation, username }) {
               {"\n\n"}
               <Text style={styles.boldText}>Address:</Text> {address}
               {"\n\n"}
-              <Text style={styles.boldText}>Role:</Text> {role ? "Admin" : "Member"}
+              <Text style={styles.boldText}>Role:</Text> {role ? 'Admin' : 'Member'}
             </Text>
           </View>
           <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -126,11 +150,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    width: 150, 
+    width: 150,
     alignSelf: 'center',
     shadowOffset: { width: 5, height: 2 },
-    shadowOpacity: 0.5, 
-    shadowRadius: 3
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
   },
   logoutButtonText: {
     color: 'white', // Set the text color to black

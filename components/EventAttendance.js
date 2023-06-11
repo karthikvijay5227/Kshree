@@ -1,16 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Card, Button } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function EventAttendance({ navigation, username }) {
     const [events, setEvents] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [attend, setAttend] = useState([]);
-    // const [eventname, setEventName] = useState([]);
+    const [backPressCount, setBackPressCount] = useState(0);
+
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        return () => backHandler.remove();
+    }, []);
+
+    const handleBackPress = () => {
+        if (backPressCount < 1) {
+            setBackPressCount(backPressCount + 1);
+            navigation.navigate('Home');
+            setTimeout(() => {
+                setBackPressCount(0);
+            }, 2000); // Reset backPressCount after 2 seconds
+            return true;
+        } else {
+            BackHandler.exitApp();
+            return false;
+        }
+    };
+
 
     const fetchData = async () => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';

@@ -1,8 +1,31 @@
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React,{useState,useEffect} from 'react';
+import { View, Text, ScrollView, BackHandler } from 'react-native';
 import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function AboutUs() {
+    const [backPressCount, setBackPressCount] = useState(0);
+    let navigation = useNavigation();
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        return () => backHandler.remove();
+    }, []);
+
+    const handleBackPress = () => {
+        if (backPressCount < 1) {
+            setBackPressCount(backPressCount + 1);
+            navigation.navigate('Home');
+            setTimeout(() => {
+                setBackPressCount(0);
+            }, 2000); // Reset backPressCount after 2 seconds
+            return true;
+        } else {
+            BackHandler.exitApp();
+            return false;
+        }
+    };
     return (
         <View style={styles.container}>
             <View style={styles.box}>

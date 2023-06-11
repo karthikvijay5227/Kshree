@@ -10,7 +10,7 @@ import Registration from '../Screens/Registration';
 import Notify from '../components/Notify';
 import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { BackHandler } from 'react-native';
 
 const Drawer = createDrawerNavigator();
@@ -129,14 +129,21 @@ function MemberHome({ navigation, username }) {
         return unsubscribe;
     }, [navigation]);
 
-    useEffect(() => {
-        const backAction = () => {
-            BackHandler.exitApp();
-            return true;
-        };
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-        return () => backHandler.remove();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            const handleBackPress = () => {
+                BackHandler.exitApp();
+                return true;
+            };
+
+            BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+            return () => {
+                // Clean up event listener when the screen loses focus or unmounts
+                BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+            };
+        }, [])
+    );
 
     const handleRefresh = () => {
         setRefreshing(true);

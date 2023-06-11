@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Dimensions, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
+import { useNavigation } from '@react-navigation/native';
+
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -15,31 +17,55 @@ export default function LoanStatus({ username }) {
     const [ifsc, setIfsc] = useState('');
     const [branch, setBranch] = useState('');
     const [pay, setPay] = useState('');
+    const [backPressCount, setBackPressCount] = useState(0);
 
+    let navigation = useNavigation();
+
+
+    async function fetchData() {
+        const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        let amount = await supabase.from('loan').select('amount').eq('username', username);
+        setAmount(amount.data[0].amount);
+        let rate = await supabase.from('loan').select('rate').eq('username', username);
+        setRate(rate.data[0].rate);
+        let duration = await supabase.from('loan').select('duration').eq('username', username);
+        setDuration(duration.data[0].duration);
+        let bank = await supabase.from('loan').select('bank').eq('username', username);
+        setBank(bank.data[0].bank);
+        let account = await supabase.from('loan').select('account').eq('username', username);
+        setAccount(account.data[0].account);
+        let ifsc = await supabase.from('loan').select('ifsc').eq('username', username);
+        setIfsc(ifsc.data[0].ifsc);
+        let branch = await supabase.from('loan').select('branch').eq('username', username);
+        setBranch(branch.data[0].branch);
+        let pays = await supabase.rpc('monthly_payment', { p_username })
+        setPay(pays.data);
+    }
     useEffect(() => {
-        async function fetchData() {
-            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
-            const supabase = createClient(supabaseUrl, supabaseKey);
-            let amount = await supabase.from('loan').select('amount').eq('username', username);
-            setAmount(amount.data[0].amount);
-            let rate = await supabase.from('loan').select('rate').eq('username', username);
-            setRate(rate.data[0].rate);
-            let duration = await supabase.from('loan').select('duration').eq('username', username);
-            setDuration(duration.data[0].duration);
-            let bank = await supabase.from('loan').select('bank').eq('username', username);
-            setBank(bank.data[0].bank);
-            let account = await supabase.from('loan').select('account').eq('username', username);
-            setAccount(account.data[0].account);
-            let ifsc = await supabase.from('loan').select('ifsc').eq('username', username);
-            setIfsc(ifsc.data[0].ifsc);
-            let branch = await supabase.from('loan').select('branch').eq('username', username);
-            setBranch(branch.data[0].branch);
-            let pays = await supabase.rpc('monthly_payment', { p_username })
-            setPay(pays.data);
-        }
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        return () => backHandler.remove();
+    }, []);
+
+    const handleBackPress = () => {
+        if (backPressCount < 1) {
+            setBackPressCount(backPressCount + 1);
+            navigation.navigate('Home');
+            setTimeout(() => {
+                setBackPressCount(0);
+            }, 2000); // Reset backPressCount after 2 seconds
+            return true;
+        } else {
+            BackHandler.exitApp();
+            return false;
+        }
+    };
 
     if (amount != 0) {
         return (

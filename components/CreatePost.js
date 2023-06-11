@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Image, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Text, Dimensions } from 'react-native';
+import { View, TextInput, Image, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Text, Dimensions, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function CreatePost() {
     const [task, setTask] = useState('');
     const [submittedTasks, setSubmittedTasks] = useState([]);
+    const [backPressCount, setBackPressCount] = useState(0);
+
+    let navigation = useNavigation();
 
     useEffect(() => {
         fetchSubmittedTasks();
@@ -69,6 +74,26 @@ export default function CreatePost() {
 
         if (error) {
             throw new Error('Failed to delete post');
+        }
+    };
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        return () => backHandler.remove();
+    }, []);
+
+    const handleBackPress = () => {
+        if (backPressCount < 1) {
+            setBackPressCount(backPressCount + 1);
+            navigation.navigate('Home');
+            setTimeout(() => {
+                setBackPressCount(0);
+            }, 2000); // Reset backPressCount after 2 seconds
+            return true;
+        } else {
+            BackHandler.exitApp();
+            return false;
         }
     };
 

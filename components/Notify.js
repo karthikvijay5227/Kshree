@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, Dimensions, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Card } from 'react-native-paper';
 import moment from 'moment';
-
+import { useNavigation } from '@react-navigation/native';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -11,10 +11,31 @@ const width = Dimensions.get('window').width;
 export default function Notify() {
     const [posts, setPosts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-
+    let navigation = useNavigation();
+    const [backPressCount, setBackPressCount] = useState(0);
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        return () => backHandler.remove();
+    }, []);
+
+    const handleBackPress = () => {
+        if (backPressCount < 1) {
+            setBackPressCount(backPressCount + 1);
+            navigation.navigate('Home');
+            setTimeout(() => {
+                setBackPressCount(0);
+            }, 2000); // Reset backPressCount after 2 seconds
+            return true;
+        } else {
+            BackHandler.exitApp();
+            return false;
+        }
+    };
 
     const fetchData = async () => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
