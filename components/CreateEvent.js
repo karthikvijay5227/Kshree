@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, Alert, Platform, KeyboardAvoidingView, Dimensions } from 'react-native';
+import { View, Text, Alert, Platform, KeyboardAvoidingView, Dimensions, BackHandler } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import RNDateTimePicker from '@react-native-community/datetimepicker';
@@ -27,6 +27,22 @@ export default class CreateEvent extends React.Component {
             avoidKey: false,
 
         }
+    }
+
+    componentDidMount() {
+        // Add a back button event listener
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
     }
     render() {
         const createEvent = async () => {
