@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl, BackHandler } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, BackHandler, Dimensions } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Card, Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
+const width = Dimensions.get('window').width;
 
 export default function EventAttendance({ navigation, username }) {
     const [events, setEvents] = useState([]);
@@ -11,6 +12,7 @@ export default function EventAttendance({ navigation, username }) {
     const [attend, setAttend] = useState([]);
     const [backPressCount, setBackPressCount] = useState(0);
 
+    navigation = useNavigation();
     useEffect(() => {
         fetchData();
     }, []);
@@ -54,15 +56,12 @@ export default function EventAttendance({ navigation, username }) {
                 eventname: event.event_name,
                 username: username,
             });
-
             if (presenceError) {
                 console.error('Error fetching presence:', presenceError);
                 return null;
             }
-
             return presence;
         });
-
         const presenceData = await Promise.all(presencePromises);
         setAttend(presenceData);
     };
@@ -79,7 +78,7 @@ export default function EventAttendance({ navigation, username }) {
             return (
                 <Card
                     key={index}
-                    style={{ height: 210, marginTop: 5, width: '100%', marginBottom: 20 }}
+                    style={{ height: 210, marginTop: 5, width: width - 40, marginBottom: 20 }}
                 >
                     <Card.Title title={item.event_name} titleStyle={{ fontSize: 18 }} right={() => {
                         const presence = attend[index];

@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { View, Text, Alert, Platform, KeyboardAvoidingView, Dimensions, BackHandler } from 'react-native';
+import { View, Text, Alert, Dimensions, BackHandler } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { ScrollView } from 'react-native-gesture-handler';
 
-
-const height = Dimensions.get('window').height
 const width = Dimensions.get('window').width
-
 
 export default class CreateEvent extends React.Component {
 
@@ -25,7 +23,6 @@ export default class CreateEvent extends React.Component {
             showDate: false,
             showTime: false,
             avoidKey: false,
-
         }
     }
 
@@ -88,14 +85,14 @@ export default class CreateEvent extends React.Component {
 
         return (
             <View style={{ flex: 1, alignContent: 'center', backgroundColor: 'white' }}>
-                <KeyboardAvoidingView enabled={this.state.avoidKey} style={{ flex: 1, alignSelf: 'center', justifyContent: 'center', marginBottom: height - 600, position: 'absolute' }} behavior={Platform.OS == 'android' ? "position" : "padding"} keyboardVerticalOffset={height - 650} >
+                <ScrollView>
                     <TextInput
                         label={'Event Name'}
                         mode='outlined'
                         error={this.state.deterror}
                         value={this.state.name}
                         onChangeText={text => this.setState({ name: text })}
-                        style={{ alignSelf: 'center', width: width - 50, marginTop: height - 700 }}
+                        style={{ alignSelf: 'center', width: width - 50, marginTop: 40 }}
                     />
 
                     <TextInput
@@ -110,7 +107,7 @@ export default class CreateEvent extends React.Component {
                         editable={true}
                     />
 
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', width: width - 50 }}>
+                    <View style={{ flexDirection: 'row', alignSelf: 'center', width: width - 30 }}>
                         <TextInput
                             label={'Event Date'}
                             mode='outlined'
@@ -185,13 +182,13 @@ export default class CreateEvent extends React.Component {
                         onPressIn={() => { this.setState({ avoidKey: true }) }}
                     />
 
-                    <View style={{ flex: 1, marginTop: height - 730 }}>
+                    <View style={{ flex: 1, marginTop: 30, alignSelf: 'center' }}>
                         <Button mode='contained' style={{ justifyContent: 'center', fontSize: 20, width: width - 50, height: 50, fontWeight: 'bold', marginTop: 30, }}
                             onPress={() => { createEvent() }}>
                             <Text style={{ fontSize: 18, justifyContent: 'center' }}>Create Event</Text>
                         </Button>
                     </View>
-                </KeyboardAvoidingView>
+                </ScrollView>
             </View>
         )
     }

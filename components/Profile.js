@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, BackHandler } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, BackHandler, ImageBackground,Dimensions } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
+
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
 
 export default function Profile({ navigation, username }) {
   const [user, setUser] = useState('');
@@ -59,34 +62,31 @@ export default function Profile({ navigation, username }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.profilePicContainer}>
-        <Image source={require('../assets/profile.png')} style={styles.profilePic} />
-        <View style={{ width: '170%' }}>
-          <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', textAlign: 'center' }}>
-            {"\n"}
-            {`Hello, ${user}`}
+      <ImageBackground source={require('../assets/bg2.jpg')} style={{ height: 200, width: width }}>
+        <View style={styles.profilePicContainer}>
+          <Image source={require('../assets/profile.png')} style={styles.profilePic} />
+          <View style={{ flexDirection: 'column', marginLeft: 20, marginBottom: 15 }}>
+            <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'white' }}>{user}</Text>
+            <Text style={{ fontFamily: 'Outfit-Medium', fontSize: 15, color: 'white' }}>{role ? "Admin" : "Member"}</Text>
+          </View>
+        </View>
+      </ImageBackground>
+      <View style={styles.boxContainer}>
+        <View style={styles.box}>
+          <Text style={styles.aboutText}>
+            <Text style={styles.boldText}>Name:</Text> {user}
+            {"\n\n"}
+            <Text style={styles.boldText}>Username:</Text> {username}
+            {"\n\n"}
+            <Text style={styles.boldText}>Phone:</Text> {phone}
+            {"\n\n"}
+            <Text style={styles.boldText}>Address:</Text> {address}
+            {"\n\n"}
           </Text>
         </View>
-      </View>
-      <View style={styles.boxContainer}>
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          <View style={styles.box}>
-            <Text style={styles.aboutText}>
-              <Text style={styles.boldText}>Name:</Text> {user}
-              {"\n\n"}
-              <Text style={styles.boldText}>Username:</Text> {username}
-              {"\n\n"}
-              <Text style={styles.boldText}>Phone:</Text> {phone}
-              {"\n\n"}
-              <Text style={styles.boldText}>Address:</Text> {address}
-              {"\n\n"}
-              <Text style={styles.boldText}>Role:</Text> {role ? 'Admin' : 'Member'}
-            </Text>
-          </View>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <Text style={styles.logoutButtonText}>Sign Out</Text>
-          </TouchableOpacity>
-        </ScrollView>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>Sign Out</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -95,39 +95,42 @@ export default function Profile({ navigation, username }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: 'white'
+
   },
   profilePicContainer: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    justifyContent: 'center',
+    width: width - 50,
+    height: 100,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: 305,
+    marginTop: 30
+
   },
   profilePic: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 70,
+    height: 70,
+    marginLeft: 20,
   },
   boxContainer: {
-    marginTop: 30, // Adjust this value to move the box closer to the profile picture
+    marginTop: height / 5,
     width: '92%',
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
+    position: 'absolute',
   },
   box: {
     width: '100%',
     borderRadius: 15,
-    backgroundColor: '#f7edf6',
+    backgroundColor: 'white',
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
-    elevation: 4,
+    elevation: 8,
     padding: 20,
   },
   scrollViewContent: {
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     shadowOffset: { width: 5, height: 2 },
     shadowOpacity: 0.5,
-    shadowRadius: 3,
+    shadowRadius: 3
   },
   logoutButtonText: {
     color: 'white', // Set the text color to black

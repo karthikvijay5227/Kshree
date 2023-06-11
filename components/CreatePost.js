@@ -38,18 +38,25 @@ export default function CreatePost() {
 
     const handleAddTask = async () => {
         if (task.trim() !== '') {
-            // Add new task to the submitted tasks list
             setSubmittedTasks([...submittedTasks, { task, created_at: moment().format('ddd, MMM DD, YYYY h:mm A') }]);
             setTask('');
-
-            // Save the new task to Supabase
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
             const supabase = createClient(supabaseUrl, supabaseKey);
-
             const { data, error } = await supabase
                 .from('Posts')
                 .insert([{ posts: task, created_at: new Date() }]);
+
+            const channel = supabase.channel('notif');
+            channel.subscribe((status) => {
+                if (status === 'SUBSCRIBED') {
+                    channel.send({
+                        type: 'broadcast',
+                        event: 'supa',
+                        payload: { task }
+                    })
+                }
+            })
             if (error) {
                 throw new Error('Failed to create post');
             }

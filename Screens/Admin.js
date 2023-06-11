@@ -51,7 +51,7 @@ function DrawerNavigation({ username }) {
             <Drawer.Screen name="Kudumbashree Registration" component={KudumbashreeRegistration} options={{ headerTitle: 'Member Registration' }} />
             <Drawer.Screen name="Events" component={Events} />
             <Drawer.Screen name="Registration" component={Registration} options={{ headerShown: false, drawerItemStyle: { height: 0 } }} />
-            <Drawer.Screen name="About" component={AboutUs} />
+            <Drawer.Screen name="About" component={AboutUs} options={{ headerShown: false, headerTitle: 'About' }} />
         </Drawer.Navigator>
     );
 }
@@ -62,33 +62,27 @@ function AdminHome() {
     const [userNumber, setUserNumber] = useState('');
     const [refreshing, setRefreshing] = useState(false);
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async () => {
+            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabase = createClient(supabaseUrl, supabaseKey);
+            let eventData = await supabase.rpc('events');
+            setEvents(eventData.data);
+            let userNumber = await supabase.rpc('get_total_users');
+            setUserNumber(userNumber.data);
+        })
+    }, []);
 
     const fetchEvents = async () => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
         const supabase = createClient(supabaseUrl, supabaseKey);
         let eventData = await supabase.rpc('events');
-        let filteredEvents = eventData.data.filter((item) => {
-            const eventDate = new Date(item.date);
-            const currentDate = new Date();
-            return eventDate > currentDate;
-        });
-        setEvents(filteredEvents);
+        setEvents(eventData.data);
         let userNumber = await supabase.rpc('get_total_users');
         setUserNumber(userNumber.data);
     };
-
-    useEffect(() => {
-        fetchEvents();
-    }, []);
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            fetchEvents();
-        });
-
-        return unsubscribe;
-    }, [navigation]);
 
     const handleRefresh = () => {
         setRefreshing(true);
@@ -102,9 +96,7 @@ function AdminHome() {
                 BackHandler.exitApp();
                 return true;
             };
-
             BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-
             return () => {
                 // Clean up event listener when the screen loses focus or unmounts
                 BackHandler.removeEventListener('hardwareBackPress', handleBackPress);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, Dimensions, BackHandler } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Dimensions, BackHandler, Alert } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
 
@@ -26,22 +26,27 @@ export default function LoanStatus({ username }) {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
         const supabase = createClient(supabaseUrl, supabaseKey);
-        let amount = await supabase.from('loan').select('amount').eq('username', username);
-        setAmount(amount.data[0].amount);
-        let rate = await supabase.from('loan').select('rate').eq('username', username);
-        setRate(rate.data[0].rate);
-        let duration = await supabase.from('loan').select('duration').eq('username', username);
-        setDuration(duration.data[0].duration);
-        let bank = await supabase.from('loan').select('bank').eq('username', username);
-        setBank(bank.data[0].bank);
-        let account = await supabase.from('loan').select('account').eq('username', username);
-        setAccount(account.data[0].account);
-        let ifsc = await supabase.from('loan').select('ifsc').eq('username', username);
-        setIfsc(ifsc.data[0].ifsc);
-        let branch = await supabase.from('loan').select('branch').eq('username', username);
-        setBranch(branch.data[0].branch);
-        let pays = await supabase.rpc('monthly_payment', { p_username })
-        setPay(pays.data);
+        try {
+            let amount = await supabase.from('loan').select('amount').eq('username', username);
+            setAmount(amount.data[0].amount);
+            let rate = await supabase.from('loan').select('rate').eq('username', username);
+            setRate(rate.data[0].rate);
+            let duration = await supabase.from('loan').select('duration').eq('username', username);
+            setDuration(duration.data[0].duration);
+            let bank = await supabase.from('loan').select('bank').eq('username', username);
+            setBank(bank.data[0].bank);
+            let account = await supabase.from('loan').select('account').eq('username', username);
+            setAccount(account.data[0].account);
+            let ifsc = await supabase.from('loan').select('ifsc').eq('username', username);
+            setIfsc(ifsc.data[0].ifsc);
+            let branch = await supabase.from('loan').select('branch').eq('username', username);
+            setBranch(branch.data[0].branch);
+            let pays = await supabase.rpc('monthly_payment', { p_username })
+            setPay(pays.data);
+        }
+        catch (err) {
+            console.log(err)
+        }
     }
     useEffect(() => {
         fetchData();
@@ -72,11 +77,6 @@ export default function LoanStatus({ username }) {
             <View>
                 <View style={{ flexDirection: 'row', marginLeft: 30, justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: '#1A1110', marginTop: 30, }}>Status</Text>
-                    {/* <View style={{ height: 40, width: 150, marginTop: 30, marginRight: 30, backgroundColor: '#90EE90', borderRadius: 10, justifyContent: 'center' }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ fontFamily: 'Outfit-Medium', fontSize: 15, marginLeft: 30, color: 'black' }}>Mark as Paid</Text>
-                        </View>
-                    </View> */}
                 </View>
                 <TouchableOpacity style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginLeft: 20, marginTop: 30, width: width - 40, height: height - 200 }} disabled>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

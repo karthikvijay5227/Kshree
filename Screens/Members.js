@@ -12,6 +12,7 @@ import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { BackHandler } from 'react-native';
+import PushNotification, { Importance } from 'react-native-push-notification';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -87,7 +88,7 @@ function DrawerNavigation({ username }) {
                 {(props) => <EventAttendance {...props} username={username} />}
             </Drawer.Screen>
             <Drawer.Screen name="InitialPage" component={Registration} options={{ headerShown: false, drawerItemStyle: { height: 0 } }} />
-            <Drawer.Screen name="About" component={AboutUs} options={{ headerShown: true, headerTitle: 'About' }} />
+            <Drawer.Screen name="About" component={AboutUs} options={{ headerShown: false, headerTitle: 'About' }} />
         </Drawer.Navigator>
     )
 }
@@ -103,31 +104,56 @@ function MemberHome({ navigation, username }) {
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
         const supabase = createClient(supabaseUrl, supabaseKey);
         let eventData = await supabase.rpc('events');
-        let filteredEvents = eventData.data.filter((item) => {
-            const eventDate = new Date(item.date);
-            const currentDate = new Date();
-            return eventDate > currentDate;
-        });
         let user = await supabase.from('users').select('name').eq('username', userName);
-        setEvents(filteredEvents);
+
+        PushNotification.channelExists("post", function (exists) {
+            if (!exists) {
+                PushNotification.createChannel(
+                    {
+                        channelId: "post", // (required)
+                        channelName: "myNotificationChannel", // (required)
+                        channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+                        playSound: true, // (optional) default: true
+                        soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+                        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+                        vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+                    },
+                    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+                );
+            }
+        });
+        const channel = supabase.channel('notif');
+        channel.on('broadcast', { event: 'supa' }, (payload) => {
+            PushNotification.localNotification({
+                channelId: "post",
+                title: "New Notification",
+                message: "You have a new notification from the admin",
+                onlyAlertOnce: true,
+            })
+        }).subscribe()
+        setEvents(eventData.data);
         setUser(user.data[0].name);
     }
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async () => {
+            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabase = createClient(supabaseUrl, supabaseKey);
+            let eventData = await supabase.rpc('events');
+            let user = await supabase.from('users').select('name').eq('username', userName);
+            setEvents(eventData.data);
+            setUser(user.data[0].name);
+        })
+    }, []);
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    const handleDeleteIconPress = () => {
+    const handleBellPress = () => {
         navigation.navigate('Notifications');
     };
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            fetchData();
-        });
-
-        return unsubscribe;
-    }, [navigation]);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -150,7 +176,6 @@ function MemberHome({ navigation, username }) {
         fetchData(); // Fetch the data from the database
         setRefreshing(false);
     };
-
 
     const getDayOrdinalSuffix = (day) => {
         if (day === 1 || day === 21 || day === 31) {
@@ -238,7 +263,7 @@ function MemberHome({ navigation, username }) {
                 <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 30, color: 'black', marginLeft: 10, marginBottom: 5 }}>Homepage</Text>
             </View>
             <View style={styles.deleteIconContainer}>
-                <TouchableOpacity onPress={handleDeleteIconPress}>
+                <TouchableOpacity onPress={handleBellPress}>
                     <Image source={require('../assets/notifications.png')} style={{ width: 27, height: 27 }} />
                 </TouchableOpacity>
             </View>
@@ -250,7 +275,7 @@ function MemberHome({ navigation, username }) {
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10, margin: width / 4.3 }}>
             </View>
-            <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', marginLeft: 20 }}>Upcoming Events</Text>
+            <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'black', marginLeft: 20, marginTop: 20 }}>Upcoming Events</Text>
             <ScrollView style={{ marginTop: 10, marginLeft: 30 }} showsVerticalScrollIndicator={false} refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
             }>
