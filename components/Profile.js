@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, BackHandler, ImageBackground,Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, BackHandler, ImageBackground, Dimensions } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
 

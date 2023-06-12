@@ -4,10 +4,10 @@ import { TextInput, Button, Modal } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import 'react-native-url-polyfill/auto'
 import { createStackNavigator } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import Admin from '../Screens/Admin';
 import Toast from 'react-native-toast-message'
 import Members from '../Screens/Members';
-
 
 const Stack = createStackNavigator();
 const height = Dimensions.get('window').height;
@@ -16,6 +16,7 @@ const width = Dimensions.get('window').width;
 export default class Registration extends React.Component {
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+    this.checkLoginState();
   }
 
   componentWillUnmount() {
@@ -26,27 +27,37 @@ export default class Registration extends React.Component {
     BackHandler.exitApp();
     return true;
   };
+
+  async checkLoginState() {
+    try {
+      const user = await AsyncStorage.getItem('user');
+      if (user) {
+        const { isAdmin, username } = JSON.parse(user);
+        if (isAdmin) {
+          this.props.navigation.navigate('Admin', { username });
+        } else {
+          this.props.navigation.navigate('Home', { username });
+        }
+      }
+    } catch (error) {
+      console.log('Error checking login state:', error);
+    }
+  }
   render() {
     return (
-
       <Stack.Navigator initialRouteName="Login"
         screenOptions={{
           headerShown: false,
         }}>
-
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Admin" component={Admin} />
         <Stack.Screen name="Home" component={Members} />
       </Stack.Navigator>
-
     )
   }
 }
 
-
 class Login extends React.Component {
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -68,12 +79,10 @@ class Login extends React.Component {
       toValue: -height / 2 + 100,
       duration: 100,
       useNativeDriver: true,
-
     }).start()
   }
 
   render() {
-
     const { navigation } = this.props;
     const transformStyle = {
       transform: [
@@ -85,24 +94,25 @@ class Login extends React.Component {
       const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
       const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
       const supabase = createClient(supabaseUrl, supabaseKey)
-
       let { data: data1, error } = await supabase.from('users').select('password').eq('username', this.state.username)
       let { data: admin, error2 } = await supabase.from('users').select('admin').eq('username', this.state.username)
 
       try {
-
         if (data1[0]["password"] == this.state.password) {
           if (admin[0]["admin"]) {
-            this.props.navigation.navigate('Admin', { username: this.state.username })
+            const user = { username: this.state.username, isAdmin: true };
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+            this.props.navigation.navigate('Admin', { username: this.state.username });
           }
           else {
-            this.props.navigation.navigate('Home', { username: this.state.username })
+            const user = { username: this.state.username, isAdmin: false };
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+            this.props.navigation.navigate('Home', { username: this.state.username });
           }
         }
         else {
           this.setState({ error: true })
         }
-
       }
       catch (error) {
         this.setState({ error: true })
@@ -117,7 +127,6 @@ class Login extends React.Component {
       }
     }
 
-
     return (
       <ImageBackground source={require('../assets/bgimage.jpg')} style={styles.imageBackground} imageStyle={styles.image}>
         <Modal visible={this.state.error} >
@@ -127,11 +136,9 @@ class Login extends React.Component {
           </View>
         </Modal>
 
-
         <Animated.View style={[styles.logs, transformStyle]}>
           <View style={{ height: 4, width: 100, marginLeft: "37%", backgroundColor: 'grey', marginTop: 10, borderRadius: 20 }}>
           </View>
-
           <View style={{ marginTop: 50, width: '90%', marginLeft: 20 }}>
             <TextInput
               mode="outlined"
@@ -140,7 +147,6 @@ class Login extends React.Component {
               style={{ marginLeft: 5, marginRight: 5 }}
               value={this.state.username}
               onChangeText={(text) => { this.setState({ username: text }) }}
-
             />
 
             <TextInput
@@ -161,14 +167,12 @@ class Login extends React.Component {
           </View>
         </Animated.View>
       </ImageBackground>
-
     )
   }
 }
 
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     justifyContent: 'center',
