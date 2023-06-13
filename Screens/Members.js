@@ -13,6 +13,7 @@ import { createClient } from '@supabase/supabase-js';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { BackHandler } from 'react-native';
 import PushNotification, { Importance } from 'react-native-push-notification';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -22,11 +23,16 @@ const width = Dimensions.get('window').width;
 function Logout(props) {
     const navigation = useNavigation();
 
-    const handleLogout = () => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'Registration' }],
-        });
+    const handleLogout = async () => {
+        try {
+            await AsyncStorage.removeItem('user'); // Remove the stored user data
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Registration' }],
+            });
+        } catch (error) {
+            console.log('Error logging out:', error);
+        }
     };
 
     return (

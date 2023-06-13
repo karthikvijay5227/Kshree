@@ -15,6 +15,8 @@ import { createClient } from '@supabase/supabase-js';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { BackHandler } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -104,11 +106,16 @@ function AdminHome() {
         }, [])
     );
 
-    const handleLogout = () => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'Registration' }],
-        });
+    const handleLogout = async () => {
+        try {
+            await AsyncStorage.removeItem('user'); // Remove the stored user data
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Registration' }],
+            });
+        } catch (error) {
+            console.log('Error logging out:', error);
+        }
     };
 
     const displayEvents = () => {
