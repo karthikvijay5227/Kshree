@@ -53,11 +53,16 @@ export default function Profile({ navigation, username }) {
     }
   };
 
-  const handleLogout = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Registration' }],
-    });
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('user'); // Remove the stored user data
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Registration' }],
+      });
+    } catch (error) {
+      console.log('Error logging out:', error);
+    }
   };
 
   return (
