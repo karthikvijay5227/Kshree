@@ -63,7 +63,6 @@ function Logout(props) {
 
 export default function Members({ route }) {
     const { username } = route.params;
-
     return (
         <Stack.Navigator initialRouteName="Drawer" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Drawer">
@@ -111,7 +110,6 @@ function MemberHome({ navigation, username }) {
         const supabase = createClient(supabaseUrl, supabaseKey);
         let eventData = await supabase.rpc('events');
         let user = await supabase.from('users').select('name').eq('username', userName);
-         
 
         PushNotification.channelExists("post", function (exists) {
             if (!exists) {
@@ -130,21 +128,19 @@ function MemberHome({ navigation, username }) {
             }
         });
 
-        try{
+        try {
             let date = await supabase.from('loan').select('updatedate').eq('username', userName);
-            if(date.data[0].updatedate < new Date().toISOString().slice(0, 10)){
+            if (date.data[0].updatedate < new Date().toISOString().slice(0, 10)) {
                 PushNotification.localNotification({
                     channelId: "post",
                     title: "Loan Status",
                     message: "Your Have Not Paid your loan for this month",
                 })
             }
-            }
-            catch(e){
-    
-            }
-        
-        
+        }
+        catch (e) {
+            console.log(e);
+        }
 
         const channel = supabase.channel('notif');
         channel.on('broadcast', { event: 'supa' }, (payload) => {
