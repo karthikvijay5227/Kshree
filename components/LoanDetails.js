@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity, Dimensions, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, ScrollView, StyleSheet, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { CountUp } from 'use-count-up';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -33,8 +33,20 @@ class LoanInfo extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
+    }
+
     componentDidMount() {
 
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         const { navigation } = this.props;
         this.onNavigate = navigation.addListener('focus', async () => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
@@ -43,8 +55,6 @@ class LoanInfo extends React.Component {
             this.setState({ totalAmount: await supabase.rpc('calculate_total_amount') })
             let { data: obj1 } = await supabase.rpc('calculatemonthlypayment')
             this.setState({ loanMembers: obj1 })
-
-
         })
 
     }

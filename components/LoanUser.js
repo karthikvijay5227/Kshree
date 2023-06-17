@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, Dimensions, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Image, Dimensions, ScrollView, BackHandler } from "react-native";
 import { createClient } from '@supabase/supabase-js';
 
 
@@ -14,8 +14,23 @@ export default class LoanUser extends React.Component {
       loanDetails: [],
       monthlyPayment: '',
       expired: false
-
     }
+  }
+
+  componentDidMount() {
+    // Add a back button event listener
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    // Remove the back button event listener
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  handleBackButton = () => {
+    // Handle the back button press
+    this.props.navigation.goBack();
+    return true; // Prevent the default back button action
   }
 
   async componentDidMount() {
@@ -55,11 +70,11 @@ export default class LoanUser extends React.Component {
       const duration = (await supabase.from('loan').select('duration').eq('username', name)).data[0].duration;
       const updatedDate = new Date(new Date(currentDate).setMonth(new Date(currentDate).getMonth() + 1)).toISOString().slice(0, 10);
       const finalDate = new Date(new Date(startDate).setMonth(new Date(currentDate).getMonth() + Number(duration))).toISOString().slice(0, 10);
-      if( updateDate <= finalDate){       
+      if (updateDate <= finalDate) {
         await supabase.from('loan').update({ updatedate: updatedDate }).eq('username', name);
         this.props.navigation.goBack();
       }
-      else{
+      else {
         await supabase.from('loan').delete().eq('username', name);
         this.props.navigation.goBack();
       }

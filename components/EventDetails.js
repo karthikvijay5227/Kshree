@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Alert, BackHandler } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Alert } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Paragraph } from 'react-native-paper';
 import CheckBox from '@react-native-community/checkbox';
@@ -17,22 +17,6 @@ export default class EventDetails extends React.Component {
             users: [],
             checked: []
         }
-    }
-
-    componentDidMount() {
-        // Add a back button event listener
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-    }
-
-    componentWillUnmount() {
-        // Remove the back button event listener
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-    }
-
-    handleBackButton = () => {
-        // Handle the back button press
-        this.props.navigation.goBack();
-        return true; // Prevent the default back button action
     }
 
     /**
