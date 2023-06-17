@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 export default function CreatePost() {
     const [task, setTask] = useState('');
     const [submittedTasks, setSubmittedTasks] = useState([]);
-    const [backPressCount, setBackPressCount] = useState(0);
 
     let navigation = useNavigation();
 
@@ -91,17 +90,8 @@ export default function CreatePost() {
     }, []);
 
     const handleBackPress = () => {
-        if (backPressCount < 1) {
-            setBackPressCount(backPressCount + 1);
-            navigation.navigate('Home');
-            setTimeout(() => {
-                setBackPressCount(0);
-            }, 2000); // Reset backPressCount after 2 seconds
-            return true;
-        } else {
-            BackHandler.exitApp();
-            return false;
-        }
+        navigation.goBack();
+        return true;
     };
 
     return (

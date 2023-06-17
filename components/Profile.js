@@ -12,7 +12,6 @@ export default function Profile({ navigation, username }) {
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [role, setRole] = useState('');
-  const [backPressCount, setBackPressCount] = useState(0);
 
   navigation = useNavigation();
 
@@ -41,17 +40,8 @@ export default function Profile({ navigation, username }) {
   }, []);
 
   const handleBackPress = () => {
-    if (backPressCount < 1) {
-      setBackPressCount(backPressCount + 1);
-      navigation.navigate('Home');
-      setTimeout(() => {
-        setBackPressCount(0);
-      }, 2000); // Reset backPressCount after 2 seconds
-      return true;
-    } else {
-      BackHandler.exitApp();
-      return false;
-    }
+    navigation.goBack();
+    return true;
   };
 
   const handleLogout = async () => {

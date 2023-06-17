@@ -7,7 +7,6 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export default function AboutUs() {
-    const [backPressCount, setBackPressCount] = useState(0);
     let navigation = useNavigation();
 
     useEffect(() => {
@@ -17,17 +16,8 @@ export default function AboutUs() {
     }, []);
 
     const handleBackPress = () => {
-        if (backPressCount < 1) {
-            setBackPressCount(backPressCount + 1);
-            navigation.navigate('Home');
-            setTimeout(() => {
-                setBackPressCount(0);
-            }, 2000); // Reset backPressCount after 2 seconds
-            return true;
-        } else {
-            BackHandler.exitApp();
-            return false;
-        }
+        navigation.goBack();
+        return true;
     };
     return (
         <View style={styles.container}>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, ScrollView, Dimensions, RefreshControl } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Dimensions, RefreshControl, BackHandler } from 'react-native';
 import { Button, Card, IconButton } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js'
@@ -29,6 +29,22 @@ class EventList extends React.Component {
             events: [],
             refresh: true
         };
+    }
+
+    componentDidMount() {
+        // Add a back button event listener
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
     }
 
     componentDidMount() {

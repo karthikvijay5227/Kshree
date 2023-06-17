@@ -10,7 +10,6 @@ export default function EventAttendance({ navigation, username }) {
     const [events, setEvents] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [attend, setAttend] = useState([]);
-    const [backPressCount, setBackPressCount] = useState(0);
 
     navigation = useNavigation();
     useEffect(() => {
@@ -24,17 +23,8 @@ export default function EventAttendance({ navigation, username }) {
     }, []);
 
     const handleBackPress = () => {
-        if (backPressCount < 1) {
-            setBackPressCount(backPressCount + 1);
-            navigation.navigate('Home');
-            setTimeout(() => {
-                setBackPressCount(0);
-            }, 2000); // Reset backPressCount after 2 seconds
-            return true;
-        } else {
-            BackHandler.exitApp();
-            return false;
-        }
+        navigation.goBack();
+        return true;
     };
 
 
