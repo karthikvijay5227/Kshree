@@ -18,6 +18,7 @@ export default function LoanStatus({ username }) {
     const [branch, setBranch] = useState('');
     const [pay, setPay] = useState('');
     const [backPressCount, setBackPressCount] = useState(0);
+    const [loanpaid, setLoanpaid] = useState(true);
 
     let navigation = useNavigation();
 
@@ -43,6 +44,10 @@ export default function LoanStatus({ username }) {
             setBranch(branch.data[0].branch);
             let pays = await supabase.rpc('monthly_payment', { p_username })
             setPay(pays.data);
+            let date = await supabase.from('loan').select('updatedate').eq('username', username);
+            if(date.data[0].updatedate < new Date().toISOString().slice(0, 10)){
+                setLoanpaid(false);
+            }
         }
         catch (err) {
             console.log(err)
@@ -74,9 +79,12 @@ export default function LoanStatus({ username }) {
 
     if (amount != 0) {
         return (
-            <View>
-                <View style={{ flexDirection: 'row', marginLeft: 30, justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: '#1A1110', marginTop: 30, }}>Status</Text>
+            <View style={{backgroundColor : 'white'}}>
+                <View style={{ flexDirection: 'row', marginLeft: 30, justifyContent: 'flex-start', alignItems: 'center'}}>
+                    <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: '#1A1110', marginTop: 30, }}>Status : </Text>
+                    {
+                        loanpaid ? <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: '#38E038', marginTop: 30, marginLeft: 10 }}>Loan Paid</Text> : <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'red', marginTop: 30, marginLeft: 20 }}>Loan Not Paid</Text>
+                    }
                 </View>
                 <TouchableOpacity style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginLeft: 20, marginTop: 30, width: width - 40, height: height - 200 }} disabled>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

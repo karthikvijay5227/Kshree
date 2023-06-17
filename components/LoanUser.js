@@ -51,9 +51,18 @@ export default class LoanUser extends React.Component {
       const supabase = createClient(supabaseUrl, supabaseKey)
       let name = this.props.route.params.name;
       const currentDate = (await supabase.from('loan').select('updatedate').eq('username', name)).data[0].updatedate;
+      const startDate = (await supabase.from('loan').select('date').eq('username', name)).data[0].date;
+      const duration = (await supabase.from('loan').select('duration').eq('username', name)).data[0].duration;
       const updatedDate = new Date(new Date(currentDate).setMonth(new Date(currentDate).getMonth() + 1)).toISOString().slice(0, 10);
-      await supabase.from('loan').update({ updatedate: updatedDate }).eq('username', name);
-      this.props.navigation.goBack();
+      const finalDate = new Date(new Date(startDate).setMonth(new Date(currentDate).getMonth() + Number(duration))).toISOString().slice(0, 10);
+      if( updateDate <= finalDate){       
+        await supabase.from('loan').update({ updatedate: updatedDate }).eq('username', name);
+        this.props.navigation.goBack();
+      }
+      else{
+        await supabase.from('loan').delete().eq('username', name);
+        this.props.navigation.goBack();
+      }
     }
 
 
