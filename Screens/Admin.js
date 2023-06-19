@@ -17,7 +17,6 @@ import { BackHandler } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
-
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const width = Dimensions.get('window').width;
@@ -75,6 +74,7 @@ function AdminHome() {
             setUserNumber(userNumber.data);
         })
     }, []);
+
 
     const fetchEvents = async () => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';

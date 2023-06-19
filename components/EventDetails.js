@@ -19,22 +19,6 @@ export default class EventDetails extends React.Component {
         }
     }
 
-    componentDidMount() {
-        // Add a back button event listener
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-    }
-
-    componentWillUnmount() {
-        // Remove the back button event listener
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-    }
-
-    handleBackButton = () => {
-        // Handle the back button press
-        this.props.navigation.goBack();
-        return true; // Prevent the default back button action
-    }
-
     /**
      * This function uses Supabase to retrieve data from two tables and set the state of the component with
      * the retrieved data.
@@ -66,6 +50,18 @@ export default class EventDetails extends React.Component {
             this.setState({ checked: checkedState });
         }
         this.setState({ checked: checkedState });
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
     }
 
     /* `getEventDetails` is a function that takes in a parameter `data` and sets the state of the component
