@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Image, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Text, Dimensions, BackHandler } from 'react-native';
+import { View, TextInput, Image, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Text, Dimensions, BackHandler, Keyboard } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
@@ -8,8 +8,25 @@ import { useNavigation } from '@react-navigation/native';
 export default function CreatePost() {
     const [task, setTask] = useState('');
     const [submittedTasks, setSubmittedTasks] = useState([]);
+    const [keyboardStatus, setKeyboardStatus] = useState(false);
 
     let navigation = useNavigation();
+
+    useEffect(() => {
+        fetchSubmittedTasks();
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setKeyboardStatus(true);
+        });
+
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setKeyboardStatus(false);
+        });
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
     useEffect(() => {
         fetchSubmittedTasks();
@@ -56,6 +73,9 @@ export default function CreatePost() {
                     })
                 }
             })
+            if (keyboardStatus) {
+                Keyboard.dismiss();
+            }
             if (error) {
                 throw new Error('Failed to create post');
             }
@@ -97,7 +117,13 @@ export default function CreatePost() {
     return (
         <View style={styles.container}>
             <View style={styles.taskWrapper}>
-                <ScrollView style={styles.items}>
+                <ScrollView
+                    style={[
+                        styles.items,
+                        keyboardStatus && styles.itemsWithKeyboard // Apply conditional style
+                    ]}
+                    contentContainerStyle={styles.scrollViewContent}
+                >
                     {submittedTasks.map((submittedTask, index) => (
                         <View key={index} style={styles.submittedTask}>
                             <View style={styles.submittedTaskTextContainer}>
@@ -111,6 +137,9 @@ export default function CreatePost() {
                     ))}
                 </ScrollView>
             </View>
+            {keyboardStatus ? (
+                <View style={styles.keyboardBackground} />
+            ) : null}
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.writeTaskWrapper}>
                 <TextInput
                     style={styles.input}
@@ -140,7 +169,8 @@ const styles = StyleSheet.create({
     },
     items: {
         marginTop: 30,
-        maxHeight: 640,
+        maxHeight: "79%",                      //610
+        minHeight: '100%',
     },
     submittedTask: {
         backgroundColor: 'white',
@@ -168,7 +198,7 @@ const styles = StyleSheet.create({
     },
     writeTaskWrapper: {
         position: 'absolute',
-        bottom: 30,
+        bottom: 25,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -197,5 +227,17 @@ const styles = StyleSheet.create({
     addImage: {
         width: 30,
         height: 30,
+    },
+    keyboardBackground: {
+        position: 'absolute',
+        top: "75%",                      //330
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: '#E8EAED',
+    },
+    itemsWithKeyboard: {
+        maxHeight: "79%",                      //610
+        minHeight: '45%', 
     },
 });
