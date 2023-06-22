@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Image, ScrollView, RefreshControl } from 'react-native';
 import LoanDetails from '../components/LoanDetails';
@@ -17,10 +17,52 @@ import { BackHandler } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
-
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const width = Dimensions.get('window').width;
+
+function DrawerHeader({ username, ...props }) {
+    const [name, setName] = useState(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+                const supabase = createClient(supabaseUrl, supabaseKey);
+                const { data, error } = await supabase.from('users').select('name').eq('username', username);
+                if (error) {
+                    console.log('Error fetching user data:', error.message);
+                } else {
+                    if (data && data.length > 0) {
+                        setName(data[0].name);
+                    }
+                }
+            } catch (error) {
+                console.log('Error fetching user data:', error.message);
+            }
+        };
+
+        fetchUserData();
+    }, [username]);
+
+    return (
+        <DrawerContentScrollView {...props}>
+            <View style={{ marginTop: 8, marginHorizontal: 10, borderRadius: 15, marginBottom: 15, backgroundColor: '#e6eefa', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }}>
+                <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 18, marginLeft: 10 }}>
+                    <Image
+                        source={require('../assets/profile.png')}
+                        style={{ width: 50, height: 50, borderRadius: 60 }}
+                    />
+                    <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 20, color: 'black', marginTop: 10, marginBottom: 15, paddingRight: 18 }}>
+                        {name}
+                    </Text>
+                </View>
+            </View>
+            <DrawerItemList {...props} />
+        </DrawerContentScrollView>
+    );
+}
 
 export default function Admin({ route }) {
     const { username } = route.params;
@@ -40,7 +82,9 @@ export default function Admin({ route }) {
 
 function DrawerNavigation({ username }) {
     return (
-        <Drawer.Navigator initialRouteName="AdminHome">
+        <Drawer.Navigator initialRouteName="AdminHome" drawerContent={(props) => (
+            <DrawerHeader {...props} username={username} />
+        )}>
             <Drawer.Screen name="Home" options={{ headerShown: false }}>
                 {(props) => <AdminHome {...props} username={username} />}
             </Drawer.Screen>
@@ -75,6 +119,7 @@ function AdminHome() {
             setUserNumber(userNumber.data);
         })
     }, []);
+
 
     const fetchEvents = async () => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';

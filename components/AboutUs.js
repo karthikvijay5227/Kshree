@@ -7,7 +7,6 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export default function AboutUs() {
-    const [backPressCount, setBackPressCount] = useState(0);
     let navigation = useNavigation();
 
     useEffect(() => {
@@ -17,17 +16,8 @@ export default function AboutUs() {
     }, []);
 
     const handleBackPress = () => {
-        if (backPressCount < 1) {
-            setBackPressCount(backPressCount + 1);
-            navigation.navigate('Home');
-            setTimeout(() => {
-                setBackPressCount(0);
-            }, 2000); // Reset backPressCount after 2 seconds
-            return true;
-        } else {
-            BackHandler.exitApp();
-            return false;
-        }
+        navigation.goBack();
+        return true;
     };
     return (
         <View style={styles.container}>
@@ -41,8 +31,8 @@ export default function AboutUs() {
 
             <View style={{ height: 150, width: width, alignSelf: 'center' }}>
                 <Text style={{ fontFamily: 'Outfit-Medium', fontSize: 20, marginLeft: 20, color: "black" }}> Developers</Text>
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flexDirection: 'column', marginLeft: 8 }}>
+                <View style={{ flexDirection: 'row', marginLeft: "2.3%" }}>
+                    <View style={{ flexDirection: 'column' }}>
                         <Image source={require('../assets/ashwin.jpg')} style={styles.dev} />
                         <Text style={{ fontFamily: 'Outfit-Medium', fontSize: 15, alignSelf: 'center', marginLeft: 20, marginTop: 5, color: "black" }}>R Ashwin</Text>
                     </View>
@@ -58,7 +48,7 @@ export default function AboutUs() {
             </View>
 
             <View style={styles.box}>
-                <ScrollView contentContainerStyle={{ height: height + 230 }}>
+                <ScrollView contentContainerStyle={{ height: height - 65, minHeight: '140%' }}>
                     <Text style={styles.aboutText}>
                         Kudumbashree is a pioneering poverty eradication and women empowerment program in the state of Kerala, India. Established in 1998, Kudumbashree aims to uplift the socio-economic status of women and their families by providing them with various skill development, entrepreneurship, and microfinance opportunities.
                         {'\n\n'}
@@ -81,6 +71,7 @@ const styles = StyleSheet.create({
     },
     box: {
         width: '90%',
+        height: '60%',
         borderRadius: 10,
         backgroundColor: '#FFFFFF',
         shadowColor: '#000000',
@@ -89,7 +80,7 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 4,
         padding: 20,
-        marginTop: 20,
+        marginTop: 25,
         alignSelf: 'center',
     },
     dev: {

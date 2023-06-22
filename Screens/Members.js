@@ -20,8 +20,35 @@ const Stack = createStackNavigator();
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
-function Logout(props) {
+function DrawerHeader({ username, ...props }) {
     const navigation = useNavigation();
+    const [name, setName] = useState(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+                const supabase = createClient(supabaseUrl, supabaseKey);
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('name')
+                    .eq('username', username);
+
+                if (error) {
+                    console.log('Error fetching user data:', error.message);
+                } else {
+                    if (data && data.length > 0) {
+                        setName(data[0].name);
+                    }
+                }
+            } catch (error) {
+                console.log('Error fetching user data:', error.message);
+            }
+        };
+
+        fetchUserData();
+    }, [username]);
 
     const handleLogout = async () => {
         try {
@@ -37,6 +64,17 @@ function Logout(props) {
 
     return (
         <DrawerContentScrollView {...props}>
+            <View style={{marginTop:8, marginHorizontal: 10, borderRadius: 15, marginBottom: 15, backgroundColor: '#e6eefa', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }}>
+                <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 18, marginLeft: 10 }}>
+                    <Image
+                        source={require('../assets/profile.png')}
+                        style={{ width: 50, height: 50, borderRadius: 60 }}
+                    />
+                    <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 20, color: 'black', marginTop: 10, marginBottom: 15, paddingRight: 18 }}>
+                        {name}
+                    </Text>
+                </View>
+            </View>
             <DrawerItemList {...props} />
             <DrawerItem
                 label={() => (
@@ -53,7 +91,7 @@ function Logout(props) {
                         Log Out
                     </Text>
                 )}
-                style={{ marginTop: height - 420 }}
+                style={{ marginTop: height * 0.35 }}
                 onPress={handleLogout}
             />
         </DrawerContentScrollView>
@@ -63,7 +101,6 @@ function Logout(props) {
 
 export default function Members({ route }) {
     const { username } = route.params;
-
     return (
         <Stack.Navigator initialRouteName="Drawer" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Drawer">
@@ -76,7 +113,7 @@ export default function Members({ route }) {
 function DrawerNavigation({ username }) {
     return (
         <Drawer.Navigator initialRouteName="MemberHome" screenOptions={{ headerShown: false }} drawerContent={(props) => (
-            <Logout {...props} />
+            <DrawerHeader {...props} username={username} />
         )}>
             <Drawer.Screen name="Home">
                 {(props) => <MemberHome {...props} username={username} />}
@@ -111,7 +148,6 @@ function MemberHome({ navigation, username }) {
         const supabase = createClient(supabaseUrl, supabaseKey);
         let eventData = await supabase.rpc('events');
         let user = await supabase.from('users').select('name').eq('username', userName);
-         
 
         PushNotification.channelExists("post", function (exists) {
             if (!exists) {
@@ -130,21 +166,19 @@ function MemberHome({ navigation, username }) {
             }
         });
 
-        try{
+        try {
             let date = await supabase.from('loan').select('updatedate').eq('username', userName);
-            if(date.data[0].updatedate < new Date().toISOString().slice(0, 10)){
+            if (date.data[0].updatedate < new Date().toISOString().slice(0, 10)) {
                 PushNotification.localNotification({
                     channelId: "post",
                     title: "Loan Status",
                     message: "Your Have Not Paid your loan for this month",
                 })
             }
-            }
-            catch(e){
-    
-            }
-        
-        
+        }
+        catch (e) {
+            console.log(e);
+        }
 
         const channel = supabase.channel('notif');
         channel.on('broadcast', { event: 'supa' }, (payload) => {

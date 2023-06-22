@@ -102,12 +102,18 @@ class Login extends React.Component {
           if (admin[0]["admin"]) {
             const user = { username: this.state.username, isAdmin: true };
             await AsyncStorage.setItem('user', JSON.stringify(user));
-            this.props.navigation.navigate('Admin', { username: this.state.username });
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Admin', params: { username: this.state.username } }],
+            });
           }
           else {
             const user = { username: this.state.username, isAdmin: false };
             await AsyncStorage.setItem('user', JSON.stringify(user));
-            this.props.navigation.navigate('Home', { username: this.state.username });
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Home', params: { username: this.state.username } }],
+            });
           }
         }
         else {

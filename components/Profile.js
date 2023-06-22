@@ -12,7 +12,6 @@ export default function Profile({ navigation, username }) {
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [role, setRole] = useState('');
-  const [backPressCount, setBackPressCount] = useState(0);
 
   navigation = useNavigation();
 
@@ -20,14 +19,11 @@ export default function Profile({ navigation, username }) {
     const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
     const supabase = createClient(supabaseUrl, supabaseKey);
-    let user = await supabase.from('users').select('name').eq('username', username);
-    setUser(user.data[0].name);
-    let phone = await supabase.from('users').select('phone_number').eq('username', username);
-    setPhone(phone.data[0].phone_number);
-    let address = await supabase.from('users').select('address').eq('username', username);
-    setAddress(address.data[0].address);
-    let role = await supabase.from('users').select('admin').eq('username', username);
-    setRole(role.data[0].admin);
+    const { data: userData } = await supabase.from('users').select('name, phone_number, address, admin').eq('username', username);
+    setUser(userData[0].name);
+    setPhone(userData[0].phone_number);
+    setAddress(userData[0].address);
+    setRole(userData[0].admin);
   }
 
   useEffect(() => {
@@ -41,17 +37,8 @@ export default function Profile({ navigation, username }) {
   }, []);
 
   const handleBackPress = () => {
-    if (backPressCount < 1) {
-      setBackPressCount(backPressCount + 1);
-      navigation.navigate('Home');
-      setTimeout(() => {
-        setBackPressCount(0);
-      }, 2000); // Reset backPressCount after 2 seconds
-      return true;
-    } else {
-      BackHandler.exitApp();
-      return false;
-    }
+    navigation.goBack();
+    return true;
   };
 
   const handleLogout = async () => {

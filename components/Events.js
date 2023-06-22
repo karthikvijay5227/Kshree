@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, ScrollView, Dimensions, RefreshControl } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Dimensions, RefreshControl, BackHandler } from 'react-native';
 import { Button, Card, IconButton } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js'
@@ -22,7 +22,6 @@ export default class Events extends React.Component {
 }
 
 class EventList extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -41,7 +40,18 @@ class EventList extends React.Component {
             this.setState({ events: obj })
         });
         setTimeout(() => { this.setState({ refresh: false }) }, 1000)
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
 
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
     }
 
     render() {
@@ -94,14 +104,3 @@ class EventList extends React.Component {
         )
     }
 }
-
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-})

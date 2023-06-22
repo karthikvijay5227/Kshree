@@ -12,7 +12,6 @@ export default function Notify() {
     const [posts, setPosts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     let navigation = useNavigation();
-    const [backPressCount, setBackPressCount] = useState(0);
     useEffect(() => {
         fetchData();
     }, []);
@@ -24,17 +23,8 @@ export default function Notify() {
     }, []);
 
     const handleBackPress = () => {
-        if (backPressCount < 1) {
-            setBackPressCount(backPressCount + 1);
-            navigation.navigate('Home');
-            setTimeout(() => {
-                setBackPressCount(0);
-            }, 2000); // Reset backPressCount after 2 seconds
-            return true;
-        } else {
-            BackHandler.exitApp();
-            return false;
-        }
+        navigation.goBack();
+        return true;
     };
 
     const fetchData = async () => {
