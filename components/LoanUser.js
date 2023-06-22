@@ -55,7 +55,12 @@ export default class LoanUser extends React.Component {
       const duration = (await supabase.from('loan').select('duration').eq('username', name)).data[0].duration;
       const updatedDate = new Date(new Date(currentDate).setMonth(new Date(currentDate).getMonth() + 1)).toISOString().slice(0, 10);
       const finalDate = new Date(new Date(startDate).setMonth(new Date(currentDate).getMonth() + Number(duration))).toISOString().slice(0, 10);
-      if( updateDate <= finalDate){       
+      
+
+      console.log(updatedDate);
+      console.log(finalDate);
+
+      if( updatedDate <= finalDate){       
         await supabase.from('loan').update({ updatedate: updatedDate }).eq('username', name);
         this.props.navigation.goBack();
       }
