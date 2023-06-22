@@ -143,7 +143,7 @@ export default class CreateEvent extends React.Component {
                         this.state.showTime && (
                             <RNDateTimePicker mode='time' value={this.state.date} onChange={(event, date) => {
                                 if (event.type == 'dismissed')
-                                    this.setState({ showDate: false })
+                                    this.setState({ showTime: false })
                                 else if (event.type == 'set')
                                     this.setState({ time: date.getHours() + ':' + date.getMinutes(), showTime: false })
                             }} />

@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Dimensions, ScrollView, ImageBackground, Toucha
 import { SelectList } from 'react-native-dropdown-select-list';
 import { createClient } from '@supabase/supabase-js';
 import { TextInput } from 'react-native-paper';
+import { duration } from 'moment/moment';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -54,6 +55,9 @@ export default class LoanRegistartion extends React.Component {
             }
             else {
 
+               const finalDate = new Date(new Date().setMonth( parseInt(new Date().getMonth()) + parseInt(this.state.duration) - 1)).toISOString().slice(0, 10);
+               
+
                 try {
                     await supabase.from('loan').insert([{
                         username: this.state.selectedUser,
@@ -64,7 +68,8 @@ export default class LoanRegistartion extends React.Component {
                         bank: this.state.bank,
                         account: this.state.account,
                         ifsc: this.state.ifsc,
-                        branch: this.state.branch
+                        branch: this.state.branch,
+                        finaldate : finalDate
                     }])
                 }
                 catch (e) {
