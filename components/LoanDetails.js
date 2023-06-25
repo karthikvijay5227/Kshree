@@ -90,8 +90,8 @@ class LoanInfo extends React.Component {
         }
 
         return (
-            <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor: 'white' }}>
-                <View style={{ flexDirection: 'row', marginLeft:"2.5%" }}>
+            <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'white' }}>
+                <View style={{ flexDirection: 'row'}}>
                     <TouchableOpacity disabled style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginTop: 30, width: width - 180, height: 100, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                         <Text style={{ fontSize: 15, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: "black" }}>Total Amount</Text>
                         <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 30, color: '#38E038', alignSelf: 'flex-end', marginRight: 30 }}>

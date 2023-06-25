@@ -48,13 +48,15 @@ export default function AboutUs() {
             </View>
 
             <View style={styles.box}>
-                <ScrollView contentContainerStyle={{ height: height - 65, minHeight: '140%' }}>
+                <ScrollView contentContainerStyle={{ height: height }}>
                     <Text style={styles.aboutText}>
-                        Kudumbashree is a pioneering poverty eradication and women empowerment program in the state of Kerala, India. Established in 1998, Kudumbashree aims to uplift the socio-economic status of women and their families by providing them with various skill development, entrepreneurship, and microfinance opportunities.
-                        {'\n\n'}
-                        At its core, Kudumbashree believes in empowering women as catalysts for change within their communities. Through a network of over 4 million members organized into neighborhood groups called "Kudumbashree units," the organization fosters self-help, solidarity, and collective action.
-                        {'\n\n'}
-                        Kudumbashree offers a wide range of programs and initiatives, including training in various income-generating activities, micro-enterprises, and capacity-building workshops. By promoting financial inclusion, enhancing livelihood options, and fostering community development, Kudumbashree has played a significant role in reducing poverty and creating sustainable livelihoods across Kerala.
+                    We are Sanjay, Karthik, and Ashwin, three students from the College of Engineering Chengannur, CSE department. We are passionate about coding and developing innovative solutions for social causes. We have developed an app called Kshree, which helps to track and manage events of Kudumbashree.
+                    {'\n\n'}
+                    Our app aims to provide a platform for the Kudumbashree members to access information, communicate with each other, and participate in various activities and initiatives of the programme. The app also enables the users to monitor their progress, achievements, and challenges in their journey towards empowerment and prosperity.
+                    {'\n\n'}
+                    We hope that our app will help the Kudumbashree members to achieve their goals and aspirations. We also hope that our app will help the Kudumbashree programme to achieve its vision of a poverty-free, prosperous Kerala.
+                    {'\n\n'}
+                    Thank you for choosing Kshree! 🙏
                     </Text>
                 </ScrollView>
             </View>
