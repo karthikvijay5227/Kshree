@@ -53,8 +53,8 @@ export default class LoanRegistartion extends React.Component {
             }
             else {
 
-               const finalDate = new Date(new Date().setMonth( parseInt(new Date().getMonth()) + parseInt(this.state.duration) - 1)).toISOString().slice(0, 10);
-               
+                const finalDate = new Date(new Date().setMonth(parseInt(new Date().getMonth()) + parseInt(this.state.duration) - 1)).toISOString().slice(0, 10);
+
 
                 try {
                     await supabase.from('loan').insert([{
@@ -67,7 +67,7 @@ export default class LoanRegistartion extends React.Component {
                         account: this.state.account,
                         ifsc: this.state.ifsc,
                         branch: this.state.branch,
-                        finaldate : finalDate
+                        finaldate: finalDate
                     }])
                 }
                 catch (e) {
@@ -82,7 +82,7 @@ export default class LoanRegistartion extends React.Component {
             <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'white' }}>
 
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={{ width: width - 80, marginTop: 50, }}>
+                    <View style={{ width: width - 80, marginTop: 50 }}>
 
                         <SelectList
                             placeholder='Member Name'

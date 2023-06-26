@@ -108,7 +108,7 @@ class LoanInfo extends React.Component {
 
                 </View>
 
-                <ScrollView style={{ marginTop: 30 }} contentContainerStyle={{ paddingBottom: 20, marginLeft: 30, width: width - 50, alignItems: 'center' }}>
+                <ScrollView style={{ marginTop: 30 }} contentContainerStyle={{ paddingBottom: 20, width: width - 50, alignItems: 'center' }}>
 
                     {
                         handleLoanDetails()
