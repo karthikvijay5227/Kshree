@@ -15,8 +15,7 @@ export default class EventDetails extends React.Component {
             eventDetails: [],
             refresh: true,
             users: [],
-            checked: [],
-            username : []
+            checked: []
         }
     }
 
@@ -34,11 +33,7 @@ export default class EventDetails extends React.Component {
         this.getEventDetails(obj[0])
         let { data: obj2 } = await supabase.from('users').select('username');
         this.setState({ users: Object.entries(obj2) })
-        let { data: obj3 } = await supabase.from('users').select('name');
-        obj3 = obj3.map((item) => {
-            return item.name;
-        })
-        this.setState({ username: obj3 })
+
         let checkedState = this.state.users.map(() => false);
 
         try {
@@ -91,7 +86,7 @@ export default class EventDetails extends React.Component {
                     return (
                         <View key={index} style={{ flex: 0.2, marginTop: 20, width: width, flexDirection: 'row', alignItems: 'center', borderTopWidth: 1 }}>
                             <Image source={require('../assets/user.png')} style={{ height: 40, width: 40, marginLeft: 20 }} />
-                            <Text style={{ fontFamily: 'Gilroy-Medium', fontSize: 18, marginLeft: 20, color: 'black' }}>{this.state.username[index]}</Text>
+                            <Text style={{ fontFamily: 'Gilroy-Medium', fontSize: 18, marginLeft: 20, color: 'black' }}>{item[1].username}</Text>
                             <CheckBox value={this.state.checked[index]} onValueChange={() => this.handleCheckboxChange(index)} style={{ marginLeft: 'auto', marginRight: 30 }} />
                         </View>
                     )

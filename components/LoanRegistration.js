@@ -54,11 +54,12 @@ export default class LoanRegistartion extends React.Component {
             else {
 
                 const finalDate = new Date(new Date().setMonth(parseInt(new Date().getMonth()) + parseInt(this.state.duration) - 1)).toISOString().slice(0, 10);
-
+                
 
                 try {
+                    let user = await supabase.from('users').select('username').eq('name', this.state.selectedUser)
                     await supabase.from('loan').insert([{
-                        username: this.state.selectedUser,
+                        username: user.data[0].username,
                         amount: this.state.amount,
                         purpose: this.state.purpose,
                         rate: this.state.rate,
