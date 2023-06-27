@@ -3,9 +3,7 @@ import { View, StyleSheet, Text, Dimensions, ScrollView, ImageBackground, Toucha
 import { SelectList } from 'react-native-dropdown-select-list';
 import { createClient } from '@supabase/supabase-js';
 import { TextInput } from 'react-native-paper';
-import { duration } from 'moment/moment';
 
-const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 export default class LoanRegistartion extends React.Component {
