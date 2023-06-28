@@ -13,6 +13,36 @@ export default function ProfileEdit({ username }) {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+                const supabase = createClient(supabaseUrl, supabaseKey);
+
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('name, address, phone_number')
+                    .eq('username', username)
+                    .limit(1);
+
+                if (error) {
+                    throw error;
+                }
+
+                if (data.length > 0) {
+                    const { name, address, phone_number } = data[0];
+                    setName(name);
+                    setAddress(address);
+                    setPhoneNumber(phone_number);
+                }
+            } catch (error) {
+                Alert.alert('Error', error.message);
+            }
+        };
+
+        fetchUserData();
+    }, [username]);
 
     useEffect(() => {
         const isInputValid = name !== '' && address !== '' && phoneNumber !== '' && phoneNumber.length === 10;
@@ -28,6 +58,13 @@ export default function ProfileEdit({ username }) {
                 .from('users')
                 .update({ address, name, phone_number: phoneNumber })
                 .eq('username', username);
+
+            if (data && data.length > 0) {
+                const { name, address, phone_number } = data[0];
+                setName(name);
+                setAddress(address);
+                setPhoneNumber(phone_number);
+            }
 
             if (error) {
                 throw error;
