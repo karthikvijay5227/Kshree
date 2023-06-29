@@ -45,7 +45,7 @@ export default function LoanStatus({ username }) {
             let pays = await supabase.rpc('monthly_payment', { p_username })
             setPay(pays.data);
             let date = await supabase.from('loan').select('updatedate').eq('username', username);
-            if(date.data[0].updatedate < new Date().toISOString().slice(0, 10)){
+            if (date.data[0].updatedate < new Date().toISOString().slice(0, 10)) {
                 setLoanpaid(false);
             }
         }
@@ -64,23 +64,14 @@ export default function LoanStatus({ username }) {
     }, []);
 
     const handleBackPress = () => {
-        if (backPressCount < 1) {
-            setBackPressCount(backPressCount + 1);
-            navigation.navigate('Home');
-            setTimeout(() => {
-                setBackPressCount(0);
-            }, 2000); // Reset backPressCount after 2 seconds
-            return true;
-        } else {
-            BackHandler.exitApp();
-            return false;
-        }
+        navigation.goBack();
+        return true;
     };
 
     if (amount != 0) {
         return (
-            <View style={{backgroundColor : 'white'}}>
-                <View style={{ flexDirection: 'row', marginLeft: 30, justifyContent: 'flex-start', alignItems: 'center'}}>
+            <View style={{ backgroundColor: 'white' }}>
+                <View style={{ flexDirection: 'row', marginLeft: 30, justifyContent: 'flex-start', alignItems: 'center' }}>
                     <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: '#1A1110', marginTop: 30, }}>Status : </Text>
                     {
                         loanpaid ? <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: '#38E038', marginTop: 30, marginLeft: 10 }}>Loan Paid</Text> : <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'red', marginTop: 30, marginLeft: 20 }}>Loan Not Paid</Text>

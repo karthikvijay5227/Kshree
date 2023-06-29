@@ -17,22 +17,6 @@ export default class LoanUser extends React.Component {
     }
   }
 
-  componentDidMount() {
-    // Add a back button event listener
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-  }
-
-  componentWillUnmount() {
-    // Remove the back button event listener
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  }
-
-  handleBackButton = () => {
-    // Handle the back button press
-    this.props.navigation.goBack();
-    return true; // Prevent the default back button action
-  }
-
   async componentDidMount() {
     const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
@@ -56,6 +40,18 @@ export default class LoanUser extends React.Component {
     else {
       this.setState({ expired: true })
     }
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    // Remove the back button event listener
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  handleBackButton = () => {
+    // Handle the back button press
+    this.props.navigation.goBack();
+    return true; // Prevent the default back button action
   }
 
   render() {

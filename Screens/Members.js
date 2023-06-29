@@ -7,6 +7,7 @@ import AboutUs from '../components/AboutUs';
 import Profile from '../components/Profile';
 import EventAttendance from '../components/EventAttendance';
 import Registration from '../Screens/Registration';
+import ProfileEdit from '../components/ProfileEdit';
 import Notify from '../components/Notify';
 import { IconButton } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js';
@@ -64,7 +65,7 @@ function DrawerHeader({ username, ...props }) {
 
     return (
         <DrawerContentScrollView {...props}>
-            <View style={{marginTop:8, marginHorizontal: 10, borderRadius: 15, marginBottom: 15, backgroundColor: '#e6eefa', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }}>
+            <View style={{ marginTop: 8, marginHorizontal: 10, borderRadius: 15, marginBottom: 15, backgroundColor: '#e6eefa', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }}>
                 <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 18, marginLeft: 10 }}>
                     <Image
                         source={require('../assets/profile.png')}
@@ -105,6 +106,9 @@ export default function Members({ route }) {
         <Stack.Navigator initialRouteName="Drawer" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Drawer">
                 {(props) => <DrawerNavigation {...props} username={username} />}
+            </Stack.Screen>
+            <Stack.Screen name="ProfileEdit" options={{ headerShown: false }}>
+                {(props) => <ProfileEdit {...props} username={username} />}
             </Stack.Screen>
         </Stack.Navigator>
     );

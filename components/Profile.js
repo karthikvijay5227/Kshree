@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, BackHandler, ImageBackground, Dimensions } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const height = Dimensions.get('window').height;
@@ -41,6 +41,12 @@ export default function Profile({ navigation, username }) {
     return true;
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, [])
+  );
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('user'); // Remove the stored user data
@@ -62,6 +68,9 @@ export default function Profile({ navigation, username }) {
             <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'white' }}>{user}</Text>
             <Text style={{ fontFamily: 'Outfit-Medium', fontSize: 15, color: 'white' }}>{role ? "Admin" : "Member"}</Text>
           </View>
+          <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate("ProfileEdit")}>
+            <Image source={require('../assets/profedit.png')} style={{ height: 30, width: 30, alignSelf: 'center' }} />
+          </TouchableOpacity>
         </View>
       </ImageBackground>
       <View style={styles.boxContainer}>
@@ -91,7 +100,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: 'white'
-
   },
   profilePicContainer: {
     width: width - 50,
@@ -100,7 +108,22 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginTop: 30
+  },
 
+  editProfileButton: {
+    position: 'absolute',
+    right: -13,
+    bottom: 35,
+    justifyContent: 'center',
+    alignContent: 'center',
+    elevation: 8,
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    backgroundColor: 'white',
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
   },
   profilePic: {
     width: 70,
