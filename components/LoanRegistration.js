@@ -3,9 +3,7 @@ import { View, StyleSheet, Text, Dimensions, ScrollView, ImageBackground, Toucha
 import { SelectList } from 'react-native-dropdown-select-list';
 import { createClient } from '@supabase/supabase-js';
 import { TextInput } from 'react-native-paper';
-import { duration } from 'moment/moment';
 
-const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 export default class LoanRegistartion extends React.Component {
@@ -57,8 +55,9 @@ export default class LoanRegistartion extends React.Component {
 
 
                 try {
+                    let user = await supabase.from('users').select('username').eq('name', this.state.selectedUser)
                     await supabase.from('loan').insert([{
-                        username: this.state.selectedUser,
+                        username: user.data[0].username,
                         amount: this.state.amount,
                         purpose: this.state.purpose,
                         rate: this.state.rate,

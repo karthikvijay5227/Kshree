@@ -123,6 +123,7 @@ export default function CreatePost() {
                         keyboardStatus && styles.itemsWithKeyboard // Apply conditional style
                     ]}
                     contentContainerStyle={styles.scrollViewContent}
+                    showsVerticalScrollIndicator={false}
                 >
                     {submittedTasks.map((submittedTask, index) => (
                         <View key={index} style={styles.submittedTask}>
@@ -238,6 +239,6 @@ const styles = StyleSheet.create({
     },
     itemsWithKeyboard: {
         maxHeight: "79%",                      //610
-        minHeight: '45%', 
+        minHeight: '45%',
     },
 });

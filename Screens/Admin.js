@@ -16,6 +16,7 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { BackHandler } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import ProfileEdit from '../components/ProfileEdit';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -75,6 +76,9 @@ export default function Admin({ route }) {
         >
             <Stack.Screen name="Drawer" options={{ headerShown: false }}>
                 {(props) => <DrawerNavigation {...props} username={username} />}
+            </Stack.Screen>
+            <Stack.Screen name="ProfileEdit" options={{ headerShown: false }}>
+                {(props) => <ProfileEdit {...props} username={username} />}
             </Stack.Screen>
         </Stack.Navigator>
     );

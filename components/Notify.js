@@ -84,6 +84,7 @@ export default function Notify() {
         <View style={styles.container}>
             <ScrollView
                 style={{ marginTop: 20, height: '100%', width: '90%' }}
+                showsVerticalScrollIndicator={false}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }

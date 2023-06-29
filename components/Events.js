@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, ScrollView, Dimensions, RefreshControl, BackHandler } from 'react-native';
+import { View, Text, ScrollView, Dimensions, RefreshControl, BackHandler } from 'react-native';
 import { Button, Card, IconButton } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js'

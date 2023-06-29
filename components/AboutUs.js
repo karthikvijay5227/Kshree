@@ -48,15 +48,15 @@ export default function AboutUs() {
             </View>
 
             <View style={styles.box}>
-                <ScrollView contentContainerStyle={{ height: height }}>
+                <ScrollView contentContainerStyle={{ height: height }} showsVerticalScrollIndicator={false}>
                     <Text style={styles.aboutText}>
-                    We are Sanjay, Karthik, and Ashwin, three students from the College of Engineering Chengannur, CSE department. We are passionate about coding and developing innovative solutions for social causes. We have developed an app called Kshree, which helps to track and manage events of Kudumbashree.
-                    {'\n\n'}
-                    Our app aims to provide a platform for the Kudumbashree members to access information, communicate with each other, and participate in various activities and initiatives of the programme. The app also enables the users to monitor their progress, achievements, and challenges in their journey towards empowerment and prosperity.
-                    {'\n\n'}
-                    We hope that our app will help the Kudumbashree members to achieve their goals and aspirations. We also hope that our app will help the Kudumbashree programme to achieve its vision of a poverty-free, prosperous Kerala.
-                    {'\n\n'}
-                    Thank you for choosing Kshree! 🙏
+                        We are Sanjay, Karthik, and Ashwin, three students from the College of Engineering Chengannur, CSE department. We are passionate about coding and developing innovative solutions for social causes. We have developed an app called Kshree, which helps to track and manage events of Kudumbashree.
+                        {'\n\n'}
+                        Our app aims to provide a platform for the Kudumbashree members to access information, communicate with each other, and participate in various activities and initiatives of the programme. The app also enables the users to monitor their progress, achievements, and challenges in their journey towards empowerment and prosperity.
+                        {'\n\n'}
+                        We hope that our app will help the Kudumbashree members to achieve their goals and aspirations. We also hope that our app will help the Kudumbashree programme to achieve its vision of a poverty-free, prosperous Kerala.
+                        {'\n\n'}
+                        Thank you for choosing Kshree! 🙏
                     </Text>
                 </ScrollView>
             </View>
