@@ -52,7 +52,7 @@ export default class LoanRegistartion extends React.Component {
             else {
 
                 const finalDate = new Date(new Date().setMonth(parseInt(new Date().getMonth()) + parseInt(this.state.duration) - 1)).toISOString().slice(0, 10);
-
+                
 
                 try {
                     let user = await supabase.from('users').select('username').eq('name', this.state.selectedUser)
