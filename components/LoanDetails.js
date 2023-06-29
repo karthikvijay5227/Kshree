@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import { CountUp } from 'use-count-up';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoanUser from '../components/LoanUser';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -72,7 +73,10 @@ class LoanInfo extends React.Component {
                 this.state.loanMembers.map((item, index) => {
 
                     return (
-                        <TouchableOpacity key={index} activeOpacity={0.8} style={styles.names} onPress={() => navigation.navigate('LoanUser', { name: item.loan_username })}>
+                        <SwipeListView key={index}
+                        data = {this.state.color}
+                        renderItem={ (data, rowMap) => (
+                            <TouchableOpacity activeOpacity={0.8} style={styles.names} onPress={() => navigation.navigate('LoanUser', { name: item.loan_username })}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10, color: "black" }}>{index + 1}.</Text>
                                 <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10, color: "black" }}>{item.loan_username}</Text>
@@ -82,6 +86,9 @@ class LoanInfo extends React.Component {
                                 <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: new Date(item.updatedate).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10) ? 'red' : '#38E038' }}>{item.updatedate}</Text>
                             </View>
                         </TouchableOpacity>
+                        )}
+                        />
+                        
 
 
                     )
