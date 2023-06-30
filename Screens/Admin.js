@@ -3,7 +3,8 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Image, ScrollView, RefreshControl } from 'react-native';
 import LoanDetails from '../components/LoanDetails';
-import LoanRegistration from '../components/LoanRegistration';
+import LoanList from '../components/CreateLoan';
+import LoanApproval from '../components/LoanApproval';
 import KudumbashreeRegistration from '../components/KudumbashreeRegistration';
 import Events from '../components/Events';
 import Profile from '../components/Profile';
@@ -97,7 +98,8 @@ function DrawerNavigation({ username }) {
             </Drawer.Screen>
             <Drawer.Screen name="Create Post" component={CreatePost} />
             <Drawer.Screen name="Loan Details" component={LoanDetails} />
-            <Drawer.Screen name="Loan Registration" component={LoanRegistration} />
+            <Drawer.Screen name="Loan Creation" component={LoanList} options={{ headerShown: false}}/>
+            <Drawer.Screen name="Loan Approval" component={LoanApproval} />
             <Drawer.Screen name="Kudumbashree Registration" component={KudumbashreeRegistration} options={{ headerTitle: 'Member Registration' }} />
             <Drawer.Screen name="Events" component={Events} />
             <Drawer.Screen name="Registration" component={Registration} options={{ headerShown: false, drawerItemStyle: { height: 0 } }} />

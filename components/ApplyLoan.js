@@ -3,15 +3,16 @@ import { View, StyleSheet, Text, Dimensions, ScrollView, ImageBackground, Toucha
 import { SelectList } from 'react-native-dropdown-select-list';
 import { createClient } from '@supabase/supabase-js';
 import { TextInput } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width;
 
-export default class LoanRegistartion extends React.Component {
+export default class ApplyLoan extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            users: [],
+            username : '',
             selectedUser: '',
             amount: '',
             purpose: '',
@@ -21,7 +22,8 @@ export default class LoanRegistartion extends React.Component {
             account: '',
             ifsc: '',
             branch: '',
-            error: false
+            error: false,
+            loan : ''
         }
     }
 
@@ -29,12 +31,14 @@ export default class LoanRegistartion extends React.Component {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
         const supabase = createClient(supabaseUrl, supabaseKey);
-        let { data: obj2 } = await supabase.from('users').select('name');
-        obj2 = obj2.map((item) => {
-            return item.name;
-        })
-        this.setState({ users: obj2 })
-
+    
+        const user = await AsyncStorage.getItem('user');
+        const { isAdmin, username } = JSON.parse(user);
+        let { data, error } = await supabase.from('users').select('name').eq('username', username);
+        this.setState({ selectedUser: data[0].name });
+        const loan = this.props.route.params.loan;
+        this.setState({ loan : loan.loanname ,username : username ,amount : String(loan.amount), rate: String(loan.interest_rate), duration: String(loan.duration)});
+        
     }
 
     render() {
@@ -55,9 +59,9 @@ export default class LoanRegistartion extends React.Component {
                 
 
                 try {
-                    let user = await supabase.from('users').select('username').eq('name', this.state.selectedUser)
+                    
                     await supabase.from('loan').insert([{
-                        username: user.data[0].username,
+                        username: this.state.username,
                         amount: this.state.amount,
                         purpose: this.state.purpose,
                         rate: this.state.rate,
@@ -68,7 +72,23 @@ export default class LoanRegistartion extends React.Component {
                         branch: this.state.branch,
                         finaldate: finalDate
                     }])
+
+                   let members = []
+                  
+                   let data = (await supabase.from('Loans').select('members').eq('loanname', this.state.loan)).data[0].members
+                   if(data != null)
+                     {
+                        data.map((item) => {
+                            members.push(item)
+                        })
+                        members.push(this.state.username)
+                     }
+                     else
+                     members.push(this.state.username)
+                     await supabase.from('Loans').update({members : members}).eq('loanname', this.state.loan)
+                   
                 }
+
                 catch (e) {
                     Alert.alert("Error in Registering Loan");
                 }
@@ -83,12 +103,11 @@ export default class LoanRegistartion extends React.Component {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={{ width: width - 80, marginTop: 50 }}>
 
-                        <SelectList
-                            placeholder='Member Name'
-                            search={false}
-                            setSelected={(value) => this.setState({ selectedUser: value })}
-                            data={this.state.users}
-                            save='value'
+                        <TextInput
+                         mode='outlined'
+                         style={{ width: width - 80, marginTop: 20, backgroundColor: 'white' }}
+                         value={this.state.selectedUser}
+                         editable={false}
                         />
                     </View>
 
@@ -97,9 +116,8 @@ export default class LoanRegistartion extends React.Component {
                         label="Amount"
                         mode='outlined'
                         value={this.state.amount}
-                        onChangeText={text => this.setState({ amount: text })}
-                        keyboardType='numeric'
                         left={<TextInput.Affix text="₹" />}
+                        editable={false}
                     />
 
                     <TextInput
@@ -115,8 +133,7 @@ export default class LoanRegistartion extends React.Component {
                         label="Interest Rate"
                         mode='outlined'
                         value={this.state.rate}
-                        onChangeText={text => this.setState({ rate: text })}
-                        keyboardType='numeric'
+                        editable={false}
                         left={<TextInput.Affix text="%" />}
                     />
 
@@ -125,8 +142,7 @@ export default class LoanRegistartion extends React.Component {
                         label="Duration"
                         mode='outlined'
                         value={this.state.duration}
-                        onChangeText={text => this.setState({ duration: text })}
-                        keyboardType='numeric'
+                        editable={false}
                         right={<TextInput.Affix text="Months" />}
                     />
 

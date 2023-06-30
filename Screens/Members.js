@@ -6,6 +6,7 @@ import LoanStatus from '../components/LoanStatus';
 import AboutUs from '../components/AboutUs';
 import Profile from '../components/Profile';
 import EventAttendance from '../components/EventAttendance';
+import LoanRequests from '../components/LoanRequests';
 import Registration from '../Screens/Registration';
 import ProfileEdit from '../components/ProfileEdit';
 import Notify from '../components/Notify';
@@ -133,6 +134,9 @@ function DrawerNavigation({ username }) {
             </Drawer.Screen>
             <Drawer.Screen name="Event Attendance" options={{ headerShown: true, headerTitle: 'Event Attendance' }} >
                 {(props) => <EventAttendance {...props} username={username} />}
+            </Drawer.Screen>
+            <Drawer.Screen name="Loan Request" options={{ headerShown: true, headerTitle: 'Loan Request' }} >
+                {(props) => <LoanRequests {...props} username={username} />}
             </Drawer.Screen>
             <Drawer.Screen name="InitialPage" component={Registration} options={{ headerShown: false, drawerItemStyle: { height: 0 } }} />
             <Drawer.Screen name="About" component={AboutUs} options={{ headerShown: false, headerTitle: 'About' }} />
