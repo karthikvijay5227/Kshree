@@ -3,7 +3,7 @@ admin or member, with their name, username, password, address, and phone number.
 
 import * as React from 'react';
 import { View, StyleSheet, Text, Dimensions, ScrollView, BackHandler } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, HelperText } from 'react-native-paper';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createClient } from '@supabase/supabase-js'
@@ -29,6 +29,8 @@ export default class KudumbashreeRegistartion extends React.Component {
             phone: '',
             pherror: false,
             deterror: false,
+            isPasswordFocused: false,
+            passwordError: false
         }
     }
 
@@ -48,6 +50,7 @@ export default class KudumbashreeRegistartion extends React.Component {
     }
 
     render() {
+        const isPasswordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(this.state.password);
 
         const list = [{ label: "Admin", value: true }, { label: "Member", value: false }]
         const height = Dimensions.get('window').height;
@@ -81,6 +84,10 @@ export default class KudumbashreeRegistartion extends React.Component {
             else if (this.state.phone.length != 10) {
                 this.setState({ pherror: true });
                 Alert.alert("Please enter a valid phone number");
+            } else if (!isPasswordValid) {
+                this.setState({ passwordError: true }); // Set passwordError state to true
+                Alert.alert("Please enter a password that meets the requirements.");
+                return;
             }
             else {
                 try {
@@ -100,80 +107,112 @@ export default class KudumbashreeRegistartion extends React.Component {
                 Alert.alert("User added successfully");
                 this.props.navigation.goBack()
             }
+            if (!isPasswordValid) {
+                Alert.alert("Please enter a password that meets the requirements.");
+                return;
+            }
         }
 
         return (
             <View style={styles.container}>
                 <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
                     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', alignItems: 'flex-start', marginTop: 30, }}>Member Registartion</Text>
-
-                        <TextInput
-                            label={'Name'}
-                            mode='outlined'
-                            error={this.state.deterror}
-                            value={this.state.name}
-                            onChangeText={text => this.setState({ name: text })}
-                            style={{ width: width - 50, marginTop: 20 }}
-                        />
-
-                        <TextInput
-                            label={'UserName'}
-                            mode='outlined'
-                            error={this.state.deterror}
-                            value={this.state.username}
-                            onChangeText={text => this.setState({ username: text })}
-                            style={{ width: width - 50, marginTop: 20 }}
-                        />
-
-                        <TextInput
-                            label={'Password'}
-                            mode='outlined'
-                            error={this.state.deterror}
-                            secureTextEntry={true}
-                            value={this.state.password}
-                            onChangeText={text => this.setState({ password: text })}
-                            style={{ width: width - 50, marginTop: 20 }}
-                        />
-
-                        <TextInput
-                            label={'Address'}
-                            mode='outlined'
-                            error={this.state.deterror}
-                            value={this.state.address}
-                            onChangeText={text => this.setState({ address: text })}
-                            style={{ width: width - 50, marginTop: 20 }}
-                            numberOfLines={10}
-                            multiline={true}
-                            editable={true}
-                        />
-
-                        <TextInput
-                            label={'Phone Number'}
-                            mode='outlined'
-                            value={this.state.phone}
-                            error={this.state.pherror}
-                            onChangeText={text => this.setState({ phone: text })}
-                            keyboardType={'number-pad'}
-                            style={{ width: width - 50, marginTop: 20 }}
-                        />
-
-                        <View style={{ width: width - 50, marginTop: 20 }}>
-                            <SelectList
-                                placeholder='Role'
-                                search={false}
-                                setSelected={(value) => this.setState({ admin: value })}
-                                data={[{ key: 1, value: 'Admin', }, { key: 2, value: 'Member' }]}
-                                save='value'
-                                onSelect={() => {
-                                    if (this.state.admin == 'Admin') {
-                                        this.setState({ admin: true })
-                                    }
-                                    else {
-                                        this.setState({ admin: false })
-                                    }
-                                }}
+                        <View style={styles.textHeaderContainer}>
+                            <Text style={styles.textHeader}>Member Registration</Text>
+                        </View>
+                        <View style={styles.textInputContainer}>
+                            <TextInput
+                                label={'Name'}
+                                mode='outlined'
+                                error={this.state.deterror}
+                                value={this.state.name}
+                                onChangeText={text => this.setState({ name: text })}
+                                style={{ width: width - 50, marginTop: 20 }}
                             />
+
+                            <TextInput
+                                label={'UserName'}
+                                mode='outlined'
+                                error={this.state.deterror}
+                                value={this.state.username}
+                                onChangeText={text => this.setState({ username: text })}
+                                style={{ width: width - 50, marginTop: 20 }}
+                            />
+
+                            <TextInput
+                                label={'Password'}
+                                mode='outlined'
+                                error={this.state.deterror || (!isPasswordValid && this.state.isPasswordFocused)}
+                                secureTextEntry={true}
+                                value={this.state.password}
+                                onChangeText={text => this.setState({ password: text })}
+                                style={[
+                                    {
+                                        width: width - 50, marginTop: 20
+                                    },
+                                    (!isPasswordValid && this.state.isPasswordFocused) && styles.errorTextInput
+                                ]}
+                                onFocus={() => this.setState({ isPasswordFocused: true })}
+                                onBlur={() => this.setState({ isPasswordFocused: false })}
+                            />
+                            {this.state.isPasswordFocused && (
+                                <View style={styles.passwordRequirementsContainer}>
+                                    <HelperText type="info" visible={true}>
+                                        Password requirements:
+                                    </HelperText>
+                                    <HelperText type="info" visible={true}>
+                                        - At least 8 characters
+                                    </HelperText>
+                                    <HelperText type="info" visible={true}>
+                                        - Must contain at least one uppercase letter, one lowercase letter, and one number
+                                    </HelperText>
+                                </View>
+                            )}
+                            {!isPasswordValid  && (
+                                <HelperText type="error" visible={true} style={styles.passwordErrorText}>
+                                    Password does not meet the requirements.
+                                </HelperText>
+                            )}
+
+                            <TextInput
+                                label={'Address'}
+                                mode='outlined'
+                                error={this.state.deterror}
+                                value={this.state.address}
+                                onChangeText={text => this.setState({ address: text })}
+                                style={{ width: width - 50, marginTop: 20 }}
+                                numberOfLines={10}
+                                multiline={true}
+                                editable={true}
+                            />
+
+                            <TextInput
+                                label={'Phone Number'}
+                                mode='outlined'
+                                value={this.state.phone}
+                                error={this.state.pherror}
+                                onChangeText={text => this.setState({ phone: text })}
+                                keyboardType={'number-pad'}
+                                style={{ width: width - 50, marginTop: 20 }}
+                            />
+
+                            <View style={{ width: width - 50, marginTop: 20 }}>
+                                <SelectList
+                                    placeholder='Role'
+                                    search={false}
+                                    setSelected={(value) => this.setState({ admin: value })}
+                                    data={[{ key: 1, value: 'Admin', }, { key: 2, value: 'Member' }]}
+                                    save='value'
+                                    onSelect={() => {
+                                        if (this.state.admin == 'Admin') {
+                                            this.setState({ admin: true })
+                                        }
+                                        else {
+                                            this.setState({ admin: false })
+                                        }
+                                    }}
+                                />
+                            </View>
                         </View>
                         <View style={{ marginTop: 40, width: '30%' }}>
                             <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ADD8E6', width: '100%', height: 50, borderRadius: 10, marginBottom: 30 }} onPress={() => { addUser() }}>
@@ -194,5 +233,30 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    textHeaderContainer: {
+        alignItems: 'center',
+        marginTop: 10,
+        marginRight:"49.4%"
+    },
+    textHeader: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    passwordRequirementsContainer: {
+        marginHorizontal: 20,
+        marginTop: 10
+    },
+    passwordErrorText: {
+        marginTop: 5
+    },
+    textInputContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20
+    },
+    errorTextInput: {
+        borderColor: 'red', // Add any desired styles for error state
     }
 })
