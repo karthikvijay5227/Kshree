@@ -2,8 +2,8 @@
 admin or member, with their name, username, password, address, and phone number. */
 
 import * as React from 'react';
-import { View, StyleSheet, Text, Dimensions, ScrollView, BackHandler } from 'react-native';
-import { TextInput, HelperText } from 'react-native-paper';
+import { View, StyleSheet, Text, Dimensions, ScrollView, BackHandler, Image } from 'react-native';
+import { TextInput, HelperText, IconButton } from 'react-native-paper';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createClient } from '@supabase/supabase-js'
@@ -30,7 +30,9 @@ export default class KudumbashreeRegistartion extends React.Component {
             pherror: false,
             deterror: false,
             isPasswordFocused: false,
-            passwordError: false
+            passwordError: false,
+            passvalid : [false,false,false,false,false],
+            passwordVisible : false
         }
     }
 
@@ -50,7 +52,8 @@ export default class KudumbashreeRegistartion extends React.Component {
     }
 
     render() {
-        const isPasswordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(this.state.password);
+        const isPasswordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/.test(this.state.password);
+
 
         const list = [{ label: "Admin", value: true }, { label: "Member", value: false }]
         const height = Dimensions.get('window').height;
@@ -91,6 +94,13 @@ export default class KudumbashreeRegistartion extends React.Component {
             }
             else {
                 try {
+                    
+                    if( await supabase.from('users').select('username').eq('username',this.state.username))
+                     {
+                        Alert.alert("Username already exists");
+                        this.props.navigation.goBack();
+                    }
+                    else{
                     await supabase.from('users').insert([
                         {
                             username: this.state.username,
@@ -100,12 +110,18 @@ export default class KudumbashreeRegistartion extends React.Component {
                             name: this.state.name,
                             phone_number: this.state.phone
                         }])
+                    
+                    if( await supabase.from('users').select('username').eq('username',this.state.username))
+                     {
+                        Alert.alert("User Added Successfully");
+                     }
+                    }
+
 
                 } catch (e) {
                     Alert.alert("Failed to add user");
                 }
-                Alert.alert("User added successfully");
-                this.props.navigation.goBack()
+               
             }
             if (!isPasswordValid) {
                 Alert.alert("Please enter a password that meets the requirements.");
@@ -116,7 +132,7 @@ export default class KudumbashreeRegistartion extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
-                    <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+                    <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} ref={(c) => {this.scroll = c}}>
                         <View style={styles.textHeaderContainer}>
                             <Text style={styles.textHeader}>Member Registration</Text>
                         </View>
@@ -143,36 +159,79 @@ export default class KudumbashreeRegistartion extends React.Component {
                                 label={'Password'}
                                 mode='outlined'
                                 error={this.state.deterror || (!isPasswordValid && this.state.isPasswordFocused)}
-                                secureTextEntry={true}
+                                secureTextEntry={this.state.passwordVisible}
+                                right={<TextInput.Icon icon={this.state.passwordVisible ? require('../assets/hide.png') : require('../assets/eye.png')} onPress={() => { this.setState({ passwordVisible: !this.state.passwordVisible }) }} />}
                                 value={this.state.password}
-                                onChangeText={text => this.setState({ password: text })}
+                                onChangeText={(text) => {
+                                    this.setState({ password: text })
+                                    if(text.length >= 8)
+                                        this.state.passvalid[0] = true;
+                                    else
+                                        this.state.passvalid[0] = false;
+
+                                    if(/\d/.test(text))
+                                        this.state.passvalid[1] = true;
+                                    else
+                                        this.state.passvalid[1] = false;
+
+                                    if(/[A-Z]/.test(text))
+                                        this.state.passvalid[2] = true;
+                                    else
+                                        this.state.passvalid[2] = false;
+                                    
+                                    if(/[a-z]/.test(text))
+                                        this.state.passvalid[3] = true;
+                                    else
+                                        this.state.passvalid[3] = false;
+                                    
+                                    if(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(text))
+                                        this.state.passvalid[4] = true; 
+                                    else
+                                        this.state.passvalid[4] = false;
+                                }}
                                 style={[
                                     {
                                         width: width - 50, marginTop: 20
                                     },
                                     (!isPasswordValid && this.state.isPasswordFocused) && styles.errorTextInput
                                 ]}
-                                onFocus={() => this.setState({ isPasswordFocused: true })}
-                                onBlur={() => this.setState({ isPasswordFocused: false })}
+
+                                onPressIn={() => {this.setState({ isPasswordFocused: true }); this.scroll.scrollTo({x: 0, y: height - 600, animated: true})}}                               
+                                
+
                             />
                             {this.state.isPasswordFocused && (
                                 <View style={styles.passwordRequirementsContainer}>
                                     <HelperText type="info" visible={true}>
                                         Password requirements:
                                     </HelperText>
-                                    <HelperText type="info" visible={true}>
-                                        - At least 8 characters
-                                    </HelperText>
-                                    <HelperText type="info" visible={true}>
-                                        - Must contain at least one uppercase letter, one lowercase letter, and one number
-                                    </HelperText>
+                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                                        <Image source={this.state.passvalid[0] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                        <HelperText type="info" visible={true} > At least 8 characters </HelperText>
+                                    </View>
+                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                                        <Image source={this.state.passvalid[1] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                        <HelperText type="info" visible={true} > Must Contain a Number </HelperText>
+                                    </View>
+                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                                        <Image source={this.state.passvalid[2] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                        <HelperText type="info" visible={true} > Must Contain an Uppercase Letter</HelperText>
+                                    </View>
+                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                                        <Image source={this.state.passvalid[3] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                        <HelperText type="info" visible={true} > Must Contain a Lower Case Letter </HelperText>
+                                    </View>
+                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                                        <Image source={this.state.passvalid[4] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                        <HelperText type="info" visible={true} > Must Contain a Special Symbol </HelperText>
+                                    </View>
+
+                                    <HelperText type="error" visible={this.state.passvalid.includes(false)} style={styles.passwordErrorText}>Password does not meet the requirements</HelperText>
                                 </View>
+
+                                
                             )}
-                            {!isPasswordValid  && (
-                                <HelperText type="error" visible={true} style={styles.passwordErrorText}>
-                                    Password does not meet the requirements.
-                                </HelperText>
-                            )}
+                            
 
                             <TextInput
                                 label={'Address'}
@@ -184,6 +243,7 @@ export default class KudumbashreeRegistartion extends React.Component {
                                 numberOfLines={10}
                                 multiline={true}
                                 editable={true}
+                                onPressIn={() => {this.setState({ isPasswordFocused: false });}}
                             />
 
                             <TextInput
