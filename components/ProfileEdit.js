@@ -133,7 +133,7 @@ export default function ProfileEdit({ username }) {
                             onPress={() => { isFormValid && handleSave(); }}
                             disabled={!isFormValid}
                         >
-                            <Text style={styles.registerButtonText}>Register</Text>
+                            <Text style={styles.registerButtonText}>Update</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
