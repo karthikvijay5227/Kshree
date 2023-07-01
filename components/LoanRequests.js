@@ -1,5 +1,5 @@
 import react, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, Alert, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, Alert, RefreshControl,BackHandler } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -39,15 +39,21 @@ class LoanRegistertion extends Component {
         loans : this.props.route.params.loan,
         amount : ''
     }
-
-    
-
-    
-
-    
    }
 
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
+    }
+
    componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     let rate = parseFloat(this.state.loans.interest_rate);
     let duration = Number(this.state.loans.duration);
     let loan = Number(this.state.loans.amount);
