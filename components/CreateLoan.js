@@ -1,5 +1,5 @@
 import react, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, Alert, TouchableOpacity, Image, ImageBackground, RefreshControl } from 'react-native';
+import { View, Text, Dimensions, Alert, TouchableOpacity, Image, RefreshControl,BackHandler } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js';
 import { TextInput } from 'react-native-paper';
@@ -32,9 +32,19 @@ class LoanView extends Component {
           refresh : false
         }
     }
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
+    }
 
     componentDidMount(){
-        
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         this._unsubscribe = this.props.navigation.addListener('focus', async() => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';

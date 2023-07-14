@@ -31,8 +31,8 @@ export default class KudumbashreeRegistartion extends React.Component {
             deterror: false,
             isPasswordFocused: false,
             passwordError: false,
-            passvalid : [false,false,false,false,false],
-            passwordVisible : false
+            passvalid: [false, false, false, false, false],
+            passwordVisible: false
         }
     }
 
@@ -94,34 +94,29 @@ export default class KudumbashreeRegistartion extends React.Component {
             }
             else {
                 try {
-                    
-                    if( await supabase.from('users').select('username').eq('username',this.state.username))
-                     {
+                    if (await supabase.from('users').select('username').eq('username', this.state.username)) {
                         Alert.alert("Username already exists");
                         this.props.navigation.goBack();
                     }
-                    else{
-                    await supabase.from('users').insert([
-                        {
-                            username: this.state.username,
-                            password: this.state.password,
-                            admin: this.state.admin,
-                            address: this.state.address,
-                            name: this.state.name,
-                            phone_number: this.state.phone
-                        }])
-                    
-                    if( await supabase.from('users').select('username').eq('username',this.state.username))
-                     {
-                        Alert.alert("User Added Successfully");
-                     }
+                    else {
+                        await supabase.from('users').insert([
+                            {
+                                username: this.state.username,
+                                password: this.state.password,
+                                admin: this.state.admin,
+                                address: this.state.address,
+                                name: this.state.name,
+                                phone_number: this.state.phone
+                            }])
+
+                        if (await supabase.from('users').select('username').eq('username', this.state.username)) {
+                            Alert.alert("User Added Successfully");
+                        }
                     }
-
-
                 } catch (e) {
                     Alert.alert("Failed to add user");
                 }
-               
+
             }
             if (!isPasswordValid) {
                 Alert.alert("Please enter a password that meets the requirements.");
@@ -132,7 +127,7 @@ export default class KudumbashreeRegistartion extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
-                    <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} ref={(c) => {this.scroll = c}}>
+                    <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} ref={(c) => { this.scroll = c }}>
                         <View style={styles.textHeaderContainer}>
                             <Text style={styles.textHeader}>Member Registration</Text>
                         </View>
@@ -164,28 +159,28 @@ export default class KudumbashreeRegistartion extends React.Component {
                                 value={this.state.password}
                                 onChangeText={(text) => {
                                     this.setState({ password: text })
-                                    if(text.length >= 8)
+                                    if (text.length >= 8)
                                         this.state.passvalid[0] = true;
                                     else
                                         this.state.passvalid[0] = false;
 
-                                    if(/\d/.test(text))
+                                    if (/\d/.test(text))
                                         this.state.passvalid[1] = true;
                                     else
                                         this.state.passvalid[1] = false;
 
-                                    if(/[A-Z]/.test(text))
+                                    if (/[A-Z]/.test(text))
                                         this.state.passvalid[2] = true;
                                     else
                                         this.state.passvalid[2] = false;
-                                    
-                                    if(/[a-z]/.test(text))
+
+                                    if (/[a-z]/.test(text))
                                         this.state.passvalid[3] = true;
                                     else
                                         this.state.passvalid[3] = false;
-                                    
-                                    if(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(text))
-                                        this.state.passvalid[4] = true; 
+
+                                    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(text))
+                                        this.state.passvalid[4] = true;
                                     else
                                         this.state.passvalid[4] = false;
                                 }}
@@ -195,43 +190,38 @@ export default class KudumbashreeRegistartion extends React.Component {
                                     },
                                     (!isPasswordValid && this.state.isPasswordFocused) && styles.errorTextInput
                                 ]}
-
-                                onPressIn={() => {this.setState({ isPasswordFocused: true }); this.scroll.scrollTo({x: 0, y: height - 600, animated: true})}}                               
-                                
-
+                                onPressIn={() => { this.setState({ isPasswordFocused: true }); this.scroll.scrollTo({ x: 0, y: height - 600, animated: true }) }}
                             />
+
                             {this.state.isPasswordFocused && (
                                 <View style={styles.passwordRequirementsContainer}>
                                     <HelperText type="info" visible={true}>
                                         Password requirements:
                                     </HelperText>
-                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                                        <Image source={this.state.passvalid[0] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Image source={this.state.passvalid[0] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{ width: 15, height: 15, marginLeft: 10 }} />
                                         <HelperText type="info" visible={true} > At least 8 characters </HelperText>
                                     </View>
-                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                                        <Image source={this.state.passvalid[1] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Image source={this.state.passvalid[1] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{ width: 15, height: 15, marginLeft: 10 }} />
                                         <HelperText type="info" visible={true} > Must Contain a Number </HelperText>
                                     </View>
-                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                                        <Image source={this.state.passvalid[2] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Image source={this.state.passvalid[2] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{ width: 15, height: 15, marginLeft: 10 }} />
                                         <HelperText type="info" visible={true} > Must Contain an Uppercase Letter</HelperText>
                                     </View>
-                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                                        <Image source={this.state.passvalid[3] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Image source={this.state.passvalid[3] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{ width: 15, height: 15, marginLeft: 10 }} />
                                         <HelperText type="info" visible={true} > Must Contain a Lower Case Letter </HelperText>
                                     </View>
-                                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                                        <Image source={this.state.passvalid[4] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{width : 15, height : 15, marginLeft : 10}} />
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Image source={this.state.passvalid[4] ? require('../assets/correct.png') : require('../assets/wrong.png')} style={{ width: 15, height: 15, marginLeft: 10 }} />
                                         <HelperText type="info" visible={true} > Must Contain a Special Symbol </HelperText>
                                     </View>
 
                                     <HelperText type="error" visible={this.state.passvalid.includes(false)} style={styles.passwordErrorText}>Password does not meet the requirements</HelperText>
                                 </View>
-
-                                
                             )}
-                            
 
                             <TextInput
                                 label={'Address'}
@@ -243,7 +233,7 @@ export default class KudumbashreeRegistartion extends React.Component {
                                 numberOfLines={10}
                                 multiline={true}
                                 editable={true}
-                                onPressIn={() => {this.setState({ isPasswordFocused: false });}}
+                                onPressIn={() => { this.setState({ isPasswordFocused: false }); }}
                             />
 
                             <TextInput
@@ -275,7 +265,7 @@ export default class KudumbashreeRegistartion extends React.Component {
                             </View>
                         </View>
                         <View style={{ marginTop: 40, width: '30%' }}>
-                            <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ADD8E6', width: '100%', height: 50, borderRadius: 10, marginBottom: 30 }} onPress={() => { addUser() }}>
+                            <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ADD8E6', width: '100%', height: 50, borderRadius: 10, marginBottom: 30,marginLeft:"12%" }} onPress={() => { addUser() }}>
                                 <Text>Register</Text>
                             </TouchableOpacity>
                         </View>
@@ -297,7 +287,7 @@ const styles = StyleSheet.create({
     textHeaderContainer: {
         alignItems: 'center',
         marginTop: 10,
-        marginRight:"49.4%"
+        marginRight: "46%"
     },
     textHeader: {
         fontSize: 20,
