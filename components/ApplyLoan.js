@@ -73,6 +73,7 @@ export default class ApplyLoan extends React.Component {
                     
                     await supabase.from('loan').insert([{
                         username: this.state.username,
+                        name : this.state.selectedUser,
                         amount: this.state.amount,
                         purpose: this.state.purpose,
                         rate: this.state.rate,
@@ -83,6 +84,7 @@ export default class ApplyLoan extends React.Component {
                         branch: this.state.branch,
                         finaldate: finalDate
                     }])
+
 
                    let members = []
                   

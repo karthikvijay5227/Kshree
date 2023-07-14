@@ -1,5 +1,10 @@
 import react, {Component} from "react";
+
+import { View, Text, StyleSheet, Image, ScrollView, Dimensions, Alert, LayoutAnimation } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, Alert,BackHandler } from "react-native";
+
 import { createClient } from '@supabase/supabase-js';
 import { createStackNavigator } from "@react-navigation/stack";
 import { IconButton } from "react-native-paper";
@@ -13,7 +18,6 @@ export default class LoanApproval extends Component {
  render(){
     return(
        <Stack.Navigator initialRouteName="Loan Member Request" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Loan Conditions" component={LoanConditions} />
             <Stack.Screen name="Loan Member Request" component={LoanMemberRequest} />
          </Stack.Navigator>
     )
@@ -26,8 +30,14 @@ class LoanMemberRequest extends Component{
     constructor(props){
         super(props);
         this.state = {
-            loanMemberRequest : []
+            loanMemberRequest : [],
+            height : [],
+            toggled : [],
+            image : []
         }
+
+        
+
     }
 
     componentWillUnmount() {
@@ -48,10 +58,45 @@ class LoanMemberRequest extends Component{
         const supabase = createClient(supabaseUrl, supabaseKey);
         const { data, error } = await supabase.from('loan').select('*').eq('approved', false);
         this.setState({loanMemberRequest : data});
+        this.setState({height : Array(this.state.loanMemberRequest.length).fill(100)});
+        this.setState({toggle : Array(this.state.loanMemberRequest.length).fill(false)});
+        this.setState({image : Array(this.state.loanMemberRequest.length).fill(require('../assets/than.png'))});
+        console.log(this.state.image)
         
     }
 
     render(){
+
+        const increaseHeight = (index) => {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            const newValues = [...this.state.height];
+            const newToggled = [...this.state.toggled];
+            newValues[index] = this.state.toggled[index] ? 100 : 150;
+            newToggled[index] = !this.state.toggled[index];
+            this.setState({ height: newValues, toggled: newToggled });
+            
+          
+        }
+
+        const approve =  async(name, index) => {
+            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabase = createClient(supabaseUrl, supabaseKey);
+            await supabase.from('loan').update({approved : true}).eq('username', name);
+            const ImageChange = [...this.state.image];
+            ImageChange[index] = require('../assets/correct.png');
+            this.setState({image : ImageChange});
+
+        }
+
+        const reject = async(name,index) => {
+           
+            const ImageChange = [...this.state.image];
+            ImageChange[index] = require('../assets/wrong.png');
+            this.setState({image : ImageChange});
+            await supabase.from('loan').update({approved : false}).eq('username', name);
+        }
+
     
         return(
             <View style={{flex : 1, backgroundColor : 'white'}}>
@@ -60,20 +105,38 @@ class LoanMemberRequest extends Component{
                 {
                     this.state.loanMemberRequest.map((item, index) => {
                         return(
-                            <View key={index} style={{flexDirection : 'row', justifyContent : 'center',marginTop : 10}}>
-                            <TouchableOpacity onPress={()=>{this.props.navigation.navigate('LoanConditions')}} style={{ elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, marginLeft: 10, marginTop: 10, width: width - 50, height: 100, justifyContent: 'flex-start', alignItems: 'flex-start',}}>
-                             <View style={{marginLeft : 30, marginTop : 20}}>
-                                <Text style={{fontFamily : 'Outfit-SemiBold',color : 'black' ,fontSize : 15}}>{item.username}</Text>
+                        
+                         <View key={index} style={{flexDirection : 'row', justifyContent : 'center',marginTop : 10, bottom : 10,}}>
+                            <TouchableOpacity onPress={()=>{increaseHeight(index)}} style={[{elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20,height : 100, marginLeft: 10 ,marginTop: 10, width: width - 50, justifyContent: 'flex-start', alignItems: 'flex-start'},{height: this.state.height[index] }]}>
+                            <View style={{marginTop : 20, marginLeft : 20}}>
+                                <Text style={{fontFamily : 'Outfit-SemiBold',color : 'black' ,fontSize : 15}}>{item.name}</Text>
                                 <View style={{flexDirection : 'row', justifyContent : 'space-between', width : width - 110}}>
                                     <View style={{flexDirection : 'column'}}>
                                         <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 13}}>Requesting an Amount of  ₹ {item.amount}</Text>
                                         <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 13}}>for {item.duration} months</Text>
                                     </View>
                                     <TouchableOpacity style={{height : 40, width : 40}}>
-                                        <Image source={require('../assets/than.png')} style={{height : 40, width : 40}} />
+                                        <Image source={this.state.image[index]} style={{height : 40, width : 40}} />
                                     </TouchableOpacity>
                                 </View>
+
+                            {
+                                this.state.toggled[index] && (
+                    
+                                    <View style={{flexDirection : 'row', justifyContent : 'flex-end', width : width - 110, marginTop : 20}}>
+                                     <TouchableOpacity onPress={()=>{approve(item.username, index)}} style={{height : 35, width : 75, backgroundColor : 'green', justifyContent : 'center',alignItems : 'center', elevation : 10, borderRadius : 30}}>
+                                        <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 13, color : 'white'}}>Approve</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={()=>{reject(item.username, index)}} style={{height : 35, width : 75, backgroundColor : 'red', marginLeft : 5,justifyContent : 'center',alignItems : 'center', elevation : 10, borderRadius : 30}}>
+                                        <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 13, color : 'white'}}>Reject</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                  
+                                )
+                            }
+
                             </View>
+                            
                             </TouchableOpacity>
                              
                             </View>
@@ -85,6 +148,8 @@ class LoanMemberRequest extends Component{
             </View>
     
         )
+
+       
     }
 
 }
@@ -99,3 +164,4 @@ class LoanConditions extends react.Component{
     }
 
 }
+
