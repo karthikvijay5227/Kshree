@@ -73,7 +73,7 @@ class LoanInfo extends React.Component {
 
                     return (
                 
-                            <TouchableOpacity activeOpacity={0.8} style={styles.names} onPress={() => navigation.navigate('LoanUser', { name: item.loan_username })}>
+                        <TouchableOpacity key={index} activeOpacity={0.8} style={styles.names} onPress={() => navigation.navigate('LoanUser', { name: item.loan_username })}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10, color: "black" }}>{index + 1}.</Text>
                                 <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10, color: "black" }}>{item.loan_username}</Text>
