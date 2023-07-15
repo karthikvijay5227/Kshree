@@ -1,8 +1,8 @@
 import react, { Component } from 'react';
-import { View, Text, Dimensions, Alert, TouchableOpacity, Image, RefreshControl,BackHandler } from 'react-native';
+import { View, Text, Dimensions, TouchableOpacity, Alert, BackHandler,Image,RefreshControl} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js';
-import { TextInput } from 'react-native-paper';
+import { IconButton, TextInput } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
@@ -16,7 +16,155 @@ export default class LoanList extends Component {
                 <Stack.Screen name="LoanList" component={LoanList} />
                 <Stack.Screen name="CreateLoan" component={CreateLoan} />
                 <Stack.Screen name="LoanView" component={LoanView} />
+                <Stack.Screen name="LoanMembers" component={LoanMembers} />
             </Stack.Navigator>
+        )
+    }
+}
+
+
+class LoanMembers extends Component {
+    
+    constructor(props){
+        super(props);
+        this.state = {
+            members : [],
+            loan : [],
+            refresh : false,
+            loanname : this.props.route.params.name,
+            duration : this.props.route.params.duration,
+            amount : this.props.route.params.amount,
+            rate : this.props.route.params.rate
+
+        }
+    }
+    
+    componentDidMount(){
+      
+            this._unsubscribe = this.props.navigation.addListener('focus', async() => {
+            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabase = createClient(supabaseUrl, supabaseKey);
+            let { data: data} = await supabase.from('loan').select('*').eq('loanname', this.state.loanname);
+            this.setState({members : data});
+            })
+            
+        }
+       
+
+    render(){
+
+        const { navigation } = this.props;
+
+        const onRefresh = async() => {
+            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabase = createClient(supabaseUrl, supabaseKey);
+            let { data: data} = await supabase.from('loan').select('*').eq('loanname', this.state.loanname);
+            this.setState({members : data});
+        }
+
+
+        const DisplayMembers = () => {
+
+            return(
+                this.state.members.map((item, index) => {
+                    return(
+                        <TouchableOpacity key={index} activeOpacity={1} style={{justifyContent : 'center',height : 60, width : width - 50, elevation : 10,backgroundColor : 'white', borderRadius : 10}}>
+                            
+                            <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center'}}>
+                               <Text style={{fontFamily : 'Outfit-Bold', color : 'black' ,fontSize : 15, marginLeft : 20, marginTop : 10}}>{item.name}</Text>
+                               <IconButton icon={require('../assets/delete.png')} size={20} onPress={()=>{deleteMember(item.username)}} style={{marginRight : 20, elevation : 10}}/>
+                            </View>
+                        </TouchableOpacity>
+                    );
+                })
+            )
+        }
+
+
+        const deleteMember = async (name) => {
+            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabase = createClient(supabaseUrl, supabaseKey);
+            Alert.alert('Delete Member', 'Are you sure you want to delete this member from the loan?', [
+                {
+                    text : 'Yes',
+                    onPress : async() => {  
+                        await supabase.from('loan').delete().eq('username', name); 
+                        onRefresh();
+                        DisplayMembers();
+                       
+                    }
+                },
+                {
+                    text : 'No',
+                    
+                }
+            ])
+
+            
+           
+        }
+
+        const DeleteLoan = async () => {
+            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabase = createClient(supabaseUrl, supabaseKey);
+            Alert.alert('Delete Loan', 'Are you sure you want to delete this loan?', [
+                {
+                    text : 'Yes',
+                    onPress : async() => { 
+                        await supabase.from('loan').delete().eq('loanname', this.state.loanname);
+                        await supabase.from('Loans').delete().eq('loanname', this.state.loanname);
+                        navigation.goBack();
+                    }
+
+                },
+                {
+                    text : 'No'
+                }
+            ])
+        }
+        
+        
+        
+        return(
+            <View style={{backgroundColor : 'white', flex : 1}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 10, marginTop: 20, width: width }}>
+                    <TouchableOpacity style={{ marginLeft: 20, marginTop: 15, justifyContent: 'center', alignContent: 'center', elevation: 8, width: 45, height: 45, borderRadius: 50, backgroundColor: 'white', shadowOffset: { width: 2, height: 2 }, shadowOpacity: 0.5, shadowRadius: 5 }} onPress={() => navigation.goBack()}>
+                        <Image source={require('../assets/arrow-left.png')} style={{ height: 20, width: 20, alignSelf: 'center' }} />
+                    </TouchableOpacity>
+                    <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 30, color: 'black', marginTop: 15, marginLeft: 25 }}>{this.state.loanname}</Text>
+                </View>
+                <TouchableOpacity disabled style={{ height: 230, elevation : 5, width: width - 40, borderRadius: 10,backgroundColor : 'white',  justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 30, marginLeft : 20 }}>
+                    <View style={{flexDirection : 'row',justifyContent : 'space-between',alignItems : 'center'}}>
+                       <View style={{justifyContent : 'flex-start', alignItems : 'flex-start', marginLeft : 10}}>
+                         <Text style={{ fontSize: 16, fontFamily: 'InterTight-Bold', color: 'black', marginLeft : 10 }}>Loan Details</Text>
+                         <Text style={{ fontSize: 15, fontFamily: 'InterTight-Bold', color: '#808080', marginLeft : 10, marginTop : 15 }}>Amount : ₹ {this.state.amount}</Text>
+                         <Text style={{ fontSize: 15, fontFamily: 'InterTight-Bold', color: '#808080', marginLeft : 10, marginTop : 5 }}>Duration : {this.state.duration} months</Text>
+                         <Text style={{ fontSize: 15, fontFamily: 'InterTight-Bold', color: '#808080', marginLeft : 10, marginTop : 5 }}>Rate :  {this.state.rate} %</Text>
+                       </View>
+                       <Image source={require('../assets/members.jpg')} style={{height : 150, width : 170, marginLeft : 10, marginTop : 20}}/>
+                    </View>
+
+                    <TouchableOpacity onPress={()=>{DeleteLoan()}} style={{marginTop : 10,height : 35, width : 100, backgroundColor : '#FF7F7F', marginLeft : 20,justifyContent : 'center',alignItems : 'center', elevation : 10, borderRadius : 5}}>
+                      <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 13, color : 'white'}}>Delete Loan</Text>
+                    </TouchableOpacity>
+
+                </TouchableOpacity>
+
+                <Text style={{ fontSize: 20, fontFamily: 'InterTight-Bold', color: 'black', marginLeft : 30, marginTop : 30}}>Members</Text>
+                <ScrollView style={{marginTop : 10}} contentContainerStyle={{alignItems : 'center', paddingBottom : 20}}
+                    refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={()=>{onRefresh()}} />}>
+                {
+                    DisplayMembers()
+                }
+                </ScrollView>
+
+
+            </View>
+
         )
     }
 }
@@ -66,7 +214,7 @@ class LoanView extends Component {
             return(
                 this.state.loans.map((item, index) => {
                     return(
-                        <TouchableOpacity key={index} activeOpacity={1} style={{height : 200, width : width - 50, elevation : 10,marginTop : 20 ,backgroundColor : 'white', borderRadius : 10}}>
+                        <TouchableOpacity key={index} activeOpacity={1} style={{height : 200, width : width - 50, elevation : 10,marginTop : 20 ,backgroundColor : 'white', borderRadius : 10}} onPress={()=>{navigation.navigate('LoanMembers',{name : item.loanname, duration : item.duration, amount : item.amount,rate : item.rate })}}>
                             <Text style={{fontFamily : 'Outfit-Bold', color : '#38E038' ,fontSize : 30, marginLeft : 20, marginTop : 10}}>{item.loanname}</Text>
                             <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center'}}>
                                 <TouchableOpacity disabled style={{flexDirection : 'column', elevation : 2 ,justifyContent : 'center' , marginLeft : 10, marginTop : 10 ,width : width - 200, height : 120, backgroundColor : 'white', borderRadius : 10, justifyContent : 'center'}}>

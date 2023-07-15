@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { View, StyleSheet, Text, Dimensions, ScrollView, ImageBackground, TouchableOpacity, Alert, BackHandler } from 'react-native';
-import { SelectList } from 'react-native-dropdown-select-list';
 import { createClient } from '@supabase/supabase-js';
 import { TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -82,7 +81,8 @@ export default class ApplyLoan extends React.Component {
                         account: this.state.account,
                         ifsc: this.state.ifsc,
                         branch: this.state.branch,
-                        finaldate: finalDate
+                        finaldate: finalDate,
+                        loanname : this.state.loan,
                     }])
 
 

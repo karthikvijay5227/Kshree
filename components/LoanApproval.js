@@ -1,11 +1,8 @@
 import react, {Component} from "react";
-
-import { View, Text, StyleSheet, Image, ScrollView, Dimensions, Alert, LayoutAnimation } from "react-native";
+import { View, Text, Image, ScrollView, Dimensions, Alert, LayoutAnimation, BackHandler } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
 import { createClient } from '@supabase/supabase-js';
 import { createStackNavigator } from "@react-navigation/stack";
-import { IconButton } from "react-native-paper";
 
 
 const width = Dimensions.get('window').width;
@@ -152,14 +149,4 @@ class LoanMemberRequest extends Component{
 
 }
 
-class LoanConditions extends react.Component{
-    render(){
-        return(
-            <View>
-                <Text>Loan Conditions</Text>
-            </View>
-        )
-    }
-
-}
 
