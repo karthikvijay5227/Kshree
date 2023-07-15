@@ -3,8 +3,6 @@ import react, {Component} from "react";
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions, Alert, LayoutAnimation } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, Alert,BackHandler } from "react-native";
-
 import { createClient } from '@supabase/supabase-js';
 import { createStackNavigator } from "@react-navigation/stack";
 import { IconButton } from "react-native-paper";
