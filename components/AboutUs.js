@@ -94,8 +94,9 @@ const styles = StyleSheet.create({
     },
 
     aboutText: {
-        fontSize: 20,
+        fontSize: 15,
         lineHeight: 23,
         color: '#000',
+        fontFamily: 'Outfit-Light',
     },
 });
