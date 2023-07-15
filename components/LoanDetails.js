@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity, Dimensions, ScrollView, StyleSheet, BackHandler } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, ScrollView, StyleSheet, BackHandler,Image } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { CountUp } from 'use-count-up';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -68,6 +68,7 @@ class LoanInfo extends React.Component {
 
             const { navigation } = this.props;
 
+            if(this.state.loanMembers.length != 0){
             return (
                 this.state.loanMembers.map((item, index) => {
 
@@ -83,12 +84,20 @@ class LoanInfo extends React.Component {
                                 <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: new Date(item.updatedate).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10) ? 'red' : '#38E038' }}>{item.updatedate}</Text>
                             </View>
                         </TouchableOpacity>
-                     
-
 
                     )
                 })
-            )
+            )}
+            else{
+              return(
+                <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
+                    <Image source={require('../assets/nodata.jpg')} style={{height : 300, width : width - 50, marginTop : 10}} />
+                    <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 20, color : 'black'}}>No Loans Approved</Text>
+                </View>
+
+              )
+            
+            }
         }
 
         return (

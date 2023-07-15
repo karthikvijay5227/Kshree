@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, Dimensions, Animated, Keyboard, BackHandler } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Dimensions, Animated, Keyboard, BackHandler,Alert } from 'react-native';
 import { TextInput, Button, Modal } from 'react-native-paper';
 import { createClient } from '@supabase/supabase-js'
 import 'react-native-url-polyfill/auto'
@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Import 
 import Admin from '../Screens/Admin';
 import Toast from 'react-native-toast-message'
 import Members from '../Screens/Members';
+import { ActivityIndicator } from 'react-native-paper';
+import Lottie from 'lottie-react-native';
 
 const Stack = createStackNavigator();
 const height = Dimensions.get('window').height;
@@ -64,7 +66,8 @@ class Login extends React.Component {
       username: '',
       password: '',
       error: false,
-      animationUp: new Animated.Value(0)
+      animationUp: new Animated.Value(0),
+      loading : false
     }
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
@@ -94,12 +97,18 @@ class Login extends React.Component {
       const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
       const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
       const supabase = createClient(supabaseUrl, supabaseKey)
+
+      this.setState({loading : true})
+
       let { data: data1, error } = await supabase.from('users').select('password').eq('username', this.state.username)
       let { data: admin, error2 } = await supabase.from('users').select('admin').eq('username', this.state.username)
 
       try {
         if (data1[0]["password"] == this.state.password) {
-          if (admin[0]["admin"]) {
+          let { data: data, error } = await supabase.from('users').select('login').eq('username', this.state.username)
+          if (data[0]["login"] == false) {
+            await supabase.from('users').update({ login: true }).eq('username', this.state.username)
+            if (admin[0]["admin"]) {
             const user = { username: this.state.username, isAdmin: true };
             await AsyncStorage.setItem('user', JSON.stringify(user));
             navigation.reset({
@@ -115,6 +124,11 @@ class Login extends React.Component {
               routes: [{ name: 'Home', params: { username: this.state.username } }],
             });
           }
+        }
+        else{
+          Alert.alert("User Already Logged In")
+          this.setState({loading : false})
+        }
         }
         else {
           this.setState({ error: true })
@@ -133,6 +147,52 @@ class Login extends React.Component {
       }
     }
 
+    const onSignIn = () =>{
+      
+      if(!this.state.loading)
+      {
+        return(
+          <View style={{ marginTop: 50, width: '90%', marginLeft: 20 }}>
+          <TextInput
+            mode="outlined"
+            label="Username"
+            error={this.state.error}
+            style={{ marginLeft: 5, marginRight: 5 }}
+            value={this.state.username}
+            onChangeText={(text) => { this.setState({ username: text }) }}
+          />
+
+          <TextInput
+            mode="outlined"
+            label="Password"
+            error={this.state.error}
+            secureTextEntry={true}
+            style={{ marginLeft: 5, marginRight: 5, marginTop: 2 }}
+            value={this.state.password}
+            onChangeText={(text) => { this.setState({ password: text }) }}
+          />
+
+          <View style={styles.signInContainer}>
+            <Button style={styles.signInButton} onPress={() => { validateCredentials() }}>
+              <Text style={styles.signInText}>Sign In</Text>
+            </Button>
+          </View>
+        </View>
+        )
+      }
+      else{
+        return(
+        <View style={{ marginTop: 20, width: '90%',alignItems : 'flex-start', justifyContent : 'center' }}>
+          <View style={{flexDirection : 'row', justifyContent : 'flex-start', alignItems : 'center'}}>
+            <Lottie style={{height : 200}} source={require('../assets/loading.json')} autoPlay loop />
+            <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 30, color : 'black'}}>Logging In</Text>
+          </View>
+        </View>
+        )
+      }
+
+    }
+
     return (
       <ImageBackground source={require('../assets/bgimage.jpg')} style={styles.imageBackground} imageStyle={styles.image}>
         <Modal visible={this.state.error} >
@@ -145,32 +205,11 @@ class Login extends React.Component {
         <Animated.View style={[styles.logs, transformStyle]}>
           <View style={{ height: 4, width: 100, marginLeft: "37%", backgroundColor: 'grey', marginTop: 10, borderRadius: 20 }}>
           </View>
-          <View style={{ marginTop: 50, width: '90%', marginLeft: 20 }}>
-            <TextInput
-              mode="outlined"
-              label="Username"
-              error={this.state.error}
-              style={{ marginLeft: 5, marginRight: 5 }}
-              value={this.state.username}
-              onChangeText={(text) => { this.setState({ username: text }) }}
-            />
 
-            <TextInput
-              mode="outlined"
-              label="Password"
-              error={this.state.error}
-              secureTextEntry={true}
-              style={{ marginLeft: 5, marginRight: 5, marginTop: 2 }}
-              value={this.state.password}
-              onChangeText={(text) => { this.setState({ password: text }) }}
-            />
-
-            <View style={styles.signInContainer}>
-              <Button style={styles.signInButton} onPress={() => { validateCredentials() }}>
-                <Text style={styles.signInText}>Sign In</Text>
-              </Button>
-            </View>
-          </View>
+          {
+            onSignIn()
+          }
+          
         </Animated.View>
       </ImageBackground>
     )

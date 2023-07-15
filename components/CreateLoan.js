@@ -67,6 +67,7 @@ class LoanMembers extends Component {
 
         const DisplayMembers = () => {
 
+           if(this.state.members.length != 0)
             return(
                 this.state.members.map((item, index) => {
                     return(
@@ -80,6 +81,14 @@ class LoanMembers extends Component {
                     );
                 })
             )
+            else{
+                return(
+                    <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
+                            <Image source={require('../assets/nodata.jpg')} style={{height : 170, width : width - 50}} />
+                            <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 20, color : 'black'}}>No Members Applied</Text>
+                    </View>
+                )
+            }
         }
 
 
@@ -211,7 +220,9 @@ class LoanView extends Component {
 
         const displayLoans = () => {
             
+            if(this.state.loans.length != 0){
             return(
+                
                 this.state.loans.map((item, index) => {
                     return(
                         <TouchableOpacity key={index} activeOpacity={1} style={{height : 200, width : width - 50, elevation : 10,marginTop : 20 ,backgroundColor : 'white', borderRadius : 10}} onPress={()=>{navigation.navigate('LoanMembers',{name : item.loanname, duration : item.duration, amount : item.amount,rate : item.rate })}}>
@@ -229,7 +240,15 @@ class LoanView extends Component {
                     );
                 }
                 )
-            )
+            )}
+            else {
+                return(
+                    <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
+                          <Image source={require('../assets/no-data-sorry.jpg')} style={{height : 250, width : width - 50, marginTop : 100}} />
+                            <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 20, color : 'black'}}>No Loans Created</Text>
+                    </View>
+                )
+            }
         }
 
         const onRefresh = async() => {

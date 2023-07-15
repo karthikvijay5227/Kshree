@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ScrollView, Dimensions, RefreshControl, BackHandler } from 'react-native';
+import { View, Text, ScrollView, Dimensions, RefreshControl, BackHandler,Image } from 'react-native';
 import { Button, Card, IconButton } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js'
@@ -66,6 +66,8 @@ class EventList extends React.Component {
             this.setState({ events: obj })
         }
         const mapEvents = () => {
+            
+            if(this.state.events.length != 0){
             return (
                 this.state.events.map((item, index) => {
                     return (
@@ -85,7 +87,15 @@ class EventList extends React.Component {
                         </Card>
                     )
                 })
-            )
+            )}
+            else{
+                return(
+                    <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
+                        <Image source={require('../assets/noevents.png')} style={{height : 300, width : width - 50, marginTop : 10}} />
+                        <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 20, color : 'black'}}>No Events Created</Text>
+                    </View>
+                )
+            }
         }
 
         return (

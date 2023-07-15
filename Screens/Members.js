@@ -59,6 +59,7 @@ function DrawerHeader({ username, ...props }) {
                 index: 0,
                 routes: [{ name: 'Registration' }],
             });
+            await supabase.from('users').update({ login: false }).eq('username', username);
         } catch (error) {
             console.log('Error logging out:', error);
         }
