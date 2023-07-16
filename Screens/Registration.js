@@ -10,6 +10,7 @@ import Toast from 'react-native-toast-message'
 import Members from '../Screens/Members';
 import { ActivityIndicator } from 'react-native-paper';
 import Lottie from 'lottie-react-native';
+import KudumbashreeRegistartion from './UserReg';
 
 const Stack = createStackNavigator();
 const height = Dimensions.get('window').height;
@@ -54,6 +55,7 @@ export default class Registration extends React.Component {
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Admin" component={Admin} />
         <Stack.Screen name="Home" component={Members} />
+        <Stack.Screen name="Ureg" component={KudumbashreeRegistartion}/>
       </Stack.Navigator>
     )
   }
@@ -177,6 +179,11 @@ class Login extends React.Component {
               <Text style={styles.signInText}>Sign In</Text>
             </Button>
           </View>
+          <View style={styles.signupContainer}>
+            <Button style={styles.signupButton} onPress={() => { this.props.navigation.navigate('Ureg') }}>
+              <Text style={styles.signupText}>Sign Up</Text>
+            </Button>
+          </View>
         </View>
         )
       }
@@ -250,6 +257,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   signInText: {
+    fontSize: 17,
+    color: 'black',
+  },
+  signupContainer: {
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  signupButton: {
+    backgroundColor: '#ADD8E6',
+    padding: 2,
+    width: '50%',
+    borderRadius: 10,
+  },
+  signupText: {
     fontSize: 17,
     color: 'black',
   },
