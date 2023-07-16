@@ -6,10 +6,29 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoanUser from '../components/LoanUser';
 import { IconButton } from 'react-native-paper';
 
+
 const { width, height } = Dimensions.get('window');
 const Stack = createStackNavigator();
 
-export default class UserDetails extends React.Component {
+export default class UserDetails extends React.Component{
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
+      }
+
+    render() {
+        return(
+
+            <Stack.Navigator initialRouteName="users">
+                <Stack.Screen name="users" component={Users} options={{ headerShown: false }} />
+            </Stack.Navigator>
+
+        )
+    }
+
+
 
     render() {
         return(
@@ -21,6 +40,8 @@ export default class UserDetails extends React.Component {
         )
     }
 }
+
+
 
 class Users extends React.Component{
     
@@ -87,7 +108,7 @@ class Users extends React.Component{
             
             <View style={{backgroundColor : 'white', flex : 1}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 10, marginTop: 20, width: width }}>
-                    <TouchableOpacity style={{ marginLeft: 20, marginTop: 15, justifyContent: 'center', alignContent: 'center', elevation: 8, width: 45, height: 45, borderRadius: 50, backgroundColor: 'white', shadowOffset: { width: 2, height: 2 }, shadowOpacity: 0.5, shadowRadius: 5 }} onPress={() => navigation.goBack()}>
+                    <TouchableOpacity style={{ marginLeft: 20, marginTop: 15, justifyContent: 'center', alignContent: 'center', elevation: 8, width: 45, height: 45, borderRadius: 50, backgroundColor: 'white', shadowOffset: { width: 2, height: 2 }, shadowOpacity: 0.5, shadowRadius: 5 }} onPress={() => this.props.navigation.goBack()}>
                         <Image source={require('../assets/arrow-left.png')} style={{ height: 20, width: 20, alignSelf: 'center' }} />
                     </TouchableOpacity>
                     <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 30, color: 'black', marginTop: 15, marginLeft: 25 }}>User Details</Text>                
