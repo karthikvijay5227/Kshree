@@ -10,8 +10,7 @@ import Toast from 'react-native-toast-message'
 import Members from '../Screens/Members';
 import { ActivityIndicator } from 'react-native-paper';
 import Lottie from 'lottie-react-native';
-import KudumbashreeRegistartion from '../components/KudumbashreeRegistration';
-import { useNavigation } from '@react-navigation/native';
+import KudumbashreeRegistartion from './UserReg';
 
 
 const Stack = createStackNavigator();
@@ -57,7 +56,8 @@ export default class Registration extends React.Component {
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Admin" component={Admin} />
         <Stack.Screen name="Home" component={Members} />
-        <Stack.Screen name="Reg" component={KudumbashreeRegistartion} />
+        <Stack.Screen name="Ureg" component={KudumbashreeRegistartion}/>
+
       </Stack.Navigator>
     )
   }
@@ -184,12 +184,12 @@ class Login extends React.Component {
               <Text style={styles.signInText}>Sign In</Text>
             </Button>
           </View>
-            <View style={styles.signUpContainer}>
-              <Button style={styles.signUpButton} onPress= {()=> {this.props.navigation.navigate('Reg')}}>
-                <Text style={styles.signUpText}>Sign Up</Text>
-              </Button>
-            </View>
-           </View>
+
+          <View style={styles.signupContainer}>
+            <Button style={styles.signupButton} onPress={() => { this.props.navigation.navigate('Ureg') }}>
+              <Text style={styles.signupText}>Sign Up</Text>
+            </Button>
+          </View>
         </View>
 
         )
@@ -266,21 +266,25 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: 'black',
   },
-signUpContainer: {
+
+  signupContainer: {
     left: 0,
     right: 0,
     alignItems: 'center',
     marginTop: 30,
   },
-  signUpButton: {
+
+  signupButton: {
+
     backgroundColor: '#ADD8E6',
     padding: 2,
     width: '50%',
     borderRadius: 10,
   },
-  signUpText: {
+
+  signupText: {
     fontSize: 17,
     color: 'black',
-  },
+  },
 
 })
