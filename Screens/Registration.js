@@ -12,6 +12,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import Lottie from 'lottie-react-native';
 import KudumbashreeRegistartion from './UserReg';
 
+
 const Stack = createStackNavigator();
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -56,6 +57,7 @@ export default class Registration extends React.Component {
         <Stack.Screen name="Admin" component={Admin} />
         <Stack.Screen name="Home" component={Members} />
         <Stack.Screen name="Ureg" component={KudumbashreeRegistartion}/>
+
       </Stack.Navigator>
     )
   }
@@ -88,12 +90,14 @@ class Login extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const navigation= this.props;
     const transformStyle = {
       transform: [
         { translateY: this.state.animationUp }
       ]
     }
+
+
 
     validateCredentials = async () => {
       const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
@@ -123,7 +127,7 @@ class Login extends React.Component {
             await AsyncStorage.setItem('user', JSON.stringify(user));
             navigation.reset({
               index: 0,
-              routes: [{ name: 'Home', params: { username: this.state.username } }],
+              routes: [{ name: 'Reg'}],
             });
           }
         }
@@ -147,10 +151,10 @@ class Login extends React.Component {
           onHide: () => { this.setState({ error: false }) }
         });
       }
-    }
-
+    };
+   
     const onSignIn = () =>{
-      
+
       if(!this.state.loading)
       {
         return(
@@ -174,17 +178,20 @@ class Login extends React.Component {
             onChangeText={(text) => { this.setState({ password: text }) }}
           />
 
+          <View style={{flexDirection : 'row'}}>
           <View style={styles.signInContainer}>
             <Button style={styles.signInButton} onPress={() => { validateCredentials() }}>
               <Text style={styles.signInText}>Sign In</Text>
             </Button>
           </View>
+
           <View style={styles.signupContainer}>
             <Button style={styles.signupButton} onPress={() => { this.props.navigation.navigate('Ureg') }}>
               <Text style={styles.signupText}>Sign Up</Text>
             </Button>
           </View>
         </View>
+
         )
       }
       else{
@@ -201,24 +208,23 @@ class Login extends React.Component {
     }
 
     return (
+
       <ImageBackground source={require('../assets/bgimage.jpg')} style={styles.imageBackground} imageStyle={styles.image}>
-        <Modal visible={this.state.error} >
-          <View style={{ marginBottom: height - 300 }}>
-            <Toast autoHide visibilityTime={2000}>
-            </Toast>
-          </View>
-        </Modal>
+          <Modal visible={this.state.error}>
+            <View style={{ marginBottom: height - 300 }}>
+              <Toast autoHide visibilityTime={2000}>
+              </Toast>
+            </View>
+          </Modal>
 
-        <Animated.View style={[styles.logs, transformStyle]}>
-          <View style={{ height: 4, width: 100, marginLeft: "37%", backgroundColor: 'grey', marginTop: 10, borderRadius: 20 }}>
-          </View>
+          <Animated.View style={[styles.logs, transformStyle]}>
+            <View style={{ height: 4, width: 100, marginLeft: "37%", backgroundColor: 'grey', marginTop: 10, borderRadius: 20 }}>
+            </View>
 
-          {
-            onSignIn()
-          }
-          
-        </Animated.View>
-      </ImageBackground>
+            {onSignIn()}
+
+          </Animated.View>
+        </ImageBackground>
     )
   }
 }
@@ -260,20 +266,25 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: 'black',
   },
+
   signupContainer: {
     left: 0,
     right: 0,
     alignItems: 'center',
     marginTop: 30,
   },
+
   signupButton: {
+
     backgroundColor: '#ADD8E6',
     padding: 2,
     width: '50%',
     borderRadius: 10,
   },
+
   signupText: {
     fontSize: 17,
     color: 'black',
   },
+
 })
