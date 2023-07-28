@@ -179,16 +179,17 @@ class Login extends React.Component {
           />
 
           <View style={{flexDirection : 'row'}}>
-          <View style={styles.signInContainer}>
-            <Button style={styles.signInButton} onPress={() => { validateCredentials() }}>
-              <Text style={styles.signInText}>Sign In</Text>
-            </Button>
-          </View>
+            <View style={styles.signInContainer}>
+              <Button style={styles.signInButton} onPress={() => { validateCredentials() }}>
+                <Text style={styles.signInText}>Sign In</Text>
+              </Button>
+            </View>
 
-          <View style={styles.signupContainer}>
-            <Button style={styles.signupButton} onPress={() => { this.props.navigation.navigate('Ureg') }}>
-              <Text style={styles.signupText}>Sign Up</Text>
-            </Button>
+            <View style={styles.signupContainer}>
+              <Button style={styles.signupButton} onPress={() => { this.props.navigation.navigate('Ureg') }}>
+                <Text style={styles.signupText}>Sign Up</Text>
+              </Button>
+            </View>
           </View>
         </View>
 
@@ -287,4 +288,4 @@ const styles = StyleSheet.create({
     color: 'black',
   },
 
-})
+});

@@ -198,6 +198,20 @@ function MemberHome({ navigation, username }) {
                 onlyAlertOnce: true,
             })
         }).subscribe()
+
+        channel.on('broadcast',{event : 'delete'},async(payload)=>{
+            if(payload.payload.task.username === userName)
+            {
+
+                await AsyncStorage.removeItem('user');
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Registration' }],
+                });
+            }
+        })
+
+
         setEvents(eventData.data);
         setUser(user.data[0].name);
     }
