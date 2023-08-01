@@ -8,7 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Import 
 import Admin from '../Screens/Admin';
 import Toast from 'react-native-toast-message'
 import Members from '../Screens/Members';
-import { ActivityIndicator } from 'react-native-paper';
 import Lottie from 'lottie-react-native';
 import KudumbashreeRegistartion from './UserReg';
 
@@ -53,7 +52,7 @@ export default class Registration extends React.Component {
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
         <Stack.Screen name="Admin" component={Admin} />
         <Stack.Screen name="Home" component={Members} />
         <Stack.Screen name="Ureg" component={KudumbashreeRegistartion}/>
@@ -71,7 +70,8 @@ class Login extends React.Component {
       password: '',
       error: false,
       animationUp: new Animated.Value(0),
-      loading : false
+      loading : false,
+      passwordVisible : true
     }
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
@@ -89,8 +89,67 @@ class Login extends React.Component {
     }).start()
   }
 
+  validateCredentials = async () => {
+    const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    this.setState({loading : true})
+    
+    let { data: data1, error } = await supabase.from('users').select('password').eq('username', this.state.username)
+    let { data: admin, error2 } = await supabase.from('users').select('admin').eq('username', this.state.username)
+
+
+    try {
+      if (data1[0]["password"] == this.state.password) {
+        let { data: data, error } = await supabase.from('users').select('login').eq('username', this.state.username)
+        if (data[0]["login"] == false) {
+          
+          await supabase.from('users').update({ login: true }).eq('username', this.state.username)
+          
+          if (admin[0]["admin"]) {
+            const user = { username: this.state.username, isAdmin: true };
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+            this.props.navigation.navigate('Admin', { username: this.state.username })
+            this.setState({loading : false})
+        }
+        else {
+          const user = { username: this.state.username, isAdmin: false };
+          await AsyncStorage.setItem('user', JSON.stringify(user));
+          this.props.navigation.navigate('Home', { username: this.state.username })
+
+          this.setState({loading : false})
+        }
+      }
+      else{
+        Alert.alert("User Already Logged In")
+        this.setState({loading : false})
+      }
+      }
+      else {
+        this.setState({ error: true })
+        this.setState({loading : false})
+      }
+    }
+    catch (error) {
+      this.setState({ error: true })
+      this.setState({loading : false})
+      console.log(error,"Yohoho")
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: "Invalid Credentials",
+        autoHide: true,
+        visibilityTime: 1000,
+        onHide: () => { this.setState({ error: false }) }
+      });
+    }
+  };
+
+  handleSignIn 
+
   render() {
-    const navigation= this.props;
+    
     const transformStyle = {
       transform: [
         { translateY: this.state.animationUp }
@@ -99,59 +158,8 @@ class Login extends React.Component {
 
 
 
-    validateCredentials = async () => {
-      const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
-      const supabase = createClient(supabaseUrl, supabaseKey)
 
-      this.setState({loading : true})
-
-      let { data: data1, error } = await supabase.from('users').select('password').eq('username', this.state.username)
-      let { data: admin, error2 } = await supabase.from('users').select('admin').eq('username', this.state.username)
-
-      try {
-        if (data1[0]["password"] == this.state.password) {
-          let { data: data, error } = await supabase.from('users').select('login').eq('username', this.state.username)
-          if (data[0]["login"] == false) {
-            await supabase.from('users').update({ login: true }).eq('username', this.state.username)
-            if (admin[0]["admin"]) {
-            const user = { username: this.state.username, isAdmin: true };
-            await AsyncStorage.setItem('user', JSON.stringify(user));
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Admin', params: { username: this.state.username } }],
-            });
-          }
-          else {
-            const user = { username: this.state.username, isAdmin: false };
-            await AsyncStorage.setItem('user', JSON.stringify(user));
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Reg'}],
-            });
-          }
-        }
-        else{
-          Alert.alert("User Already Logged In")
-          this.setState({loading : false})
-        }
-        }
-        else {
-          this.setState({ error: true })
-        }
-      }
-      catch (error) {
-        this.setState({ error: true })
-        Toast.show({
-          type: 'error',
-          position: 'top',
-          text1: "Invalid Credentials",
-          autoHide: true,
-          visibilityTime: 1000,
-          onHide: () => { this.setState({ error: false }) }
-        });
-      }
-    };
+ 
    
     const onSignIn = () =>{
 
@@ -172,24 +180,22 @@ class Login extends React.Component {
             mode="outlined"
             label="Password"
             error={this.state.error}
-            secureTextEntry={true}
-            style={{ marginLeft: 5, marginRight: 5, marginTop: 2 }}
+            secureTextEntry={this.state.passwordVisible}
+            right={<TextInput.Icon icon={this.state.passwordVisible ? require('../assets/hide.png') : require('../assets/eye.png')} onPress={() => { this.setState({ passwordVisible: !this.state.passwordVisible }) }} />}            style={{ marginLeft: 5, marginRight: 5, marginTop: 2 }}
             value={this.state.password}
             onChangeText={(text) => { this.setState({ password: text }) }}
           />
 
-          <View style={{flexDirection : 'row'}}>
-            <View style={styles.signInContainer}>
-              <Button style={styles.signInButton} onPress={() => { validateCredentials() }}>
+          <View style={{flexDirection : 'row',justifyContent : 'space-evenly', width : width, alignSelf : 'center'}}>
+            
+              <Button style={styles.signInButton} onPress={() => {this.validateCredentials()}}>
                 <Text style={styles.signInText}>Sign In</Text>
               </Button>
-            </View>
-
-            <View style={styles.signupContainer}>
+           
               <Button style={styles.signupButton} onPress={() => { this.props.navigation.navigate('Ureg') }}>
                 <Text style={styles.signupText}>Sign Up</Text>
               </Button>
-            </View>
+          
           </View>
         </View>
 
@@ -260,8 +266,9 @@ const styles = StyleSheet.create({
   signInButton: {
     backgroundColor: '#ff99e6',
     padding: 2,
-    width: '50%',
+    width: '40%',
     borderRadius: 10,
+    marginTop  :30
   },
   signInText: {
     fontSize: 17,
@@ -279,8 +286,9 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#ADD8E6',
     padding: 2,
-    width: '50%',
+    width: '40%',
     borderRadius: 10,
+    marginTop : 30
   },
 
   signupText: {

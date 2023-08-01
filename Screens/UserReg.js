@@ -94,7 +94,8 @@ export default class KudumbashreeRegistartion extends React.Component {
             }
             else {
                 try {
-                    if (await supabase.from('users').select('username').eq('username', this.state.username)) {
+                    const { data : record, error : recorderror}= await supabase.from('users').select('username').eq('username', this.state.username)
+                    if (record.length != 0) {
                         Alert.alert("Username already exists");
                         this.props.navigation.goBack();
                     }

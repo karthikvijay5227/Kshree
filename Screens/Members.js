@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, Text, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, RefreshControl, Alert } from 'react-native';
 import LoanStatus from '../components/LoanStatus';
 import AboutUs from '../components/AboutUs';
 import Profile from '../components/Profile';
@@ -204,12 +204,23 @@ function MemberHome({ navigation, username }) {
             {
 
                 await AsyncStorage.removeItem('user');
+                
+                Alert.alert("Your account has been deleted","Please register again to continue using the app",[
+                    {
+                        text : "OK"
+                    }
+                ])
+                
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'Registration' }],
                 });
             }
         })
+
+        
+
+
 
 
         setEvents(eventData.data);
