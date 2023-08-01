@@ -3,11 +3,12 @@ admin or member, with their name, username, password, address, and phone number.
 
 import * as React from 'react';
 import { View, StyleSheet, Text, Dimensions, ScrollView, BackHandler, Image } from 'react-native';
-import { TextInput, HelperText, IconButton } from 'react-native-paper';
+import { TextInput, HelperText} from 'react-native-paper';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createClient } from '@supabase/supabase-js'
-import { Alert } from 'react-native';
+import { Alert, Modal } from 'react-native';
+import Lottie from 'lottie-react-native';
 
 export default class KudumbashreeRegistartion extends React.Component {
 
@@ -30,19 +31,27 @@ export default class KudumbashreeRegistartion extends React.Component {
             pherror: false,
             deterror: false,
             isPasswordFocused: false,
+            confirmPasswordVisible: true,
             passwordError: false,
+            confirmPasswordError: false,
             passvalid: [false, false, false, false, false],
-            passwordVisible: false
+            passwordVisible: false,
+            confirmPassword: '',
+            createUser: false,
+            userRegistered: false,
+            seconds: 0,
         }
     }
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
+    
 
     componentWillUnmount() {
         // Remove the back button event listener
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        
     }
 
     handleBackButton = () => {
@@ -58,6 +67,8 @@ export default class KudumbashreeRegistartion extends React.Component {
         const list = [{ label: "Admin", value: true }, { label: "Member", value: false }]
         const height = Dimensions.get('window').height;
         const width = Dimensions.get('window').width;
+    
+
         const addUser = async () => {
 
             /* This code is creating a Supabase client object using the Supabase URL and API key.
@@ -94,11 +105,14 @@ export default class KudumbashreeRegistartion extends React.Component {
             }
             else {
                 try {
-                    if (await supabase.from('users').select('username').eq('username', this.state.username)) {
+                    
+                    const {data : existUser, error : existError} = await supabase.from('users').select('username').eq('username', this.state.username);
+                    if (existUser.length != 0) {
                         Alert.alert("Username already exists");
                         this.props.navigation.goBack();
                     }
                     else {
+                        this.setState({ createUser: true })
                         await supabase.from('users').insert([
                             {
                                 username: this.state.username,
@@ -110,8 +124,29 @@ export default class KudumbashreeRegistartion extends React.Component {
                             }])
 
                         if (await supabase.from('users').select('username').eq('username', this.state.username)) {
-                            Alert.alert("User Added Successfully");
+                            this.setState({ userRegistered: true })
+                            this.setState({
+                                name: '',
+                                username: '',
+                                password: '',
+                                address: '',
+                                admin: '',
+                                phone: '',
+                                pherror: false,
+                                deterror: false,
+                                isPasswordFocused: false,
+                                confirmPasswordVisible: true,
+                                passwordError: false,
+                                confirmPasswordError: false,
+                                passvalid: [false, false, false, false, false],
+                                passwordVisible: false,
+                                confirmPassword: '',
+                                createUser: false,
+                                userRegistered: false})
+
                         }
+                        Alert.alert("User added successfully");
+                        this.props.navigation.goBack();
                     }
                 } catch (e) {
                     Alert.alert("Failed to add user");
@@ -125,8 +160,35 @@ export default class KudumbashreeRegistartion extends React.Component {
         }
 
         return (
-            <View style={styles.container}>
+            <View style={styles.container}>                                
                 <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
+                    
+                <View>
+                    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={this.state.createUser}
+                        onRequestClose={() => {
+                            this.setState({createUser : !this.state.createUser})
+                            }}
+                        >
+                        <View style={{flex :1,justifyContent : 'center', alignItems :'center',backgroundColor: 'rgba(45, 45, 45, 0.5)'}}>
+                            <TouchableOpacity disabled style={{backgroundColor : 'white',height : height/2 - 50, width : width - 100, borderRadius : 20, elevation : 6,justifyContent : 'center',alignItems : 'center'}}>
+                            {
+                                this.state.userRegistered ? (
+                                    <Lottie style={{height : 200}} source={require('../assets/createdUser.json')} autoPlay loop/>
+                                ) : (
+                                    <Lottie style={{height : 200}} source={require('../assets/creatingUser.json')} autoPlay/>
+                                    
+                                )
+                            }
+
+
+                            </TouchableOpacity>
+                        </View>
+                    </Modal>
+                </View>
+                    
                     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} ref={(c) => { this.scroll = c }}>
                         <View style={styles.textHeaderContainer}>
                             <Text style={styles.textHeader}>Member Registration</Text>
@@ -222,6 +284,22 @@ export default class KudumbashreeRegistartion extends React.Component {
                                     <HelperText type="error" visible={this.state.passvalid.includes(false)} style={styles.passwordErrorText}>Password does not meet the requirements</HelperText>
                                 </View>
                             )}
+                            
+                            <TextInput
+                                label={'Confirm Password'}
+                                mode='outlined'
+                                error={this.state.confirmPasswordError}
+                                secureTextEntry={this.state.confirmPasswordVisible}
+                                right={<TextInput.Icon icon={this.state.confirmPasswordVisible ? require('../assets/hide.png') : require('../assets/eye.png')} onPress={() => { this.setState({ confirmPasswordVisible: !this.state.confirmPasswordVisible }) }} />}
+                                value={this.state.confirmPassword}
+                                onChangeText={text => this.setState({ confirmPassword : text, confirmPasswordError : false })}
+                                style={{ width: width - 50, marginTop: 20 }}
+                                onEndEditing={() => {
+                                    if (this.state.password != this.state.confirmPassword) {
+                                        this.setState({ confirmPasswordError : true });
+                                    }
+                                }}
+                                />
 
                             <TextInput
                                 label={'Address'}

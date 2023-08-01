@@ -57,7 +57,8 @@ class LoanRegistertion extends Component {
     let rate = parseFloat(this.state.loans.interest_rate);
     let duration = Number(this.state.loans.duration);
     let loan = Number(this.state.loans.amount);
-    this.setState({amount :  Math.round( (loan/duration + (loan/duration)*(rate)).toFixed(2)).toFixed(2)})
+    this.setState({amount :  Math.round((loan + (loan/duration)*(rate/100))/duration).toFixed(2)})
+    console.log(this.state.amount)
    }
 
    
@@ -158,8 +159,9 @@ class LoanView extends Component {
             const supabase = createClient(supabaseUrl, supabaseKey);
             const {isAdmin, username} =  JSON.parse(await AsyncStorage.getItem('user'))
             let data = (await supabase.from('Loans').select('members').eq('loanname', name)).data[0].members
+            console.log()
             try{
-                if(data.includes(username) != null){
+                if(data.indexOf(String(username)) != -1){
                     Alert.alert('Already Applied')
                 }
                 else{

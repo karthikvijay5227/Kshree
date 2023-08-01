@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Image, ScrollView, RefreshControl } from 'react-native';
 import LoanDetails from '../components/LoanDetails';
 import LoanList from '../components/CreateLoan';
+import LoanRequests from '../components/LoanRequests';
 import LoanApproval from '../components/LoanApproval';
 import KudumbashreeRegistration from '../components/KudumbashreeRegistration';
 import Events from '../components/Events';
@@ -19,6 +20,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import ProfileEdit from '../components/ProfileEdit';
 import UserDetails from '../components/UserDetails';
+
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -101,6 +103,9 @@ function DrawerNavigation({ username }) {
             </Drawer.Screen>
             <Drawer.Screen name="User Details" component={UserDetails} options={{ headerShown: false }} />
             <Drawer.Screen name="Create Post" component={CreatePost} />
+            <Drawer.Screen name="Apply Loan" options={{ headerShown: true, headerTitle: 'Loan Request' }} >
+                {(props) => <LoanRequests {...props} username={username} />}
+            </Drawer.Screen>
             <Drawer.Screen name="Loan Details" component={LoanDetails} />
             <Drawer.Screen name="Loan Creation" component={LoanList} options={{ headerShown: false}}/>
             <Drawer.Screen name="Loan Approval" component={LoanApproval} />
@@ -121,15 +126,16 @@ function AdminHome({ username }) {
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
+        const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabase = createClient(supabaseUrl, supabaseKey);
         const unsubscribe = navigation.addListener('focus', async () => {
-            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
-            const supabase = createClient(supabaseUrl, supabaseKey);
+            
             let eventData = await supabase.rpc('events');
             setEvents(eventData.data);
             let userNumber = await supabase.rpc('get_total_users');
             setUserNumber(userNumber.data);
-        })
+        });
     }, []);
 
 
@@ -141,6 +147,8 @@ function AdminHome({ username }) {
         setEvents(eventData.data);
         let userNumber = await supabase.rpc('get_total_users');
         setUserNumber(userNumber.data);
+
+      
     };
 
     const handleRefresh = () => {
@@ -192,6 +200,8 @@ function AdminHome({ username }) {
                 return 'th';
             }
         }
+
+
       if(events.length != 0){
         return events.map((item, index) => (
             <View key={index} style={{ flexDirection: 'row', height: 80, width: width - 80, alignItems: 'center', borderColor: '#808080', borderBottomWidth: 1, marginTop: 10 }}>

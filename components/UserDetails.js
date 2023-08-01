@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, TouchableOpacity, Dimensions, ScrollView,Image, Alert } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
-import { Paragraph, Switch, TextInput } from 'react-native-paper';
+import { Switch, TextInput } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'react-native-paper';
 import Lottie from 'lottie-react-native';
@@ -93,10 +93,12 @@ class Users extends React.Component{
                                 </View>
                                 <View style={{justifyContent : 'flex-start',alignItems : 'center', }}>
                                   <View style={{flexDirection : 'row', marginRight : 10}}>
-                                  <IconButton icon={require('../assets/delete.png')} size={20} onPress={()=>{
+                                
+                                  <IconButton icon={require('../assets/delete.png')} disabled={item.admin} size={20} onPress={()=>{
                                     this.setState({deleteUser : true})
                                     this.setState({deleteName : item.name,deleteUserName : item.username})
                                     }} style={{ elevation : 10}}/>
+                                
                                   <IconButton icon={require('../assets/edit.png')} size={20} onPress={()=>{navigation.navigate("Edit User",{
                                         name : item.name,
                                         username : item.username,
@@ -156,7 +158,6 @@ class Users extends React.Component{
                                 })
                             }
                         })
-
                         }
                     )}
                     catch{

@@ -225,7 +225,7 @@ class LoanView extends Component {
                 
                 this.state.loans.map((item, index) => {
                     return(
-                        <TouchableOpacity key={index} activeOpacity={1} style={{height : 200, width : width - 50, elevation : 10,marginTop : 20 ,backgroundColor : 'white', borderRadius : 10}} onPress={()=>{navigation.navigate('LoanMembers',{name : item.loanname, duration : item.duration, amount : item.amount,rate : item.rate })}}>
+                        <TouchableOpacity key={index} activeOpacity={1} style={{height : 200, width : width - 50, elevation : 10,marginTop : 20 ,backgroundColor : 'white', borderRadius : 10}} onPress={()=>{navigation.navigate('LoanMembers',{name : item.loanname, duration : item.duration, amount : item.amount, rate : item.interest_rate })}}>
                             <Text style={{fontFamily : 'Outfit-Bold', color : '#38E038' ,fontSize : 30, marginLeft : 20, marginTop : 10}}>{item.loanname}</Text>
                             <View style={{flexDirection : 'row', justifyContent : 'space-between', alignItems : 'center'}}>
                                 <TouchableOpacity disabled style={{flexDirection : 'column', elevation : 2 ,justifyContent : 'center' , marginLeft : 10, marginTop : 10 ,width : width - 200, height : 120, backgroundColor : 'white', borderRadius : 10, justifyContent : 'center'}}>
