@@ -27,8 +27,6 @@ const width = Dimensions.get('window').width;
 
 function DrawerHeader({ username, ...props }) {
     const [name, setName] = useState(null);
-
-
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -41,7 +39,6 @@ function DrawerHeader({ username, ...props }) {
                 } else {
                     if (data && data.length > 0) {
                         setName(data[0].name);
-                        
                     }
                 }
             } catch (error) {
@@ -103,19 +100,18 @@ function DrawerNavigation({ username }) {
             <Drawer.Screen name="User Details" component={UserDetails} options={{ headerShown: false }} />
             <Drawer.Screen name="Create Post" component={CreatePost} />
             <Drawer.Screen name="Loan Details" component={LoanDetails} />
-            <Drawer.Screen name="Loan Creation" component={LoanList} options={{ headerShown: false}}/>
+            <Drawer.Screen name="Loan Creation" component={LoanList} options={{ headerShown: false }} />
             <Drawer.Screen name="Loan Approval" component={LoanApproval} />
             <Drawer.Screen name="Kudumbashree Registration" component={KudumbashreeRegistration} options={{ headerTitle: 'Member Registration' }} />
             <Drawer.Screen name="Events" component={Events} />
             <Drawer.Screen name="Registration" component={Registration} options={{ headerShown: false, drawerItemStyle: { height: 0 } }} />
             <Drawer.Screen name="About" component={AboutUs} options={{ headerShown: false, headerTitle: 'About' }} />
-            
         </Drawer.Navigator>
     );
 }
 
 function AdminHome({ username }) {
-    
+
     const navigation = useNavigation();
     const [events, setEvents] = useState([]);
     const [userNumber, setUserNumber] = useState('');
@@ -126,7 +122,7 @@ function AdminHome({ username }) {
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
         const supabase = createClient(supabaseUrl, supabaseKey);
         const unsubscribe = navigation.addListener('focus', async () => {
-            
+
             let eventData = await supabase.rpc('events');
             setEvents(eventData.data);
             let userNumber = await supabase.rpc('get_total_users');
@@ -136,15 +132,13 @@ function AdminHome({ username }) {
 
 
     const fetchEvents = async () => {
-            const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
-            const supabase = createClient(supabaseUrl, supabaseKey);
+        const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabase = createClient(supabaseUrl, supabaseKey);
         let eventData = await supabase.rpc('events');
         setEvents(eventData.data);
         let userNumber = await supabase.rpc('get_total_users');
         setUserNumber(userNumber.data);
-
-      
     };
 
     const handleRefresh = () => {
@@ -177,7 +171,6 @@ function AdminHome({ username }) {
                 index: 0,
                 routes: [{ name: 'Registration' }],
             });
-           
             await supabase.from('users').update({ login: false }).eq('username', username);
         } catch (error) {
             console.log('Error logging out:', error);
@@ -197,33 +190,32 @@ function AdminHome({ username }) {
             }
         }
 
-
-      if(events.length != 0){
-        return events.map((item, index) => (
-            <View key={index} style={{ flexDirection: 'row', height: 80, width: width - 80, alignItems: 'center', borderColor: '#808080', borderBottomWidth: 1, marginTop: 10 }}>
-                <View style={{ flexDirection: 'column' }}>
-                    <Text style={{ fontSize: 18, fontFamily: 'Outfit-Light', color: '#808080' }}>
-                        {new Date(item.date).toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 3).toUpperCase()}
-                    </Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'Outfit-Bold', color: '#000000', letterSpacing: 2, marginTop: 5, alignItems: 'flex-end' }}>{new Date(item.date).getDate()}</Text>
-                        <Text style={{ fontSize: 18, fontFamily: 'Outfit-Light', color: '#000000', marginLeft: 5 }}>
-                            {getDayOrdinalSuffix(new Date(item.date).getDate())}
+        if (events.length != 0) {
+            return events.map((item, index) => (
+                <View key={index} style={{ flexDirection: 'row', height: 80, width: width - 80, alignItems: 'center', borderColor: '#808080', borderBottomWidth: 1, marginTop: 10 }}>
+                    <View style={{ flexDirection: 'column' }}>
+                        <Text style={{ fontSize: 18, fontFamily: 'Outfit-Light', color: '#808080' }}>
+                            {new Date(item.date).toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 3).toUpperCase()}
                         </Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Text style={{ fontSize: 20, fontFamily: 'Outfit-Bold', color: '#000000', letterSpacing: 2, marginTop: 5, alignItems: 'flex-end' }}>{new Date(item.date).getDate()}</Text>
+                            <Text style={{ fontSize: 18, fontFamily: 'Outfit-Light', color: '#000000', marginLeft: 5 }}>
+                                {getDayOrdinalSuffix(new Date(item.date).getDate())}
+                            </Text>
+                        </View>
                     </View>
+                    <Text style={{ fontSize: 25, fontFamily: 'Outfit-Medium', color: '#1A1110', marginLeft: 30 }}>{item.event_name}</Text>
                 </View>
-                <Text style={{ fontSize: 25, fontFamily: 'Outfit-Medium', color: '#1A1110', marginLeft: 30 }}>{item.event_name}</Text>
-            </View>
-        ));
-      }
-      else{
-        return(
-            <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
-                <Image source={require('../assets/nodata.jpg')} style={{height : 150, width : width - 50, marginTop : 40}} />
-                <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 20, color : 'black'}}>No Upcoming Events</Text>
-            </View>
-        )
-      }
+            ));
+        }
+        else {
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('../assets/nodata.jpg')} style={{ height: 150, width: width - 50, marginTop: 40 }} />
+                    <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'black' }}>No Upcoming Events</Text>
+                </View>
+            )
+        }
     };
 
     return (

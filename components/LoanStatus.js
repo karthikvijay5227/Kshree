@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, Dimensions, BackHandler, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Dimensions, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
 
@@ -124,12 +124,10 @@ export default function LoanStatus({ username }) {
         );
     } else {
         return (
-            <View style={{ elevation: 10, shadowOffset: { width: 0, height: 2 }, shadowColor: 'rgba(0, 0, 0, 0.25)', shadowOpacity: 1, shadowRadius: 4, backgroundColor: 'white', borderRadius: 20, marginLeft: 20, marginTop: 30, width: width - 40, height: 200 }}>
-                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                    <Text style={{ fontSize: 25, fontFamily: 'Outfit-SemiBold', color: 'black' }}>No Loan Applied</Text>
-                </View>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:"white" }}>
+                <Image source={require('../assets/nodata.jpg')} style={{ height: 150, width: width - 50, marginTop: 40 }} />
+                <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'black' }}>No Loans Applied</Text>
             </View>
-
-        );
+        )
     }
 }

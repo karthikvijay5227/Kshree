@@ -94,13 +94,12 @@ function DrawerHeader({ username, ...props }) {
                         Log Out
                     </Text>
                 )}
-                style={{ marginTop: height * 0.35 }}
+                style={{ marginTop: height * 0.29 }}
                 onPress={handleLogout}
             />
         </DrawerContentScrollView>
     );
 }
-
 
 export default function Members({ route }) {
     const { username } = route.params;
@@ -199,30 +198,22 @@ function MemberHome({ navigation, username }) {
             })
         }).subscribe()
 
-        channel.on('broadcast',{event : 'delete'},async(payload)=>{
-            if(payload.payload.task.username === userName)
-            {
+        channel.on('broadcast', { event: 'delete' }, async (payload) => {
+            if (payload.payload.task.username === userName) {
 
                 await AsyncStorage.removeItem('user');
-                
-                Alert.alert("Your account has been deleted","Please register again to continue using the app",[
+                Alert.alert("Your account has been deleted", "Please register again to continue using the app", [
                     {
-                        text : "OK"
+                        text: "OK"
                     }
                 ])
-                
+
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'Registration' }],
                 });
             }
         })
-
-        
-
-
-
-
         setEvents(eventData.data);
         setUser(user.data[0].name);
     }
@@ -282,70 +273,27 @@ function MemberHome({ navigation, username }) {
     };
 
     const displayEvents = () => {
-        return events.map((item, index) => {
-            return (
-                <View
-                    key={index}
-                    style={{
-                        flexDirection: 'row',
-                        height: 80,
-                        width: width - 80,
-                        alignItems: 'center',
-                        borderColor: '#808080',
-                        borderBottomWidth: 1,
-                        marginTop: 10,
-                    }}
-                >
-                    <View style={{ flexDirection: 'column' }}>
-                        <Text
-                            style={{
-                                fontSize: 18,
-                                fontFamily: 'Outfit-Light',
-                                color: '#808080',
-                            }}
-                        >
-                            {new Date(item.date).toLocaleDateString('en-US', {
-                                weekday: 'short',
-                            }).slice(0, 3).toUpperCase()}
-                        </Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    fontFamily: 'Outfit-Bold',
-                                    color: '#000000',
-                                    letterSpacing: 2,
-                                    marginTop: 5,
-                                    alignItems: 'flex-end',
-                                }}
-                            >
-                                {new Date(item.date).getDate()}
-                            </Text>
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    fontFamily: 'Outfit-Light',
-                                    color: '#000000',
-                                    marginLeft: 5,
-                                }}
-                            >
-                                {getDayOrdinalSuffix(new Date(item.date).getDate())}
-                            </Text>
-                        </View>
-                    </View>
-                    <Text
-                        style={{
-                            fontSize: 25,
-                            fontFamily: 'Outfit-Medium',
-                            color: '#1A1110',
-                            marginLeft: 30,
-                        }}
-                    >
-                        {item.event_name}
+        return events.length != 0 ? events.map((item, index) => (
+            <View key={index} style={{ flexDirection: 'row', height: 80, width: width - 80, alignItems: 'center', borderColor: '#808080', borderBottomWidth: 1, marginTop: 10 }}>
+                <View style={{ flexDirection: 'column' }}>
+                    <Text style={{ fontSize: 18, fontFamily: 'Outfit-Light', color: '#808080' }}>
+                        {new Date(item.date).toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 3).toUpperCase()}
                     </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 20, fontFamily: 'Outfit-Bold', color: '#000000', letterSpacing: 2, marginTop: 5, alignItems: 'flex-end' }}>{new Date(item.date).getDate()}</Text>
+                        <Text style={{ fontSize: 18, fontFamily: 'Outfit-Light', color: '#000000', marginLeft: 5 }}>
+                            {getDayOrdinalSuffix(new Date(item.date).getDate())}
+                        </Text>
+                    </View>
                 </View>
-            );
-        });
+                <Text style={{ fontSize: 25, fontFamily: 'Outfit-Medium', color: '#1A1110', marginLeft: 30 }}>{item.event_name}</Text>
+            </View>
+        )) : (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Image source={require('../assets/nodata.jpg')} style={{ height: 150, width: width - 50, marginTop: 40 }} />
+                <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'black' }}>No Upcoming Events</Text>
+            </View>
+        );
     };
 
     return (

@@ -66,8 +66,6 @@ export default class ApplyLoan extends React.Component {
             else {
 
                 const finalDate = new Date(new Date().setMonth(parseInt(new Date().getMonth()) + parseInt(this.state.duration) - 1)).toISOString().slice(0, 10);
-                
-
                 try {
                     
                     await supabase.from('loan').insert([{

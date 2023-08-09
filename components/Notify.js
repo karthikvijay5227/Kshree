@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl, Dimensions, BackHandler } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, Dimensions, BackHandler, Image } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Card } from 'react-native-paper';
 import moment from 'moment';
@@ -48,12 +48,11 @@ export default function Notify() {
     const renderPosts = () => {
         if (posts.length === 0) {
             return (
-                <View style={styles.noNotificationsContainer}>
-                    <View style={styles.noNotificationsBox}>
-                        <Text style={styles.noNotificationsText}>No Notifications</Text>
-                    </View>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('../assets/nodata.jpg')} style={{ height: 150, width: width - 50, marginTop: 40 }} />
+                    <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'black' }}>No New Notifications</Text>
                 </View>
-            );
+            )
         }
 
         return posts.map((post, index) => {

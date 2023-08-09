@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity, Dimensions, ScrollView, StyleSheet, BackHandler,Image } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, ScrollView, StyleSheet, BackHandler, Image } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { CountUp } from 'use-count-up';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoanUser from '../components/LoanUser';
 
-const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const Stack = createStackNavigator();
@@ -20,7 +19,6 @@ export default class LoanDetails extends React.Component {
         )
     }
 }
-
 
 class LoanInfo extends React.Component {
 
@@ -56,47 +54,38 @@ class LoanInfo extends React.Component {
             let { data: obj1 } = await supabase.rpc('calculatemonthlypayment')
             this.setState({ loanMembers: obj1 })
         })
-
     }
 
 
     render() {
-
         const amount = parseInt(this.state.totalAmount.data)
-
         const handleLoanDetails = () => {
-
             const { navigation } = this.props;
-
-            if(this.state.loanMembers.length != 0){
-            return (
-                this.state.loanMembers.map((item, index) => {
-
-                    return (
-                
-                        <TouchableOpacity key={index} activeOpacity={0.8} style={styles.names} onPress={() => navigation.navigate('LoanUser', { name: item.loan_username })}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10, color: "black" }}>{index + 1}.</Text>
-                                <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10, color: "black" }}>{item.loan_username}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'column', marginRight: 20 }}>
-                                <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: '#38E038' }}>₹ {Math.round(item.amount).toFixed(2)}</Text>
-                                <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: new Date(item.updatedate).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10) ? 'red' : '#38E038' }}>{item.updatedate}</Text>
-                            </View>
-                        </TouchableOpacity>
-
-                    )
-                })
-            )}
-            else{
-              return(
-                <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
-                    <Image source={require('../assets/nodata.jpg')} style={{height : 300, width : width - 50, marginTop : 10}} />
-                    <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 20, color : 'black'}}>No Loans Approved</Text>
-                </View>
-
-              )
-            
+            if (this.state.loanMembers.length != 0) {
+                return (
+                    this.state.loanMembers.map((item, index) => {
+                        return (
+                            <TouchableOpacity key={index} activeOpacity={0.8} style={styles.names} onPress={() => navigation.navigate('LoanUser', { name: item.loan_username })}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10, color: "black" }}>{index + 1}.</Text>
+                                    <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, marginLeft: 10, color: "black" }}>{item.loan_username}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'column', marginRight: 20 }}>
+                                    <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: '#38E038' }}>₹ {Math.round(item.amount).toFixed(2)}</Text>
+                                    <Text style={{ fontFamily: 'Outfit-Bold', fontSize: 15, color: new Date(item.updatedate).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10) ? 'red' : '#38E038' }}>{item.updatedate}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    })
+                )
+            }
+            else {
+                return (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Image source={require('../assets/nodata.jpg')} style={{ height: 300, width: width - 50, marginTop: 10 }} />
+                        <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'black' }}>No Loans Approved</Text>
+                    </View>
+                )
             }
         }
 
@@ -118,14 +107,11 @@ class LoanInfo extends React.Component {
                     </TouchableOpacity>
 
                 </View>
-
                 <ScrollView style={{ marginTop: 30 }} contentContainerStyle={{ paddingBottom: 20, width: width - 50, alignItems: 'center' }} showsVerticalScrollIndicator={false}>
-
                     {
                         handleLoanDetails()
                     }
                 </ScrollView>
-
             </View>
         )
     }

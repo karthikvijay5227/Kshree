@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl, BackHandler, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, BackHandler, Dimensions,Image } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Card, Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -64,45 +64,52 @@ export default function EventAttendance({ navigation, username }) {
     };
 
     const mapEvents = () => {
-        return events.map((item, index) => {
-            return (
-                <Card
-                    key={index}
-                    style={{ height: 210, marginTop: 5, width: width - 40, marginBottom: 20 }}
-                >
-                    <Card.Title title={item.event_name} titleStyle={{ fontSize: 18 }} right={() => {
-                        const presence = attend[index];
-                        const status = presence ? "Present" : "Absent";
-                        const statusColor = presence ? "green" : "red";
-                        return <Text style={{ color: statusColor, marginRight: 30, fontSize: 16, marginBottom: 5 }}>{status}</Text>;
-                    }} />
-                    <Card.Content>
-                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                            <Text style={{ fontWeight: 'bold', color: '#000000' }}>
-                                Event Description:{' '}
-                            </Text>
-                            <Text style={{ marginLeft: 5, color: '#000000' }}>
-                                {item.event_description}
-                            </Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                            <Text style={{ fontWeight: 'bold', color: '#000000' }}>
-                                Location:{' '}
-                            </Text>
-                            <Text style={{ marginLeft: 5, color: '#000000' }}>
-                                {item.location}
-                            </Text>
-                        </View>
-                        <Button
-                            mode='contained'
-                            style={{ marginTop: 30 }}
-                        >
-                            Price: {item.profit}
-                        </Button>
-                    </Card.Content>
-                </Card>
+        return events.length != 0 ?
+            events.map((item, index) => {
+                return (
+                    <Card
+                        key={index}
+                        style={{ height: 210, marginTop: 5, width: width - 40, marginBottom: 20 }}
+                    >
+                        <Card.Title title={item.event_name} titleStyle={{ fontSize: 18 }} right={() => {
+                            const presence = attend[index];
+                            const status = presence ? "Present" : "Absent";
+                            const statusColor = presence ? "green" : "red";
+                            return <Text style={{ color: statusColor, marginRight: 30, fontSize: 16, marginBottom: 5 }}>{status}</Text>;
+                        }} />
+                        <Card.Content>
+                            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <Text style={{ fontWeight: 'bold', color: '#000000' }}>
+                                    Event Description:{' '}
+                                </Text>
+                                <Text style={{ marginLeft: 5, color: '#000000' }}>
+                                    {item.event_description}
+                                </Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                <Text style={{ fontWeight: 'bold', color: '#000000' }}>
+                                    Location:{' '}
+                                </Text>
+                                <Text style={{ marginLeft: 5, color: '#000000' }}>
+                                    {item.location}
+                                </Text>
+                            </View>
+                            <Button
+                                mode='contained'
+                                style={{ marginTop: 30 }}
+                            >
+                                Price: {item.profit}
+                            </Button>
+                        </Card.Content>
+                    </Card>
+                );
+            })
+            : (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('../assets/nodata.jpg')} style={{ height: 150, width: width - 50, marginTop: 40 }} />
+                    <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'black' }}>No Upcoming Events</Text>
+                </View>
             );
-        });
     };
 
     return (
