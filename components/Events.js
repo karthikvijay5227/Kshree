@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ScrollView, Dimensions, RefreshControl, BackHandler,Image } from 'react-native';
+import { View, Text, ScrollView, Dimensions, RefreshControl, BackHandler, Image } from 'react-native';
 import { Button, Card, IconButton } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js'
@@ -66,33 +66,34 @@ class EventList extends React.Component {
             this.setState({ events: obj })
         }
         const mapEvents = () => {
-            
-            if(this.state.events.length != 0){
-            return (
-                this.state.events.map((item, index) => {
-                    return (
-                        <Card key={index} onPress={() => { this.props.navigation.navigate('EventDetails', { event: item.event_name }) }} style={{ height: 210, marginTop: 20, width: width - 20 }}>
-                            <Card.Title title={item.event_name} titleVariant='headlineMedium' right={(props) => <IconButton {...props} icon={require("../assets/delete.png")} onPress={() => { deleteEvent(item.event_name) }} />} />
-                            <Card.Content>
-                                <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                                    <Text style={{ fontWeight: 'bold', color: '#000000' }}>Event Description : </Text>
-                                    <Text style={{ marginLeft: 5, color: '#000000' }}>{item.event_description}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                                    <Text style={{ fontWeight: 'bold', color: '#000000' }}>Location : </Text>
-                                    <Text style={{ marginLeft: 5, color: '#000000' }}>{item.location}</Text>
-                                </View>
-                                <Button mode='contained' style={{ marginTop: 30 }} onPress={() => { }}>Price : {item.profit}</Button>
-                            </Card.Content>
-                        </Card>
-                    )
-                })
-            )}
-            else{
-                return(
-                    <View style={{flex : 1, justifyContent : 'center', alignItems : 'center'}}>
-                        <Image source={require('../assets/noevents.png')} style={{height : 300, width : width - 50, marginTop : 10}} />
-                        <Text style={{fontFamily : 'Outfit-SemiBold', fontSize : 20, color : 'black'}}>No Events Created</Text>
+
+            if (this.state.events.length != 0) {
+                return (
+                    this.state.events.map((item, index) => {
+                        return (
+                            <Card key={index} onPress={() => { this.props.navigation.navigate('EventDetails', { event: item.event_name }) }} style={{ height: 210, marginTop: 20, width: width - 20 }}>
+                                <Card.Title title={item.event_name} titleVariant='headlineMedium' right={(props) => <IconButton {...props} icon={require("../assets/delete.png")} onPress={() => { deleteEvent(item.event_name) }} />} />
+                                <Card.Content>
+                                    <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                        <Text style={{ fontWeight: 'bold', color: '#000000' }}>Event Description : </Text>
+                                        <Text style={{ marginLeft: 5, color: '#000000' }}>{item.event_description}</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                                        <Text style={{ fontWeight: 'bold', color: '#000000' }}>Location : </Text>
+                                        <Text style={{ marginLeft: 5, color: '#000000' }}>{item.location}</Text>
+                                    </View>
+                                    <Button mode='contained' style={{ marginTop: 30 }} onPress={() => { }}>Price : {item.profit}</Button>
+                                </Card.Content>
+                            </Card>
+                        )
+                    })
+                )
+            }
+            else {
+                return (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Image source={require('../assets/noevents.png')} style={{ height: 300, width: width - 50, marginTop: 10 }} />
+                        <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'black' }}>No Events Created</Text>
                     </View>
                 )
             }

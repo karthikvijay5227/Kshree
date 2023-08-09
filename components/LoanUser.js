@@ -250,7 +250,7 @@ export default class LoanUser extends React.Component {
                 <View style={{ flexDirection: 'column' }}>
                   <Text style={{ fontSize: 15, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: 'grey' }}>Loan Amount</Text>
                   <Text style={{ fontSize: 25, fontFamily: 'Outfit-SemiBold', marginTop: 2, marginLeft: 20, color: 'black' }}>₹ {this.state.loanDetails[0]?.amount}</Text>
-                  <Text style={{ fontSize: 15, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: 'grey' }}>Intrest Rate</Text>
+                  <Text style={{ fontSize: 15, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: 'grey' }}>Interest Rate</Text>
                   <Text style={{ fontSize: 20, fontFamily: 'Outfit-SemiBold', marginTop: 2, marginLeft: 20, color: 'black' }}>{this.state.loanDetails[0]?.rate}%</Text>
                 </View>
                 <View style={{ flexDirection: 'column', marginRight: 30 }}>

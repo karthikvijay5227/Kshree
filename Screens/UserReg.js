@@ -1,14 +1,14 @@
-/* The KudumbashreeRegistartion class is a React component that allows users to register as either an
+/* This class is a React component that allows users to register as either an
 admin or member, with their name, username, password, address, and phone number. */
 import * as React from 'react';
 import { View, StyleSheet, Text, Dimensions, ScrollView, BackHandler, Image } from 'react-native';
-import { TextInput, HelperText} from 'react-native-paper';
+import { TextInput, HelperText } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createClient } from '@supabase/supabase-js'
 import { Alert, Modal } from 'react-native';
 import Lottie from 'lottie-react-native';;
 
-export default class KudumbashreeRegistartion extends React.Component {
+export default class UserReg extends React.Component {
 
     /**
      * This is a constructor function that initializes the state of a component in a React application.
@@ -24,7 +24,6 @@ export default class KudumbashreeRegistartion extends React.Component {
             username: '',
             password: '',
             address: '',
-            admin: '',
             phone: '',
             pherror: false,
             deterror: false,
@@ -59,7 +58,7 @@ export default class KudumbashreeRegistartion extends React.Component {
         const isPasswordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/.test(this.state.password);
 
 
-        const list = [{ label: "Admin", value: true }, { label: "Member", value: false }]
+        // const list = [{ label: "Admin", value: true }, { label: "Member", value: false }]
         const height = Dimensions.get('window').height;
         const width = Dimensions.get('window').width;
         const addUser = async () => {
@@ -98,7 +97,7 @@ export default class KudumbashreeRegistartion extends React.Component {
             }
             else {
                 try {
-                    const {data : existUser, error : existError} = await supabase.from('users').select('username').eq('username', this.state.username);
+                    const { data: existUser, error: existError } = await supabase.from('users').select('username').eq('username', this.state.username);
                     if (existUser.length != 0) {
                         Alert.alert("Username already exists");
                         this.props.navigation.goBack();
@@ -109,7 +108,6 @@ export default class KudumbashreeRegistartion extends React.Component {
                             {
                                 username: this.state.username,
                                 password: this.state.password,
-                                admin: this.state.admin,
                                 address: this.state.address,
                                 name: this.state.name,
                                 phone_number: this.state.phone
@@ -122,7 +120,6 @@ export default class KudumbashreeRegistartion extends React.Component {
                                 username: '',
                                 password: '',
                                 address: '',
-                                admin: '',
                                 phone: '',
                                 pherror: false,
                                 deterror: false,
@@ -134,7 +131,8 @@ export default class KudumbashreeRegistartion extends React.Component {
                                 passwordVisible: false,
                                 confirmPassword: '',
                                 createUser: false,
-                                userRegistered: false})
+                                userRegistered: false
+                            })
 
                         }
                         Alert.alert("User added successfully");
@@ -154,39 +152,30 @@ export default class KudumbashreeRegistartion extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
-                    
-                <View>
-                    <Modal
-                        animationType="fade"
-                        transparent={true}
-                        visible={this.state.createUser}
-                        onRequestClose={() => {
-                            this.setState({createUser : !this.state.createUser})
+                    <View>
+                        <Modal
+                            animationType="fade"
+                            transparent={true}
+                            visible={this.state.createUser}
+                            onRequestClose={() => {
+                                this.setState({ createUser: !this.state.createUser })
                             }}
                         >
-                        <View style={{flex :1,justifyContent : 'center', alignItems :'center',backgroundColor: 'rgba(45, 45, 45, 0.5)'}}>
-                            <TouchableOpacity disabled style={{backgroundColor : 'white',height : height/2 - 50, width : width - 100, borderRadius : 20, elevation : 6,justifyContent : 'center',alignItems : 'center'}}>
-                            {
-                                this.state.userRegistered ? (
-                                    <Lottie style={{height : 200}} source={require('../assets/createdUser.json')} autoPlay loop/>
-                                ) : (
-                                    <Lottie style={{height : 200}} source={require('../assets/creatingUser.json')} autoPlay/>
-                                    
-                                )
-                            }
+                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(45, 45, 45, 0.5)' }}>
+                                <TouchableOpacity disabled style={{ backgroundColor: 'white', height: height / 2 - 50, width: width - 100, borderRadius: 20, elevation: 6, justifyContent: 'center', alignItems: 'center' }}>
+                                    {
+                                        this.state.userRegistered ? (
+                                            <Lottie style={{ height: 200 }} source={require('../assets/createdUser.json')} autoPlay loop />
+                                        ) : (
+                                            <Lottie style={{ height: 200 }} source={require('../assets/creatingUser.json')} autoPlay />
+                                        )
+                                    }
+                                </TouchableOpacity>
+                            </View>
+                        </Modal>
+                    </View>
 
-
-                            </TouchableOpacity>
-                        </View>
-                    </Modal>
-                </View>
-                    
-                    
-                    
                     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} ref={(c) => { this.scroll = c }}>
-                        <View style={styles.textHeaderContainer}>
-                            <Text style={styles.textHeader}>Member Registration</Text>
-                        </View>
                         <View style={styles.textInputContainer}>
                             <TextInput
                                 label={'Name'}
@@ -286,14 +275,14 @@ export default class KudumbashreeRegistartion extends React.Component {
                                 secureTextEntry={this.state.confirmPasswordVisible}
                                 right={<TextInput.Icon icon={this.state.confirmPasswordVisible ? require('../assets/hide.png') : require('../assets/eye.png')} onPress={() => { this.setState({ confirmPasswordVisible: !this.state.confirmPasswordVisible }) }} />}
                                 value={this.state.confirmPassword}
-                                onChangeText={text => this.setState({ confirmPassword : text, confirmPasswordError : false })}
+                                onChangeText={text => this.setState({ confirmPassword: text, confirmPasswordError: false })}
                                 style={{ width: width - 50, marginTop: 20 }}
                                 onEndEditing={() => {
                                     if (this.state.password != this.state.confirmPassword) {
-                                        this.setState({ confirmPasswordError : true });
+                                        this.setState({ confirmPasswordError: true });
                                     }
                                 }}
-                                />
+                            />
 
                             <TextInput
                                 label={'Address'}
@@ -317,10 +306,10 @@ export default class KudumbashreeRegistartion extends React.Component {
                                 keyboardType={'number-pad'}
                                 style={{ width: width - 50, marginTop: 20 }}
                             />
-                            
+
                         </View>
                         <View style={{ marginTop: 40, width: '30%' }}>
-                            <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ADD8E6', width: '100%', height: 50, borderRadius: 10, marginBottom: 30,marginLeft:"12%" }} onPress={() => { addUser() }}>
+                            <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ADD8E6', width: '100%', height: 50, borderRadius: 10, marginBottom: 30, marginLeft: "12%" }} onPress={() => { addUser() }}>
                                 <Text>Register</Text>
                             </TouchableOpacity>
                         </View>
@@ -343,11 +332,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 10,
         marginRight: "46%"
-    },
-    textHeader: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'center'
     },
     passwordRequirementsContainer: {
         marginHorizontal: 20,

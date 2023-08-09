@@ -64,8 +64,8 @@ export default function Profile({ navigation, username }) {
       <ImageBackground source={require('../assets/bg2.jpg')} style={{ height: 200, width: width }}>
         <View style={styles.profilePicContainer}>
           <Image source={require('../assets/profile.png')} style={styles.profilePic} />
-          <View style={{ flexDirection: 'column', marginLeft: 20, marginBottom: 15 }}>
-            <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'white' }}>{user}</Text>
+          <View style={{ flexDirection: 'column', marginLeft: 20 }}>
+            <Text style={{ fontFamily: 'InterTight-Bold', fontSize: 25, color: 'white', maxWidth: width - 180 }}>{user}</Text>
             <Text style={{ fontFamily: 'Outfit-Medium', fontSize: 15, color: 'white' }}>{role ? "Admin" : "Member"}</Text>
           </View>
           <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate("ProfileEdit")}>

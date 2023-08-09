@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity, Dimensions, ScrollView, Image, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, ScrollView, Image, Alert, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Switch, TextInput } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -14,19 +14,19 @@ const Stack = createStackNavigator();
 
 export default class UserDetails extends React.Component {
 
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
     handleBackButton = () => {
         // Handle the back button press
         this.props.navigation.goBack();
         return true; // Prevent the default back button action
-    }
-
-    render() {
-        return (
-
-            <Stack.Navigator initialRouteName="users">
-                <Stack.Screen name="users" component={Users} options={{ headerShown: false }} />
-            </Stack.Navigator>
-        )
     }
     render() {
         return (
@@ -59,6 +59,18 @@ class Users extends React.Component {
         const supabase = createClient(supabaseUrl, supabaseKey);
         let { data: data } = await supabase.from('users').select('*');
         this.setState({ users: data });
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
     }
 
     render() {
@@ -68,7 +80,7 @@ class Users extends React.Component {
                 this.state.users.map((item, index) => {
                     return (
                         <View key={index} style={{ alignSelf: 'center', justifyContent: 'center', marginTop: 10, bottom: 10, }}>
-                            <TouchableOpacity disabled style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, height: 100, marginLeft: 10, marginTop: 10, width: width - 50 }]}>
+                            <TouchableOpacity disabled style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', elevation: 10, shadowOffset: 3, backgroundColor: 'white', borderRadius: 20, height: 100, marginTop: 10, width: width - 50 }]}>
                                 <View style={{ marginLeft: 20, flexDirection: 'row', }}>
                                     <Image source={require('../assets/account.png')} style={{ height: 55, width: 55 }} />
                                     <View style={{ flexDirection: 'column' }}>
@@ -225,6 +237,21 @@ class EditUser extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        // Remove the back button event listener
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton = () => {
+        // Handle the back button press
+        this.props.navigation.goBack();
+        return true; // Prevent the default back button action
+    }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
     render() {
         const width = Dimensions.get('window').width;
         const { navigation } = this.props;
@@ -279,25 +306,25 @@ class EditUser extends React.Component {
                         </View>
                     </TouchableOpacity>
 
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 40 }}>
-                        <Image source={require('../assets/person.png')} style={{ marginTop: 20, marginLeft: 20, height: 30, width: 30 }} />
-                        <TextInput mode="flat" label="Name" style={{ width: width - 100, backgroundColor: 'white', marginLeft: 10 }}
+                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 40, marginRight: "13%" }}>
+                        <Image source={require('../assets/person.png')} style={{ marginTop: 20, marginLeft: 10.5, height: 30, width: 30 }} />
+                        <TextInput mode="flat" label="Name" style={{ width: width - 105, backgroundColor: 'white', marginLeft: "1%", position: "relative", left: "12%" }}
                             value={this.state.name}
                             onChangeText={(text) => { this.setState({ name: text }) }}
                             editable={this.state.editing}
                         />
                     </View>
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 20 }}>
+                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 20, marginRight: "13%" }}>
                         <Image source={require('../assets/arroba.png')} style={{ marginTop: 20, marginLeft: 20, height: 30, width: 30 }} />
-                        <TextInput mode="flat" label="Username" style={{ width: width - 100, backgroundColor: 'white', marginLeft: 10 }}
+                        <TextInput mode="flat" label="Username" style={{ width: width - 105, backgroundColor: 'white', marginLeft: 10 }}
                             value={this.state.username}
                             onChangeText={(text) => { this.setState({ username: text }) }}
                             editable={this.state.editing}
                         />
                     </View>
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 20 }}>
+                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 20, marginRight: "13%" }}>
                         <Image source={require('../assets/phone-call.png')} style={{ marginTop: 20, marginLeft: 20, height: 30, width: 30 }} />
-                        <TextInput mode="flat" label="Phone Number" style={{ width: width - 100, backgroundColor: 'white', marginLeft: 10 }}
+                        <TextInput mode="flat" label="Phone Number" style={{ width: width - 105, backgroundColor: 'white', marginLeft: 10 }}
                             value={this.state.phone}
                             left={<TextInput.Affix text="+91" />}
                             onChangeText={(text) => { this.setState({ phone: text }) }}
@@ -306,9 +333,9 @@ class EditUser extends React.Component {
                         />
                     </View>
 
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 20 }}>
+                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 20, marginRight: "13%" }}>
                         <Image source={require('../assets/home.png')} style={{ marginTop: 20, marginLeft: 20, height: 30, width: 30 }} />
-                        <TextInput mode="flat" label="Address" style={{ width: width - 100, backgroundColor: 'white', marginLeft: 10 }}
+                        <TextInput mode="flat" label="Address" style={{ width: width - 105, backgroundColor: 'white', marginLeft: 10 }}
                             value={this.state.address}
                             multiline
                             onChangeText={(text) => { this.setState({ address: text }) }}
@@ -316,14 +343,14 @@ class EditUser extends React.Component {
                         />
                     </View>
 
-                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 30 }}>
+                    <View style={{ flexDirection: 'row', alignSelf: 'center', marginTop: 30, marginRight: "13%" }}>
                         <Image source={require('../assets/security.png')} style={{ marginLeft: 20, height: 40, width: 40 }} />
                         <View style={{ width: width - 100, marginLeft: 10 }}>
                             <SelectList
                                 placeholder={this.state.admin ? 'Admin' : 'Member'}
                                 search={false}
                                 setSelected={(value) => this.setState({ admin: value })}
-                                data={[{ key: 1, value: 'Admin', }, { key: 2, value: 'Member' }]}
+                                data={[{ key: 1, value: 'Admin' }, { key: 2, value: 'Member' }]}
                                 dropdownShown={false}
                                 save='value'
                                 onSelect={() => {
@@ -338,13 +365,13 @@ class EditUser extends React.Component {
                         </View>
                     </View>
 
-                    <View style={{ alignSelf: 'center', marginTop: 30 }}>
+                    <View style={{ alignSelf: 'center', marginTop: 30, marginRight: "13%" }}>
                         <TouchableOpacity disabled={!this.state.editing} style={{ width: width - 100, backgroundColor: 'white', marginLeft: 30, height: 50, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', borderRadius: 10, elevation: 5, borderWidth: 0.5 }} onPress={() => {
                             updateData(
                                 this.state.name, this.state.username, this.state.admin, this.state.address, this.state.phone
                             )
                         }}>
-                            <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15 }}>Update Data</Text>
+                            <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 15, color: "black" }}>Update Data</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>

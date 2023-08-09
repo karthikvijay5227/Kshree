@@ -84,7 +84,7 @@ class LoanRegistertion extends Component {
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={{ fontSize: 15, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: 'grey' }}>Loan Amount</Text>
                             <Text style={{ fontSize: 25, fontFamily: 'Outfit-SemiBold', marginTop: 2, marginLeft: 20, color: 'black' }}>₹ {this.state.loans.amount}</Text>
-                            <Text style={{ fontSize: 15, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: 'grey' }}>Intrest Rate</Text>
+                            <Text style={{ fontSize: 15, fontFamily: 'Outfit-SemiBold', marginTop: 20, marginLeft: 20, color: 'grey' }}>Interest Rate</Text>
                             <Text style={{ fontSize: 20, fontFamily: 'Outfit-SemiBold', marginTop: 2, marginLeft: 20, color: 'black' }}>{this.state.loans.interest_rate}%</Text>
                         </View>
                         <View style={{ flexDirection: 'column', marginRight: 30 }}>
@@ -170,7 +170,7 @@ class LoanView extends Component {
                 )
             ) : (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Image source={require('../assets/nodata.jpg')} style={{ height: 150, width: width - 50, marginTop: 40 }} />
+                        <Image source={require('../assets/requests.jpg')} style={{ height: 150, width: width - 50, marginTop: 40 }} />
                     <Text style={{ fontFamily: 'Outfit-SemiBold', fontSize: 20, color: 'black' }}>No Loans Available</Text>
                 </View>
             )
