@@ -41,8 +41,7 @@ Install the apk from the releases section
 yarn run test
 ```
 
-## [Project Presentation](https://www.canva.com/design/DAFk4BvRsXI/ropbjroz6UclPzqAhq-j4Q/view?utm_content=DAFk4BvRsXI&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
-## [Project Report](/assest/MPreportgroupc.pdf)
+## [Project Presentation](https://www.canva.com/design/DAFk4BvRsXI/ropbjroz6UclPzqAhq-j4Q/view?utm_content=DAFk4BvRsXI&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink) & [Project Report](/assest/MPreportgroupc.pdf)
 
 ## License
 
