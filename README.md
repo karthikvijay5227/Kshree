@@ -58,3 +58,5 @@ This project is licensed under the MIT License.
 ## Show your support
 
 Give a ⭐️ if this project helped you!
+
+> Updated on 10th August 2023
