@@ -8,6 +8,16 @@
 <br>
 <br>
 
+Welcome to the Kshree App repository! This repository hosts the source code for the Kshree app, a comprehensive mobile application designed to streamline various administrative and member-related activities within the Kudumbashree organization.
+
+## Features
+
+- **User Roles and Access Levels:** The app offers distinct logins for Admins and Members, ensuring controlled access to different functionalities and data.
+- **Attendance Management:** Admins can efficiently schedule and mark attendance for Kudumbashree members, ensuring accurate tracking.
+- **Loan Management:** A robust loan management system empowers Admins to manage loan details, disbursement, repayment, and interest calculation.
+- **Notifications and Communication:** Admins can post important notifications, keeping members informed about organization-related updates.
+- **Enhanced User Experience:** The app prioritizes user-friendly interfaces and intuitive navigation, enhancing the overall experience for members and admins.
+
 
 <p float="left" align="center">
 
