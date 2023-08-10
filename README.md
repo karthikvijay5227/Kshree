@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Kshree 👋</h1>
+<h1 align = "center">Welcome to Kshree 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
 </p>
@@ -10,7 +10,7 @@
 
 Welcome to the Kshree App repository! This repository hosts the source code for the Kshree app, a comprehensive mobile application designed to streamline various administrative and member-related activities within the Kudumbashree organization.
 
-<p float="left" align="center">
+<p float="left" align = "center">
 
 <img src="/assets/kshree pics.png"/>
 
