@@ -1,4 +1,5 @@
 import * as React from 'react';
+import config from '../config';
 import { View, Text, TouchableOpacity, Dimensions, ScrollView, StyleSheet, BackHandler, Image } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { CountUp } from 'use-count-up';
@@ -48,7 +49,7 @@ class LoanInfo extends React.Component {
         const { navigation } = this.props;
         this.onNavigate = navigation.addListener('focus', async () => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabaseKey = config.SUPABASE_API_KEY
             const supabase = createClient(supabaseUrl, supabaseKey)
             this.setState({ totalAmount: await supabase.rpc('calculate_total_amount') })
             let { data: obj1 } = await supabase.rpc('calculatemonthlypayment')

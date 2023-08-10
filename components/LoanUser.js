@@ -1,4 +1,5 @@
 import React from "react";
+import config from '../config';
 import { View, Text, TouchableOpacity, Image, Dimensions, ScrollView, BackHandler, Modal, Alert } from "react-native";
 import { createClient } from '@supabase/supabase-js';
 import { Calendar } from 'react-native-calendars';
@@ -29,7 +30,7 @@ export default class LoanUser extends React.Component {
 
   async componentDidMount() {
     const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+    const supabaseKey = config.SUPABASE_API_KEY
     const supabase = createClient(supabaseUrl, supabaseKey)
     let { data: obj1 } = await supabase.from('loan').select('*').eq('username', this.props.route.params.name)
     this.setState({ loanDetails: obj1 })
@@ -84,7 +85,7 @@ export default class LoanUser extends React.Component {
 
       if (this.state.paidText === 'Update') {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+        const supabaseKey = config.SUPABASE_API_KEY
         const supabase = createClient(supabaseUrl, supabaseKey)
         let name = this.props.route.params.name;
 
@@ -113,7 +114,7 @@ export default class LoanUser extends React.Component {
     const revertMarked = async () => {
 
       const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+      const supabaseKey = config.SUPABASE_API_KEY
       const supabase = createClient(supabaseUrl, supabaseKey)
       let name = this.props.route.params.name;
 

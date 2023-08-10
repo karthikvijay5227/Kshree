@@ -1,4 +1,5 @@
 import * as React from 'react';
+import config from '../config';
 import { View, Text, TouchableOpacity, Dimensions, ScrollView, Image, Alert, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Switch, TextInput } from 'react-native-paper';
@@ -55,7 +56,7 @@ class Users extends React.Component {
 
     async componentDidMount() {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabaseKey = config.SUPABASE_API_KEY;
         const supabase = createClient(supabaseUrl, supabaseKey);
         let { data: data } = await supabase.from('users').select('*');
         this.setState({ users: data });
@@ -118,7 +119,7 @@ class Users extends React.Component {
 
         const onRefresh = async () => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabaseKey = config.SUPABASE_API_KEY;
             const supabase = createClient(supabaseUrl, supabaseKey);
             let { data: data } = await supabase.from('users').select('*');
             this.setState({ users: data });
@@ -129,7 +130,7 @@ class Users extends React.Component {
         const deleteUser = async () => {
 
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabaseKey = config.SUPABASE_API_KEY;
             const supabase = createClient(supabaseUrl, supabaseKey);
             if (this.state.delText === 'Delete User') {
                 console.log('User is Being Deleted')
@@ -257,7 +258,7 @@ class EditUser extends React.Component {
         const { navigation } = this.props;
         const updateData = async (uname, uusername, uaddress, uadmin, uphone) => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabaseKey = config.SUPABASE_API_KEY;
             const supabase = createClient(supabaseUrl, supabaseKey);
             await supabase.from('users').update([
                 {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import config from '../config';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, RefreshControl, Alert } from 'react-native';
@@ -30,7 +31,7 @@ function DrawerHeader({ username, ...props }) {
         const fetchUserData = async () => {
             try {
                 const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+                const supabaseKey = config.SUPABASE_API_KEY;
                 const supabase = createClient(supabaseUrl, supabaseKey);
                 const { data, error } = await supabase
                     .from('users')
@@ -55,7 +56,7 @@ function DrawerHeader({ username, ...props }) {
     const handleLogout = async () => {
         try {
                 const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+                const supabaseKey = config.SUPABASE_API_KEY;
                 const supabase = createClient(supabaseUrl, supabaseKey);
             
             await AsyncStorage.removeItem('user'); // Remove the stored user data
@@ -156,7 +157,7 @@ function MemberHome({ navigation, username }) {
 
     async function fetchData() {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabaseKey = config.SUPABASE_API_KEY;
         const supabase = createClient(supabaseUrl, supabaseKey);
         let eventData = await supabase.rpc('events');
         let user = await supabase.from('users').select('name').eq('username', userName);
@@ -225,7 +226,7 @@ function MemberHome({ navigation, username }) {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabaseKey = config.SUPABASE_API_KEY;
             const supabase = createClient(supabaseUrl, supabaseKey);
             let eventData = await supabase.rpc('events');
             let user = await supabase.from('users').select('name').eq('username', userName);

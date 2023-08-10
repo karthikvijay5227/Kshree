@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import config from '../config';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Image, ScrollView, RefreshControl } from 'react-native';
@@ -20,7 +21,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Import 
 import ProfileEdit from '../components/ProfileEdit';
 import UserDetails from '../components/UserDetails';
 
-
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const width = Dimensions.get('window').width;
@@ -31,7 +31,7 @@ function DrawerHeader({ username, ...props }) {
         const fetchUserData = async () => {
             try {
                 const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+                const supabaseKey = config.SUPABASE_API_KEY;
                 const supabase = createClient(supabaseUrl, supabaseKey);
                 const { data, error } = await supabase.from('users').select('name').eq('username', username);
                 if (error) {
@@ -119,7 +119,7 @@ function AdminHome({ username }) {
 
     useEffect(() => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabaseKey = config.SUPABASE_API_KEY;
         const supabase = createClient(supabaseUrl, supabaseKey);
         const unsubscribe = navigation.addListener('focus', async () => {
 
@@ -133,7 +133,7 @@ function AdminHome({ username }) {
 
     const fetchEvents = async () => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabaseKey = config.SUPABASE_API_KEY;
         const supabase = createClient(supabaseUrl, supabaseKey);
         let eventData = await supabase.rpc('events');
         setEvents(eventData.data);
@@ -163,7 +163,7 @@ function AdminHome({ username }) {
 
     const handleLogout = async () => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+        const supabaseKey = config.SUPABASE_API_KEY;
         const supabase = createClient(supabaseUrl, supabaseKey);
         try {
             await AsyncStorage.removeItem('user'); // Remove the stored user data

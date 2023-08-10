@@ -1,4 +1,5 @@
 import * as React from 'react';
+import config from '../config';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Alert, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { Paragraph } from 'react-native-paper';
@@ -27,7 +28,7 @@ export default class EventDetails extends React.Component {
     async componentDidMount() {
 
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+        const supabaseKey = config.SUPABASE_API_KEY
         const supabase = createClient(supabaseUrl, supabaseKey)
         let { data: obj } = await supabase.from('events').select('*').match({ event_name: this.props.route.params.event })
         this.getEventDetails(obj[0])
@@ -96,7 +97,7 @@ export default class EventDetails extends React.Component {
 
         const handleMembers = async () => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabaseKey = config.SUPABASE_API_KEY
             const supabase = createClient(supabaseUrl, supabaseKey);
             let participants = [];
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import config from '../config';
 import { View, Text, ScrollView, Dimensions, RefreshControl, BackHandler, Image } from 'react-native';
 import { Button, Card, IconButton } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -34,7 +35,7 @@ class EventList extends React.Component {
         const { navigation } = this.props;
         this._unsubscribe = navigation.addListener('focus', async () => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabaseKey = config.SUPABASE_API_KEY
             const supabase = createClient(supabaseUrl, supabaseKey)
             let { data: obj } = await supabase.from('events').select('*')
             this.setState({ events: obj })
@@ -57,7 +58,7 @@ class EventList extends React.Component {
     render() {
 
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+        const supabaseKey = config.SUPABASE_API_KEY
         const supabase = createClient(supabaseUrl, supabaseKey)
         const deleteEvent = async (name) => {
             await supabase.from('events').delete().match({ event_name: name })

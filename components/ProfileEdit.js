@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import config from '../config';
 import { View, Text, Alert, StyleSheet, ScrollView, Dimensions, TouchableOpacity, BackHandler, Image } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -17,7 +18,7 @@ export default function ProfileEdit({ username }) {
         const fetchUserData = async () => {
             try {
                 const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+                const supabaseKey = config.SUPABASE_API_KEY;
                 const supabase = createClient(supabaseUrl, supabaseKey);
 
                 const { data, error } = await supabase
@@ -52,7 +53,7 @@ export default function ProfileEdit({ username }) {
     const handleSave = async () => {
         try {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabaseKey = config.SUPABASE_API_KEY;
             const supabase = createClient(supabaseUrl, supabaseKey);
             const { data, error } = await supabase
                 .from('users')

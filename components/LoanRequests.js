@@ -1,4 +1,5 @@
 import react, { Component } from 'react';
+import config from '../config';
 import { View, Text, Dimensions, TouchableOpacity, Image, Alert, RefreshControl, BackHandler } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createClient } from '@supabase/supabase-js';
@@ -119,7 +120,7 @@ class LoanView extends Component {
 
         this._unsubscribe = this.props.navigation.addListener('focus', async () => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabaseKey = config.SUPABASE_API_KEY;
             const supabase = createClient(supabaseUrl, supabaseKey);
             let { data: data, error } = await supabase.from('Loans').select('*');
             this.setState({ loans: data });
@@ -131,7 +132,7 @@ class LoanView extends Component {
         const handleApplication = async (name, index) => {
 
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabaseKey = config.SUPABASE_API_KEY;
             const supabase = createClient(supabaseUrl, supabaseKey);
             const { isAdmin, username } = JSON.parse(await AsyncStorage.getItem('user'))
             let data = (await supabase.from('Loans').select('members').eq('loanname', name)).data[0].members
@@ -178,7 +179,7 @@ class LoanView extends Component {
 
         const onRefresh = async () => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+            const supabaseKey = config.SUPABASE_API_KEY;
             const supabase = createClient(supabaseUrl, supabaseKey);
             let { data: data, error } = await supabase.from('Loans').select('*');
             this.setState({ loans: data });

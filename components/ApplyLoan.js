@@ -1,4 +1,5 @@
 import * as React from 'react';
+import config from '../config';
 import { View, StyleSheet, Text, Dimensions, ScrollView, ImageBackground, TouchableOpacity, Alert, BackHandler } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import { TextInput } from 'react-native-paper';
@@ -39,7 +40,7 @@ export default class ApplyLoan extends React.Component {
     async componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+        const supabaseKey = config.SUPABASE_API_KEY
         const supabase = createClient(supabaseUrl, supabaseKey);
     
         const user = await AsyncStorage.getItem('user');
@@ -56,7 +57,7 @@ export default class ApplyLoan extends React.Component {
         const handleLoanMembers = async () => {
 
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabaseKey = config.SUPABASE_API_KEY
             const supabase = createClient(supabaseUrl, supabaseKey);
 
             if (this.state.selectedUser == '' || this.state.amount == '' || this.state.purpose == '' || this.state.rate == '' || this.state.duration == '' || this.state.bank == '' || this.state.account == '' || this.state.ifsc == '' || this.state.branch == '') {

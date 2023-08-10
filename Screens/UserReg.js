@@ -1,6 +1,7 @@
 /* This class is a React component that allows users to register as either an
 admin or member, with their name, username, password, address, and phone number. */
 import * as React from 'react';
+import config from '../config';
 import { View, StyleSheet, Text, Dimensions, ScrollView, BackHandler, Image } from 'react-native';
 import { TextInput, HelperText } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -69,7 +70,7 @@ export default class UserReg extends React.Component {
             perform operations such as inserting data into the database. */
 
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabaseKey = config.SUPABASE_API_KEY
             const supabase = createClient(supabaseUrl, supabaseKey)
 
 

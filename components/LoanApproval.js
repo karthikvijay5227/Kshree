@@ -1,4 +1,5 @@
 import react, {Component} from "react";
+import config from '../config';
 import { View, Text, Image, ScrollView, Dimensions, Alert, LayoutAnimation, BackHandler, RefreshControl } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { createClient } from '@supabase/supabase-js';
@@ -50,7 +51,7 @@ class LoanMemberRequest extends Component{
     async componentDidMount(){
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+        const supabaseKey = config.SUPABASE_API_KEY
         const supabase = createClient(supabaseUrl, supabaseKey);
         const { data, error } = await supabase.from('loan').select('*').eq('approved', false);
         this.setState({loanMemberRequest : data});
@@ -74,7 +75,7 @@ class LoanMemberRequest extends Component{
 
         const approve =  async(name, index) => {
             const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+            const supabaseKey = config.SUPABASE_API_KEY
             const supabase = createClient(supabaseUrl, supabaseKey);
             await supabase.from('loan').update({approved : true}).eq('username', name);
             const ImageChange = [...this.state.image];
@@ -93,7 +94,7 @@ class LoanMemberRequest extends Component{
 
         const onRefresh = async() => {
         const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA'
+        const supabaseKey = config.SUPABASE_API_KEY
         const supabase = createClient(supabaseUrl, supabaseKey);
         const { data, error } = await supabase.from('loan').select('*').eq('approved', false);
         this.setState({loanMemberRequest : data});
