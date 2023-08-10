@@ -10,6 +10,12 @@
 
 Welcome to the Kshree App repository! This repository hosts the source code for the Kshree app, a comprehensive mobile application designed to streamline various administrative and member-related activities within the Kudumbashree organization.
 
+<p float="left" align="center">
+
+<img src="/assets/kshree pics.png"/>
+
+</p>
+
 ## Features
 
 - **User Roles and Access Levels:** The app offers distinct logins for Admins and Members, ensuring controlled access to different functionalities and data.
@@ -23,13 +29,7 @@ Welcome to the Kshree App repository! This repository hosts the source code for 
 ![React Native Badge](https://img.shields.io/badge/React%20Native-61DAFB?logo=react&logoColor=000&style=for-the-badge) ![Material Design Badge](https://img.shields.io/badge/Material%20Design-757575?logo=materialdesign&logoColor=fff&style=for-the-badge) ![Supabase Badge](https://img.shields.io/badge/Supabase-3FCF8E?logo=supabase&logoColor=fff&style=for-the-badge)
 ![Visual Studio Code Badge](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?logo=visualstudiocode&logoColor=fff&style=for-the-badge) ![Android Studio Badge](https://img.shields.io/badge/Android%20Studio-3DDC84?logo=androidstudio&logoColor=fff&style=for-the-badge)
 
-<p float="left" align="center">
 
-<img src="/assets/image1.jpeg" width=180 />
-<img src="/assets/image2.jpeg" width=180 />
-<img src="/assets/image3.jpeg" width=180 />
-<img src="/assets/image4.jpeg" width=180 />
-</p>
 
 ## Usage
 
