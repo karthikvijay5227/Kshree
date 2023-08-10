@@ -54,6 +54,10 @@ function DrawerHeader({ username, ...props }) {
 
     const handleLogout = async () => {
         try {
+                const supabaseUrl = 'https://axubxqxfoptpjrsfuzxy.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWJ4cXhmb3B0cGpyc2Z1enh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY4MTc1NTM4NSwiZXhwIjoxOTk3MzMxMzg1fQ.SWDMCer4tBPEVNfrHl1H0iJ2YiWJmitGtJTT3B6eTuA';
+                const supabase = createClient(supabaseUrl, supabaseKey);
+            
             await AsyncStorage.removeItem('user'); // Remove the stored user data
             navigation.reset({
                 index: 0,
