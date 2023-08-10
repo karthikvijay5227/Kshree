@@ -41,7 +41,9 @@ yarn run test
 
 ## Author
 
-👤 **Sanjay Mathew, R Ashwin, Karthik Vijay**
+👤 **[Sanjay Mathew](https://github.com/M3BIONIX)**
+👤 **[Karthik Vijay](https://www.karthikvijaytech.me/)**
+👤 **[R Ashwin](https://github.com/ashwin417)**
 
 
 ## Show your support
