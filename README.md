@@ -39,7 +39,7 @@ Install the apk from the releases section
 yarn run test
 ```
 
-## Project Presentation -> [Click Here](https://www.canva.com/design/DAFk4BvRsXI/VfR7q5QpWOZzFr2kM07C4w/edit?utm_content=DAFk4BvRsXI&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+## Project Presentation -> [Click Here](https://www.canva.com/design/DAFk4BvRsXI/ropbjroz6UclPzqAhq-j4Q/view?utm_content=DAFk4BvRsXI&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
 
 ## Author
 
